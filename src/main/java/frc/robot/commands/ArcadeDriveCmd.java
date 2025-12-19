@@ -13,9 +13,7 @@ public class ArcadeDriveCmd extends Command {
 
     /**
      * Command to allow for driver input in teleop
-     * Can't be inlined efficiently if we want to edit the inputs in any way (deadband, square, etc.)
      */
-
     private final SwerveDrive swerve;
     private final PoseEstimator poseEstimator;
 
@@ -83,6 +81,7 @@ public class ArcadeDriveCmd extends Command {
             rot = Math.copySign(Math.pow(rot, 2.0), rot);
         }
 
+        // TODO modify as necessary based on field mirroring or roation
         if(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             swerve.driveFieldRelative(
                 drive * SwerveDriveConstants.maxAttainableSpeedMetersPerSec,

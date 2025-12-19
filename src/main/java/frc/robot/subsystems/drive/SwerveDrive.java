@@ -3,7 +3,6 @@ package frc.robot.subsystems.drive;
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -11,8 +10,15 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.CANDevices;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
@@ -31,6 +37,35 @@ public class SwerveDrive extends SubsystemBase {
     private final Pigeon2 pigeon;
 
     private final StructArrayPublisher<SwerveModuleState> publisher;
+
+    private final SysIdRoutine sysIdRoutine;
+
+    // private final SysIdRoutine sysIdRoutine =
+    // new SysIdRoutine(
+    //     new SysIdRoutine.Config(
+    //         null, // default ramp rate
+    //         null, // default step voltage
+    //         null // default timeout)
+    //     ),
+    //     new SysIdRoutine.Mechanism(
+    //         (voltage) -> {
+    //             for (int i = 0; i < modules.length; i++) {
+    //                 double volts = voltage.in(Volts);
+    //                 modules[i].applyCharacterizationVoltage(volts);
+    //             }
+    //         },
+    //         (log) -> {
+    //             for (int i = 0; i < modules.length; i++) {
+    //                 Distance distance = Meters.of(modules[i].getDriveDistanceMeters());
+    //                 LinearVelocity velocity = MetersPerSecond.of(modules[i].getDriveSpeedMetersPerSec());
+    //                 log.motor("drive-" + i)
+    //                     .linearPosition(distance)
+    //                     .linearVelocity(velocity);
+    //             }
+    //         },
+    //         this
+    //     )
+    // );
     
     public SwerveDrive() {
         modules = new SwerveModule[] {
@@ -65,20 +100,66 @@ public class SwerveDrive extends SubsystemBase {
         // start publishing an array of module states to NetworkTables with the "/SwerveStates" key
         publisher = NetworkTableInstance.getDefault()
             .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
-  }
+
+        // initialzing sysID routines
+        sysIdRoutine = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null, // default ramp rate
+                null, // default step voltage
+                null // default timeout)
+            ),
+            new SysIdRoutine.Mechanism(
+                (voltage) -> {
+                    for (int i = 0; i < modules.length; i++) {
+                        double volts = voltage.in(Volts);
+                        modules[i].applyCharacterizationVoltage(volts);
+                    }
+                },
+                (log) -> {
+                    for (int i = 0; i < modules.length; i++) {
+                        Distance distance = Meters.of(modules[i].getDriveDistanceMeters());
+                        LinearVelocity velocity = MetersPerSecond.of(modules[i].getDriveSpeedMetersPerSec());
+                        log.motor("drive-" + i)
+                            .linearPosition(distance)
+                            .linearVelocity(velocity);
+                    }
+                },
+                this
+            )
+        );
+
+    }
+
+    // sysID command factories
+    public Command sysIdQuasistaticForward() {
+        return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward);
+    }
+
+    public Command sysIdQuasistaticReverse() {
+        return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse);
+    }
+
+    public Command sysIdDynamicForward() {
+        return sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward);
+    }
+
+    public Command sysIdDynamicReverse() {
+        return sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse);
+    }
 
     @Override
     public void periodic() {
         // periodically updates the set of swerve module states published to NetworkTables
         publisher.set(getModuleStates());
     }
-    
-
-    
 
     public Rotation2d getHeading() {
         // reading is negated so that CCW is positive
         return Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble());
+    }
+
+    public void lock() {
+        isLocked = true;
     }
 
     public SwerveModulePosition[] getModulePositions() {
@@ -175,6 +256,7 @@ public class SwerveDrive extends SubsystemBase {
         double thetaRad = Math.atan2(chassisSpeeds.vyMetersPerSecond, chassisSpeeds.vxMetersPerSecond);
         double velMetersPerSec = Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
         
+        // TODO: made sure this functions as intended
         if (DriverStation.isAutonomous()) {
             skewCompensationThetaShift = Rotation2d.fromRadians(omegaRadPerSec * 0.0);
         } else {
@@ -188,6 +270,7 @@ public class SwerveDrive extends SubsystemBase {
                 omegaRadPerSec);
     }
 
+    // for sysID use only
     public void applyCharacterizationVoltage(double volts) {
         for(SwerveModule module : modules) {
             module.applyCharacterizationVoltage(volts);

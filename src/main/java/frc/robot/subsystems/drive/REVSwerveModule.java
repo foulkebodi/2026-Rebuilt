@@ -5,14 +5,12 @@ import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.RelativeEncoder;
@@ -24,8 +22,8 @@ import frc.robot.Constants.SwerveModuleConstants;
 
 public class REVSwerveModule extends SwerveModule {
 
-    private final SparkBase driveMtr;
-    private final SparkBase steerMtr;
+    private final SparkFlex driveMtr;
+    private final SparkFlex steerMtr;
 
     private final RelativeEncoder driveEnc;
     private final RelativeEncoder steerEnc;
@@ -43,8 +41,8 @@ public class REVSwerveModule extends SwerveModule {
         driveMtr = new SparkFlex(driveMtrID, MotorType.kBrushless);
         steerMtr = new SparkFlex(steerMtrID, MotorType.kBrushless);
 
-        SparkBaseConfig driveConfig = new SparkFlexConfig();
-        SparkBaseConfig steerConfig = new SparkFlexConfig();
+        SparkFlexConfig driveConfig = new SparkFlexConfig();
+        SparkFlexConfig steerConfig = new SparkFlexConfig();
 
         driveConfig.idleMode(IdleMode.kCoast);
         steerConfig.idleMode(IdleMode.kBrake);
@@ -127,13 +125,13 @@ public class REVSwerveModule extends SwerveModule {
         double angleErrorRad = desiredState.angle.getRadians() - getSteerAngle().getRadians();
         desiredState.speedMetersPerSecond *= Math.cos(angleErrorRad);
 
-        drivePID.setReference(desiredState.speedMetersPerSecond, ControlType.kVelocity, ClosedLoopSlot.kSlot0, SwerveModuleConstants.driveFF.calculate(desiredState.speedMetersPerSecond));
+        drivePID.setSetpoint(desiredState.speedMetersPerSecond, ControlType.kVelocity, ClosedLoopSlot.kSlot0, SwerveModuleConstants.driveFF.calculate(desiredState.speedMetersPerSecond));
 
-        steerPID.setReference(desiredState.angle.getRadians(), ControlType.kPosition, ClosedLoopSlot.kSlot0);
+        steerPID.setSetpoint(desiredState.angle.getRadians(), ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
     public void applyCharacterizationVoltage(double volts) {
         driveMtr.setVoltage(volts);
-        steerPID.setReference(0.0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+        steerPID.setSetpoint(0.0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 }

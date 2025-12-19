@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+// FIXME: uncomment once pathplannerlib is released
 // import com.pathplanner.lib.config.ModuleConfig;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -24,51 +25,49 @@ import edu.wpi.first.wpilibj.RobotBase;
  */
 public final class Constants {
     public static class RobotConstants {
-        // Set to the current the weight of the robot, including the battery and bumpers.
+        // TODO: Set to the current the weight of the robot, including the battery and bumpers.
         public static final double massKg = 52.41;
 
-        // Set the frame dimensions of the robot.
+        // TODO: Set the frame dimensions of the robot.
         public static final double robotWidthMeters = Units.inchesToMeters(27.0);
         public static final double robotLengthMeters = Units.inchesToMeters(27.0); 
 
         // Moment of inertia of a uniform-mass slab with the axis of rotation centered and perpendicular to the slab
         // This should be a reasonable approximation of the robot's MOI
         public static final double momentOfInertiaKgMetersSq = massKg * (Math.pow(robotWidthMeters, 2) + Math.pow(robotLengthMeters, 2)) / 12;
-
-       
-
     }
 
 	public static class ControllerConstants {
 		public static final int kDriverControllerPort = 0;
         public static final int kOperatorControllerPort = 1;
 
+        // TODO: change deadband based on controller drift
 		public static final double joystickDeadband = 0.09;
-        public static final double tiggerPressedThreshold = 0.25;
+        public static final double tiggerPressedThreshold = 0.35;
 	}
 
 	public static class CANDevices {
-		public static final int pigeonID = 14;
+		public static final int pigeonID = 1;
 
-		public static final int frModuleCANCoderID = 2; // front left
-		public static final int frModuleDriveMtrID = 6;
-		public static final int frModuleSteerMtrID = 10;
+		public static final int frModuleCANCoderID = 1;
+		public static final int frModuleDriveMtrID = 1;
+		public static final int frModuleSteerMtrID = 1;
 
-		public static final int brModuleCANCoderID = 3; // front right
-		public static final int brModuleDriveMtrID = 7;
-		public static final int brModuleSteerMtrID = 11;
+		public static final int brModuleCANCoderID = 1;
+		public static final int brModuleDriveMtrID = 1;
+		public static final int brModuleSteerMtrID = 1;
 
-		public static final int flModuleCANCoderID = 4; // back left
-		public static final int flModuleDriveMtrID = 8;
-		public static final int flModuleSteerMtrID = 12;
+		public static final int flModuleCANCoderID = 1;
+		public static final int flModuleDriveMtrID = 1;
+		public static final int flModuleSteerMtrID = 1;
 
-		public static final int blModuleCANCoderID = 5; // back right
-		public static final int blModuleDriveMtrID = 9;
-		public static final int blModuleSteerMtrID = 13;
+		public static final int blModuleCANCoderID = 1;
+		public static final int blModuleDriveMtrID = 1;
+		public static final int blModuleSteerMtrID = 1;
 	}
 
     public static class SwerveModuleConstants {
-        // Tune the below PID and FF values using the SysID routines.
+        // TODO: Tune the below PID and FF values using the SysID routines.
         public static final double driveKp = 0.12; 
         public static final double driveKd = 0.0;
 
@@ -81,13 +80,14 @@ public final class Constants {
 
         public static final SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(driveKsVolts, driveKvVoltSecsPerMeter, driveKaVoldSecsPerMeterSq);
 
-        // You may want to change this value depending on your breakers and the current usage of the rest of your robot.
+        // TODO: Change this value depending on your breakers and the current usage of the rest of your robot.
         public static final int driveCurrentLimitAmps = 55;
 
-        // This number may have to be adjusted depending on what wheels you use.
+        // TODO: Change this number based on actual wheel diamter.
         public static final double wheelRadiusMeters = Units.inchesToMeters(1.9);
 
-        // Set this value to the coefficient of friction of your wheels.
+        // TODO: Set this value to the coefficient of friction of your wheels.
+        // FIXME: Do we need this value?
         public static final double wheelCoefficientOfFriction = 1.5;
 
         public static final double driveGearReduction = (16.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0);
@@ -111,6 +111,7 @@ public final class Constants {
         public static final double driveStallCurrentAmps = 211.0;
         public static final double driveFreeCurrentAmps = 3.6;
 
+        // FIXME: uncomment once pathplannerlib is released
         // public static final ModuleConfig moduleConfig = new ModuleConfig(
         //     wheelRadiusMeters, driveFreeSpeedMetersPerSec, wheelCoefficientOfFriction, 
         //     new DCMotor(driveNominalOperatingVoltage, driveStallTorqueNewtonMeters, driveStallCurrentAmps, driveFreeCurrentAmps, driveFreeSpeedRadPerSec, 1),
@@ -118,13 +119,14 @@ public final class Constants {
     }
 
 	public static class SwerveDriveConstants {
-        public static final Rotation2d frModuleOffset = Rotation2d.fromDegrees(32.08 + 90.0);
-        public static final Rotation2d brModuleOffset = Rotation2d.fromDegrees(164.17 + 90.0);
-        public static final Rotation2d flModuleOffset = Rotation2d.fromDegrees(71.68 + 90.0);
-        public static final Rotation2d blModuleOffset = Rotation2d.fromDegrees(116.9 + 90.0);
+        // TODO: set these offsets based on module's zero position
+        public static final Rotation2d frModuleOffset = Rotation2d.fromDegrees(0.0);
+        public static final Rotation2d brModuleOffset = Rotation2d.fromDegrees(0.0);
+        public static final Rotation2d flModuleOffset = Rotation2d.fromDegrees(0.0);
+        public static final Rotation2d blModuleOffset = Rotation2d.fromDegrees(0.0);
 
 		// Set these dimensions for the distance between the center of each wheel.
-        // Note that these values are different from the robot's overall dimenstions.
+        // NOTE: these values are different from the robot's overall dimenstions.
 		public static final double chassisLengthMeters = Units.inchesToMeters(21.75); // 27 inch frame
         public static final double chassisWidthMeters = Units.inchesToMeters(21.75); // 27 inch frame
 
@@ -137,12 +139,13 @@ public final class Constants {
             new Translation2d(-chassisWidthMeters / 2.0, -chassisLengthMeters / 2.0) // back right
         );
 
+        // TODO: Tune these values based on actual robot performaance.
         public static final double maxAttainableSpeedMetersPerSec = Units.feetToMeters(20.1 * 0.9);
         public static final double maxAttainableRotationRadPerSec = 13.4;
 
         public static final double skewCompensationRatioOmegaPerTheta = 0.1;
 
-        // Tune the below PID values using the SysID routines.
+        // TODO: Tune the below PID values using the SysID routines.
         public static final double autoTranslationKp = 6.0;
         public static final double autoTranslationKd = 0.0;
 
@@ -151,9 +154,9 @@ public final class Constants {
     }
 
     public class VisionConstants {
-        public static final String frontLimelightName = "limelight-front";
+        public static final String limelightOneName = "limelight-front";
 
-        public static final String backLimelightName = "limelight-back";
+        public static final String limelightTwoName = "limelight-back";
 
         public static final double odomTranslationStdDevMeters = 0.05;
         public static final double odomRotationStdDevRad = Units.degreesToRadians(0.25);

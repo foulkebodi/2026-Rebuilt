@@ -8,6 +8,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.commands.ArcadeDriveCmd;
+import frc.robot.commands.LockCmd;
 import frc.robot.commands.util.ExampleCommand;
 import frc.robot.subsystems.drive.PoseEstimator;
 import frc.robot.subsystems.drive.SwerveDrive;
@@ -104,16 +105,25 @@ public class RobotContainer {
 			swerveDrive,
 			poseEstimator));
 			
-		// example bindings
-			operatorController.a().onTrue(new ExampleCommand(null));
-		
-			operatorController.axisGreaterThan(XboxController.Axis.kRightTrigger.value, ControllerConstants.tiggerPressedThreshold)
-			.onTrue(new ExampleCommand(null));
-		}
+		driverController.axisGreaterThan(XboxController.Axis.kLeftTrigger.value, ControllerConstants.tiggerPressedThreshold)
+		.onTrue(new LockCmd(swerveDrive));
 
-		public Command getAutonomousCommand() {
-			// return autoChooser.getSelected();
-			return new ExampleCommand(null);
+		// binding commands for sysID
+		driverController.a().onTrue(swerveDrive.sysIdDynamicForward());
+		driverController.b().onTrue(swerveDrive.sysIdDynamicReverse());
+		driverController.x().onTrue(swerveDrive.sysIdQuasistaticForward());
+		driverController.y().onTrue(swerveDrive.sysIdQuasistaticReverse());
+
+		// example bindings
+		operatorController.a().onTrue(new ExampleCommand(null));
+	
+		operatorController.axisGreaterThan(XboxController.Axis.kRightTrigger.value, ControllerConstants.tiggerPressedThreshold)
+		.onTrue(new ExampleCommand(null));
+	}
+
+	public Command getAutonomousCommand() {
+		// return autoChooser.getSelected();
+		return new ExampleCommand(null);
 	}
 
 	public void updateDashboard() {
@@ -124,6 +134,5 @@ public class RobotContainer {
 		SmartDashboard.putNumber("pos-x", poseEstimator.get().getX());
 		SmartDashboard.putNumber("pos-y", poseEstimator.get().getY());
 		SmartDashboard.putNumber("pos-rot", poseEstimator.get().getRotation().getDegrees());
-		SmartDashboard.putBoolean("is autonomous", DriverStation.isAutonomous());
 	}
 }
