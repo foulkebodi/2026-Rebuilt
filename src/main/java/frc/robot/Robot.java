@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
 
     // Start logging system (required)
    // Logger.getInstance().start();
-   
+
     // uncomment for sysID
    DataLogManager.start();
     
@@ -86,7 +86,7 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+      CommandScheduler.getInstance().schedule(m_autonomousCommand);
     }
   }
 

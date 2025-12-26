@@ -40,33 +40,6 @@ public class SwerveDrive extends SubsystemBase {
 
     private final SysIdRoutine sysIdRoutine;
 
-    // private final SysIdRoutine sysIdRoutine =
-    // new SysIdRoutine(
-    //     new SysIdRoutine.Config(
-    //         null, // default ramp rate
-    //         null, // default step voltage
-    //         null // default timeout)
-    //     ),
-    //     new SysIdRoutine.Mechanism(
-    //         (voltage) -> {
-    //             for (int i = 0; i < modules.length; i++) {
-    //                 double volts = voltage.in(Volts);
-    //                 modules[i].applyCharacterizationVoltage(volts);
-    //             }
-    //         },
-    //         (log) -> {
-    //             for (int i = 0; i < modules.length; i++) {
-    //                 Distance distance = Meters.of(modules[i].getDriveDistanceMeters());
-    //                 LinearVelocity velocity = MetersPerSecond.of(modules[i].getDriveSpeedMetersPerSec());
-    //                 log.motor("drive-" + i)
-    //                     .linearPosition(distance)
-    //                     .linearVelocity(velocity);
-    //             }
-    //         },
-    //         this
-    //     )
-    // );
-    
     public SwerveDrive() {
         modules = new SwerveModule[] {
             new REVSwerveModule(
@@ -156,6 +129,10 @@ public class SwerveDrive extends SubsystemBase {
     public Rotation2d getHeading() {
         // reading is negated so that CCW is positive
         return Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble());
+    }
+
+    public double getAngularVelocityDegPerSec() {
+        return pigeon.getAngularVelocityZDevice().getValueAsDouble();
     }
 
     public void lock() {

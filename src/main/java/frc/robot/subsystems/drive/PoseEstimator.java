@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drive;
 
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.VecBuilder;
@@ -14,21 +15,22 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.util.LimelightHelpers;
 
-
-
-
 public class PoseEstimator extends SubsystemBase {
 
     private final SwerveDrivePoseEstimator poseEstimator;
 
     private final Supplier<Rotation2d> gyroHeadingSupplier;
     private final Supplier<SwerveModulePosition[]> modulePositionsSupplier;
-    
+    private final DoubleSupplier angularVelocitySupplier;
+
+    private boolean trustLimelightOne = true;
+    private boolean trustLimelightTwo = true;
 
     public PoseEstimator(
         SwerveDriveKinematics swerveKinematics,
         Supplier<Rotation2d> gyroHeadingSupplier,
-        Supplier<SwerveModulePosition[]> modulePositionsSupplier) {
+        Supplier<SwerveModulePosition[]> modulePositionsSupplier,
+        DoubleSupplier angularVelocitySupplier) {
 
         poseEstimator = new SwerveDrivePoseEstimator(
             swerveKinematics,
@@ -46,16 +48,44 @@ public class PoseEstimator extends SubsystemBase {
 
         this.gyroHeadingSupplier = gyroHeadingSupplier;
         this.modulePositionsSupplier = modulePositionsSupplier;
+        this.angularVelocitySupplier = angularVelocitySupplier;
     }
 
     @Override
     public void periodic() {
-        if (LimelightHelpers.getTV(VisionConstants.limelightOneName)) {
-            poseEstimator.addVisionMeasurement(getlimelightOnePose(), getLimelightOneTimestamp());
+        // filter and update pose based on vision from limelight one
+        LimelightHelpers.SetRobotOrientation(VisionConstants.limelightOneName, poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        LimelightHelpers.PoseEstimate limeLightOnePose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(VisionConstants.limelightOneName);
+        trustLimelightOne = true;
+        if(angularVelocitySupplier.getAsDouble() > 360) {
+            trustLimelightOne = false;
         }
-        if (LimelightHelpers.getTV(VisionConstants.limelightTwoName)) {
-            poseEstimator.addVisionMeasurement(getlimelightTwoPose(), getLimelightTwoTimestamp());
+        if(limeLightOnePose.tagCount == 0) {
+            trustLimelightOne = false;
         }
+        if(trustLimelightOne) {
+            poseEstimator.addVisionMeasurement(
+            limeLightOnePose.pose,
+            limeLightOnePose.timestampSeconds);
+        } 
+
+        // filter and update pose based on vision from limelight two
+        LimelightHelpers.SetRobotOrientation(VisionConstants.limelightTwoName, poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        LimelightHelpers.PoseEstimate limeLightTwoPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(VisionConstants.limelightTwoName);
+        trustLimelightTwo = true;
+        if(angularVelocitySupplier.getAsDouble() > 360) {
+            trustLimelightTwo = false;
+        }
+        if(limeLightTwoPose.tagCount == 0) {
+            trustLimelightTwo = false;
+        }
+        if(trustLimelightTwo) {
+            poseEstimator.addVisionMeasurement(
+            limeLightTwoPose.pose,
+            limeLightTwoPose.timestampSeconds);
+        }
+
+        // update pose based on odometry
         poseEstimator.update(gyroHeadingSupplier.get(), modulePositionsSupplier.get());
     }
 
@@ -73,11 +103,6 @@ public class PoseEstimator extends SubsystemBase {
         // TODO: change based on field mirroring
         // DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red ? Rotation2d.fromDegrees(0) : Rotation2d.fromDegrees(180)));
     }
-
-    public Pose2d getlimelightOnePose() {
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue(VisionConstants.limelightOneName);
-        return limelightMeasurement.pose;
-    }
     
     public Pose2d getPose() {
         return poseEstimator.getEstimatedPosition();
@@ -87,23 +112,12 @@ public class PoseEstimator extends SubsystemBase {
         return gyroHeadingSupplier.get(); // or your own heading method
     }
 
+    public double getAngularVelocityDegPerSec() {
+        return angularVelocitySupplier.getAsDouble();
+    }
+
     public Pose3d getPose3d() {
         Pose3d position3d = new Pose3d(getPose().getX(), getPose().getY(), 0.0, new Rotation3d(0.0, 0.0, getPose().getRotation().getRadians()) );
         return position3d;
-    }
-
-    public double getLimelightOneTimestamp() {
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue(VisionConstants.limelightOneName);
-        return limelightMeasurement.timestampSeconds;
-    }    
-
-    public Pose2d getlimelightTwoPose() {
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue(VisionConstants.limelightTwoName);
-        return limelightMeasurement.pose;
-    }
-
-    public double getLimelightTwoTimestamp() {
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue(VisionConstants.limelightTwoName);
-        return limelightMeasurement.timestampSeconds;
     }
 }

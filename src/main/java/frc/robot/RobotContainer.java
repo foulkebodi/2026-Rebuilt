@@ -48,7 +48,8 @@ public class RobotContainer {
 	private final PoseEstimator poseEstimator = new PoseEstimator(
 		SwerveDriveConstants.kinematics,
 		() -> swerveDrive.getHeading(),
-		() -> swerveDrive.getModulePositions());
+		() -> swerveDrive.getModulePositions(),
+		() -> swerveDrive.getAngularVelocityDegPerSec());
 
 	private final CommandXboxController driverController = new CommandXboxController(ControllerConstants.kDriverControllerPort);
 	private final CommandXboxController operatorController = new CommandXboxController(ControllerConstants.kOperatorControllerPort);
