@@ -26,4 +26,5 @@ public abstract class SwerveModule extends SubsystemBase {
     public abstract void setState(SwerveModuleState desiredState);
 
     public abstract void applyCharacterizationVoltage(double volts);
+    public abstract double getCharacterizationVoltage(double volts);
 }

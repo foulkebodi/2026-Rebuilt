@@ -54,36 +54,36 @@ public class PoseEstimator extends SubsystemBase {
     @Override
     public void periodic() {
         // filter and update pose based on vision from limelight one
-        LimelightHelpers.SetRobotOrientation(VisionConstants.limelightOneName, poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-        LimelightHelpers.PoseEstimate limeLightOnePose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(VisionConstants.limelightOneName);
-        trustLimelightOne = true;
-        if(angularVelocitySupplier.getAsDouble() > 360) {
-            trustLimelightOne = false;
-        }
-        if(limeLightOnePose.tagCount == 0) {
-            trustLimelightOne = false;
-        }
-        if(trustLimelightOne) {
-            poseEstimator.addVisionMeasurement(
-            limeLightOnePose.pose,
-            limeLightOnePose.timestampSeconds);
-        } 
+        // LimelightHelpers.SetRobotOrientation(VisionConstants.limelightOneName, poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        // LimelightHelpers.PoseEstimate limeLightOnePose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(VisionConstants.limelightOneName);
+        // trustLimelightOne = true;
+        // if(angularVelocitySupplier.getAsDouble() > 360) {
+        //     trustLimelightOne = false;
+        // }
+        // if(limeLightOnePose.tagCount == 0) {
+        //     trustLimelightOne = false;
+        // }
+        // if(trustLimelightOne) {
+        //     poseEstimator.addVisionMeasurement(
+        //     limeLightOnePose.pose,
+        //     limeLightOnePose.timestampSeconds);
+        // } 
 
         // filter and update pose based on vision from limelight two
-        LimelightHelpers.SetRobotOrientation(VisionConstants.limelightTwoName, poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-        LimelightHelpers.PoseEstimate limeLightTwoPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(VisionConstants.limelightTwoName);
-        trustLimelightTwo = true;
-        if(angularVelocitySupplier.getAsDouble() > 360) {
-            trustLimelightTwo = false;
-        }
-        if(limeLightTwoPose.tagCount == 0) {
-            trustLimelightTwo = false;
-        }
-        if(trustLimelightTwo) {
-            poseEstimator.addVisionMeasurement(
-            limeLightTwoPose.pose,
-            limeLightTwoPose.timestampSeconds);
-        }
+        // LimelightHelpers.SetRobotOrientation(VisionConstants.limelightTwoName, poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        // LimelightHelpers.PoseEstimate limeLightTwoPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(VisionConstants.limelightTwoName);
+        // trustLimelightTwo = true;
+        // if(angularVelocitySupplier.getAsDouble() > 360) {
+        //     trustLimelightTwo = false;
+        // }
+        // if(limeLightTwoPose.tagCount == 0) {
+        //     trustLimelightTwo = false;
+        // }
+        // if(trustLimelightTwo) {
+        //     poseEstimator.addVisionMeasurement(
+        //     limeLightTwoPose.pose,
+        //     limeLightTwoPose.timestampSeconds);
+        // }
 
         // update pose based on odometry
         poseEstimator.update(gyroHeadingSupplier.get(), modulePositionsSupplier.get());

@@ -45,23 +45,23 @@ public final class Constants {
 	}
 
 	public static class CANDevices {
-		public static final int pigeonID = 1;
+		public static final int pigeonID = 14;
 
-		public static final int frModuleCANCoderID = 1;
-		public static final int frModuleDriveMtrID = 1;
-		public static final int frModuleSteerMtrID = 1;
+		public static final int frModuleCANCoderID = 2;
+		public static final int frModuleDriveMtrID = 6;
+		public static final int frModuleSteerMtrID = 10;
 
-		public static final int brModuleCANCoderID = 1;
-		public static final int brModuleDriveMtrID = 1;
-		public static final int brModuleSteerMtrID = 1;
+		public static final int brModuleCANCoderID = 3;
+		public static final int brModuleDriveMtrID = 7;
+		public static final int brModuleSteerMtrID = 11;
 
-		public static final int flModuleCANCoderID = 1;
-		public static final int flModuleDriveMtrID = 1;
-		public static final int flModuleSteerMtrID = 1;
+		public static final int flModuleCANCoderID = 4;
+		public static final int flModuleDriveMtrID = 8;
+		public static final int flModuleSteerMtrID = 12;
 
-		public static final int blModuleCANCoderID = 1;
-		public static final int blModuleDriveMtrID = 1;
-		public static final int blModuleSteerMtrID = 1;
+		public static final int blModuleCANCoderID = 5;
+		public static final int blModuleDriveMtrID = 9;
+		public static final int blModuleSteerMtrID = 13;
 	}
 
     public static class SwerveModuleConstants {
@@ -119,10 +119,10 @@ public final class Constants {
 
 	public static class SwerveDriveConstants {
         // TODO: set these offsets based on module's zero position
-        public static final Rotation2d frModuleOffset = Rotation2d.fromDegrees(0.0);
-        public static final Rotation2d brModuleOffset = Rotation2d.fromDegrees(0.0);
-        public static final Rotation2d flModuleOffset = Rotation2d.fromDegrees(0.0);
-        public static final Rotation2d blModuleOffset = Rotation2d.fromDegrees(0.0);
+        public static final Rotation2d flModuleOffset = Rotation2d.fromDegrees(162.5);
+        public static final Rotation2d frModuleOffset = Rotation2d.fromDegrees(122.0);
+        public static final Rotation2d blModuleOffset = Rotation2d.fromDegrees(-151.6);
+        public static final Rotation2d brModuleOffset = Rotation2d.fromDegrees(-102.8);
 
 		// Set these dimensions for the distance between the center of each wheel.
         // NOTE: these values are different from the robot's overall dimenstions.

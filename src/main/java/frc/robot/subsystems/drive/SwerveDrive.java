@@ -10,11 +10,19 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.units.measure.Voltage;
+
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
+
+import java.util.concurrent.TimeUnit;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,6 +34,7 @@ import frc.robot.Constants.SwerveModuleConstants;
 public class SwerveDrive extends SubsystemBase {
 
     private boolean isLocked = false;
+
     public boolean isLocked() {
         return isLocked;
     }
@@ -78,8 +87,8 @@ public class SwerveDrive extends SubsystemBase {
         sysIdRoutine = new SysIdRoutine(
             new SysIdRoutine.Config(
                 null, // default ramp rate
-                null, // default step voltage
-                null // default timeout)
+                Volts.of(4), // default step voltage
+                Time.ofBaseUnits(3, Seconds) // default timeout)
             ),
             new SysIdRoutine.Mechanism(
                 (voltage) -> {
@@ -90,9 +99,11 @@ public class SwerveDrive extends SubsystemBase {
                 },
                 (log) -> {
                     for (int i = 0; i < modules.length; i++) {
+                        Voltage voltage = Volts.of(modules[i].getCharacterizationVoltage(i));
                         Distance distance = Meters.of(modules[i].getDriveDistanceMeters());
                         LinearVelocity velocity = MetersPerSecond.of(modules[i].getDriveSpeedMetersPerSec());
                         log.motor("drive-" + i)
+                            .voltage(voltage)
                             .linearPosition(distance)
                             .linearVelocity(velocity);
                     }
@@ -195,10 +206,10 @@ public class SwerveDrive extends SubsystemBase {
 
         if(isLocked) {
             desiredModuleStates = new SwerveModuleState[] {
-                new SwerveModuleState(0.0, new Rotation2d(0.25 * Math.PI)),
-                new SwerveModuleState(0.0, new Rotation2d(-0.25 * Math.PI)),
-                new SwerveModuleState(0.0, new Rotation2d(-0.25 * Math.PI)),
-                new SwerveModuleState(0.0, new Rotation2d(0.25 * Math.PI))
+                new SwerveModuleState(0.00, new Rotation2d(0.25 * Math.PI)),
+                new SwerveModuleState(0.00, new Rotation2d(-0.25 * Math.PI)),
+                new SwerveModuleState(0.00, new Rotation2d(-0.25 * Math.PI)),
+                new SwerveModuleState(0.00, new Rotation2d(0.25 * Math.PI))
             };
         } else {
             chassisSpeeds = compensateForSkew(chassisSpeeds);

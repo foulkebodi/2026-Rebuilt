@@ -18,6 +18,8 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.SwerveModuleConstants;
 
 public class REVSwerveModule extends SwerveModule {
@@ -44,7 +46,7 @@ public class REVSwerveModule extends SwerveModule {
         SparkFlexConfig driveConfig = new SparkFlexConfig();
         SparkFlexConfig steerConfig = new SparkFlexConfig();
 
-        driveConfig.idleMode(IdleMode.kCoast);
+        driveConfig.idleMode(IdleMode.kBrake);
         steerConfig.idleMode(IdleMode.kBrake);
 
         driveConfig.smartCurrentLimit(SwerveModuleConstants.driveMtrCurrentLimitAmps);
@@ -136,5 +138,9 @@ public class REVSwerveModule extends SwerveModule {
     public void applyCharacterizationVoltage(double volts) {
         driveMtr.setVoltage(volts);
         steerPID.setSetpoint(0.0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    }
+
+    public double getCharacterizationVoltage(double volts) {
+        return driveMtr.getAppliedOutput() * RobotController.getBatteryVoltage();
     }
 }
