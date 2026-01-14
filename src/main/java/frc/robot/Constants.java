@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.config.ModuleConfig;
+
 // FIXME: uncomment once pathplannerlib is released
 // import com.pathplanner.lib.config.ModuleConfig;
 
@@ -11,6 +13,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -27,8 +30,8 @@ public final class Constants {
         public static final double massKg = 52.41;
 
         // TODO: Set the frame dimensions of the robot.
-        public static final double robotWidthMeters = Units.inchesToMeters(27.0);
-        public static final double robotLengthMeters = Units.inchesToMeters(27.0); 
+        public static final double robotWidthMeters = Units.inchesToMeters(25.0);
+        public static final double robotLengthMeters = Units.inchesToMeters(25.0); 
 
         // Moment of inertia of a uniform-mass slab with the axis of rotation centered and perpendicular to the slab
         // This should be a reasonable approximation of the robot's MOI
@@ -89,32 +92,32 @@ public final class Constants {
         // FIXME: Do we need this value?
         public static final double wheelCoefficientOfFriction = 1.5;
 
-        public static final double driveGearReduction = (16.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0);
+        public static final double driveGearReduction = (16.0 / 54.0) * (32.0 / 25.0) * (15.0 / 30.0);
 
         public static final double driveMetersPerEncRev = driveGearReduction * 2.0 * wheelRadiusMeters * Math.PI;
 
         public static final double driveMetersPerSecPerEncRPM = driveMetersPerEncRev / 60.0;
 
-        public static final double steerGearReduction = (15.0 / 32.0) * (10.0 / 60.0);
+        public static final double steerGearReduction = 1.0 / 26.0;
 
         public static final double steerRadiansPerEncRev = steerGearReduction * 2.0 * Math.PI;
 
         public static final double steerRadiansPerSecPerEncRPM = steerRadiansPerEncRev / 60.0;
         
-        public static final double driveFreeSpeedMetersPerSec = Units.feetToMeters(20.1);
+        public static final double driveFreeSpeedMetersPerSec = Units.feetToMeters(22.5);
 
         public static final double driveFreeSpeedRadPerSec = driveFreeSpeedMetersPerSec / wheelRadiusMeters;
 
-        public static final double driveNominalOperatingVoltage = 12.0;
+        public static final double driveNominalOperatingVoltage = 12.4;
         public static final double driveStallTorqueNewtonMeters = 3.6 / driveGearReduction; // Motor's stall torque times gear ratio
         public static final double driveStallCurrentAmps = 211.0;
         public static final double driveFreeCurrentAmps = 3.6;
 
         // FIXME: uncomment once pathplannerlib is released
-        // public static final ModuleConfig moduleConfig = new ModuleConfig(
-        //     wheelRadiusMeters, driveFreeSpeedMetersPerSec, wheelCoefficientOfFriction, 
-        //     new DCMotor(driveNominalOperatingVoltage, driveStallTorqueNewtonMeters, driveStallCurrentAmps, driveFreeCurrentAmps, driveFreeSpeedRadPerSec, 1),
-        //     driveCurrentLimitAmps, 4);
+        public static final ModuleConfig moduleConfig = new ModuleConfig(
+            wheelRadiusMeters, SwerveDriveConstants.maxAttainableSpeedMetersPerSec, wheelCoefficientOfFriction, 
+            new DCMotor(driveNominalOperatingVoltage, driveStallTorqueNewtonMeters, driveStallCurrentAmps, driveFreeCurrentAmps, driveFreeSpeedRadPerSec, 1),
+            driveMtrCurrentLimitAmps, 1);
     }
 
 	public static class SwerveDriveConstants {
@@ -126,16 +129,16 @@ public final class Constants {
 
 		// Set these dimensions for the distance between the center of each wheel.
         // NOTE: these values are different from the robot's overall dimenstions.
-		public static final double chassisLengthMeters = Units.inchesToMeters(21.75); // 27 inch frame
-        public static final double chassisWidthMeters = Units.inchesToMeters(21.75); // 27 inch frame
+		public static final double chassisTrackLengthMeters = Units.inchesToMeters(21.75); // 27 inch frame
+        public static final double chassisTrackWidthMeters = Units.inchesToMeters(21.75); // 27 inch frame
 
-        public static final double chassisRadiusMeters = Math.hypot(chassisLengthMeters, chassisWidthMeters);
+        public static final double chassisRadiusMeters = Math.hypot(chassisTrackLengthMeters, chassisTrackWidthMeters);
 
         public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-            new Translation2d(chassisWidthMeters / 2.0, chassisLengthMeters / 2.0),  // front left
-            new Translation2d(chassisWidthMeters / 2.0, -chassisLengthMeters / 2.0), // front right
-            new Translation2d(-chassisWidthMeters / 2.0, chassisLengthMeters / 2.0), // back left
-            new Translation2d(-chassisWidthMeters / 2.0, -chassisLengthMeters / 2.0) // back right
+            new Translation2d(chassisTrackWidthMeters / 2.0, chassisTrackLengthMeters / 2.0),  // front left
+            new Translation2d(chassisTrackWidthMeters / 2.0, -chassisTrackLengthMeters / 2.0), // front right
+            new Translation2d(-chassisTrackWidthMeters / 2.0, chassisTrackLengthMeters / 2.0), // back left
+            new Translation2d(-chassisTrackWidthMeters / 2.0, -chassisTrackLengthMeters / 2.0) // back right
         );
 
         // TODO: Tune these values based on actual robot performaance.

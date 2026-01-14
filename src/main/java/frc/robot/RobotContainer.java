@@ -5,14 +5,25 @@
 package frc.robot;
 
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.SwerveDriveConstants;
+import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.commands.ArcadeDriveCmd;
 import frc.robot.commands.LockCmd;
 import frc.robot.subsystems.drive.PoseEstimator;
 import frc.robot.subsystems.drive.SwerveDrive;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -38,40 +49,40 @@ public class RobotContainer {
 	private final CommandXboxController operatorController = new CommandXboxController(ControllerConstants.kOperatorControllerPort);
 
 
-	// private final SendableChooser<Command> autoChooser;
+	private final SendableChooser<Command> autoChooser;
 
 	public RobotContainer() {
 		// register named commands
-		// NamedCommands.registerCommand("exampleCommand", new ExampleCommand(exampleSubsystem));
+		NamedCommands.registerCommand("exampleCommand", new Command() {});
 
 		// configure autobuilder
-		// AutoBuilder.configure(
-		// 	poseEstimator::get,
-		// 	poseEstimator::resetPose,
-		// 	swerveDrive::getRobotRelativeSpeeds, 
-		// 	(chassisSpeeds, feedforward) -> swerveDrive.driveRobotRelative(chassisSpeeds),
-		// 	new PPHolonomicDriveController(
-		// 		new PIDConstants(SwerveDriveConstants.autoTranslationKp, SwerveDriveConstants.autoTranslationKd),
-		// 		new PIDConstants(SwerveDriveConstants.autoRotationKp, SwerveDriveConstants.autoRotationKd)),
-		// 	new RobotConfig(RobotConstants.massKg, RobotConstants.momentOfInertiaKgMetersSq, 
-		// 		SwerveModuleConstants.moduleConfig, SwerveDriveConstants.kinematics.getModules()),
-		// 	() -> {
-		// 		var alliance = DriverStation.getAlliance();
-		// 		if (alliance.isPresent()) {
-		// 			return alliance.get() == DriverStation.Alliance.Red;
-		// 		} 
-		// 		return false;
-		// 	},
-		// 	swerveDrive);
+		AutoBuilder.configure(
+			poseEstimator::get,
+			poseEstimator::resetPose,
+			swerveDrive::getRobotRelativeSpeeds, 
+			(chassisSpeeds, feedforward) -> swerveDrive.driveRobotRelative(chassisSpeeds),
+			new PPHolonomicDriveController(
+				new PIDConstants(SwerveDriveConstants.autoTranslationKp, SwerveDriveConstants.autoTranslationKd),
+				new PIDConstants(SwerveDriveConstants.autoRotationKp, SwerveDriveConstants.autoRotationKd)),
+			new RobotConfig(RobotConstants.massKg, RobotConstants.momentOfInertiaKgMetersSq, 
+				SwerveModuleConstants.moduleConfig, SwerveDriveConstants.kinematics.getModules()),
+			() -> {
+				var alliance = DriverStation.getAlliance();
+				if (alliance.isPresent()) {
+					return alliance.get() == DriverStation.Alliance.Red;
+				} 
+				return false;
+			},
+			swerveDrive);
 
 		// create auto
-		// new PathPlannerAuto("TranslationTestOne");
+		new PathPlannerAuto("TranslationTestOne");
 
 		// build auto chooser
-		// autoChooser = AutoBuilder.buildAutoChooser("Do Nothing");
+		autoChooser = AutoBuilder.buildAutoChooser("Do Nothing");
 
 		// send auto chooser to dashboard
-		// SmartDashboard.putData("auto chooser", autoChooser);
+		SmartDashboard.putData("auto chooser", autoChooser);
 	
 		// Configure the trigger bindings
 		configureBindings();
