@@ -62,15 +62,21 @@ public final class Constants {
 		public static final int blModuleCANCoderID = 5;
 		public static final int blModuleDriveMtrID = 9;
 		public static final int blModuleSteerMtrID = 13;
+
+        public static final int towerMtrID = 21;
+        public static final int beamBreakPort = 0;
+       
+        public static final int spindexerMtrID = 20;
 	}
 
     public static class SwerveModuleConstants {
         // TODO: Tune the below PID and FF values using the SysID routines.
         public static final double driveKp = 0.12; 
         public static final double driveKd = 0.0;
-
-        public static final double steerKp = 0.37431;
-        public static final double steerKd = 0.27186;
+       
+        
+        public static final double steerKp = 0.45;
+        public static final double steerKd = 0.25;
 
         public static final double driveKsVolts = 0.667;
         public static final double driveKvVoltSecsPerMeter = 2.44;
@@ -105,7 +111,7 @@ public final class Constants {
 
         public static final double driveFreeSpeedRadPerSec = driveFreeSpeedMetersPerSec / wheelRadiusMeters;
 
-        public static final double driveNominalOperatingVoltage = 12.0;
+        public static final double driveNominalOperatingVoltage = 12.4;
         public static final double driveStallTorqueNewtonMeters = 3.6 / driveGearReduction; // Motor's stall torque times gear ratio
         public static final double driveStallCurrentAmps = 211.0;
         public static final double driveFreeCurrentAmps = 3.6;
@@ -165,4 +171,18 @@ public final class Constants {
 
         public static final double poseInnacuracyThreshold = 0.5;
     }
+
+    public class TowerConstants {
+
+        public static final int maxTowerCurrentAmps = 30;
+        public static final double towerShootingSpeed = 0.85;
+        public static final double towerIntakingSpeed = 0.25;
+    }
+    public class SpindexerConstants {
+        public static final int maxSpindexerCurrentAmps = 20;
+        public static final double spindexerShootingSpeed = 0.50;
+        public static final double spindexerAgitatingSpeed = 0.25;
+
+    }
+
 }

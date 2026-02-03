@@ -8,10 +8,13 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.commands.ArcadeDriveCmd;
 import frc.robot.commands.LockCmd;
+import frc.robot.subsystems.SpindexerSys;
+import frc.robot.subsystems.TowerSys;
 import frc.robot.subsystems.drive.PoseEstimator;
 import frc.robot.subsystems.drive.SwerveDrive;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,6 +30,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 public class RobotContainer {
 	// The robot's subsystems and commands are defined here...
 	private final SwerveDrive swerveDrive = new SwerveDrive();
+	private final TowerSys towerSys = new TowerSys();
+	private final SpindexerSys spindexerSys = new SpindexerSys(towerSys);
+
+	
 
 	private final PoseEstimator poseEstimator = new PoseEstimator(
 		SwerveDriveConstants.kinematics,
@@ -36,6 +43,7 @@ public class RobotContainer {
 
 	private final CommandXboxController driverController = new CommandXboxController(ControllerConstants.kDriverControllerPort);
 	private final CommandXboxController operatorController = new CommandXboxController(ControllerConstants.kOperatorControllerPort);
+	
 
 
 	// private final SendableChooser<Command> autoChooser;
@@ -99,6 +107,7 @@ public class RobotContainer {
 
 		// example operator bindings
 		operatorController.a().onTrue(new Command() {});
+		operatorController.b().onTrue(new Command() {});
 	
 		operatorController.axisGreaterThan(XboxController.Axis.kRightTrigger.value, ControllerConstants.tiggerPressedThreshold)
 		.onTrue(new Command() {});
