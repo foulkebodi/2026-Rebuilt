@@ -4,17 +4,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
-
-//import org.littletonrobotics.junction.log.DataLogManager;
-
-
-
-
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -50,7 +42,7 @@ public class Robot extends TimedRobot {
    // Logger.getInstance().start();
 
     // uncomment for sysID
-   DataLogManager.start();
+  //  DataLogManager.start();
     
   }
 

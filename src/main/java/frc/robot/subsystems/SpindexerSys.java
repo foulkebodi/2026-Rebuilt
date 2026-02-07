@@ -12,7 +12,6 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 import frc.robot.Constants.SpindexerConstants;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANDevices;
 import frc.robot.Constants.TowerConstants;
