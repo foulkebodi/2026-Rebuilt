@@ -251,5 +251,6 @@ public final class Constants {
         public static final double turretMinPositionInches = 0.0;
 
         public static final Pose2d blueTargetPose = new Pose2d(4.62, 4.04, null);
+        public static final Pose2d redTargetPose = new Pose2d(4.62, 4.04, null);
     }
 }
