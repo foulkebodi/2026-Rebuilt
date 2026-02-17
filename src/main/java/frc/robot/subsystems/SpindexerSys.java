@@ -14,7 +14,6 @@ import frc.robot.Constants.SpindexerConstants;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANDevices;
-import frc.robot.Constants.TowerConstants;
 
 public class SpindexerSys extends SubsystemBase {
    private final SparkFlex spindexerMtr;
@@ -25,6 +24,7 @@ public class SpindexerSys extends SubsystemBase {
    private final TowerSys towerSys;
   
    
+  @SuppressWarnings("removal")
   public SpindexerSys(TowerSys towerSys) {
 
     this.towerSys = towerSys;

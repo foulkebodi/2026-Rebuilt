@@ -18,7 +18,6 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.SwerveModuleConstants;
 
@@ -37,6 +36,7 @@ public class REVSwerveModule extends SwerveModule {
 
     private final Rotation2d moduleOffset;
 
+    @SuppressWarnings("removal")
     public REVSwerveModule(int canCoderID, int driveMtrID, int steerMtrID, Rotation2d moduleOffset) {
         this.moduleOffset = moduleOffset;
 

@@ -46,20 +46,11 @@ public class RobotContainer {
 	private final SwerveDrive swerveDrive = new SwerveDrive();
 	private final TowerSys towerSys = new TowerSys();
 	private final SpindexerSys spindexerSys = new SpindexerSys(towerSys);
-
-	
-
-	private final PoseEstimator poseEstimator = new PoseEstimator(
-		SwerveDriveConstants.kinematics,
-		() -> swerveDrive.getHeading(),
-		() -> swerveDrive.getModulePositions(),
-		() -> swerveDrive.getAngularVelocityDegPerSec());
-
+	private final PoseEstimator poseEstimator = new PoseEstimator(swerveDrive);
+	private final TurretSys turretSys = new TurretSys(poseEstimator);
 
 	private final CommandXboxController driverController = new CommandXboxController(ControllerConstants.kDriverControllerPort);
 	private final CommandXboxController operatorController = new CommandXboxController(ControllerConstants.kOperatorControllerPort);
-	
-
 
 	private final SendableChooser<Command> autoChooser;
 

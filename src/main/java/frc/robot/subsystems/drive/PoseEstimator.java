@@ -1,41 +1,32 @@
 package frc.robot.subsystems.drive;
 
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
-
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.util.LimelightHelpers;
 
 public class PoseEstimator extends SubsystemBase {
 
     private final SwerveDrivePoseEstimator poseEstimator;
-
-    private final Supplier<Rotation2d> gyroHeadingSupplier;
-    private final Supplier<SwerveModulePosition[]> modulePositionsSupplier;
-    private final DoubleSupplier angularVelocitySupplier;
-
+    private final SwerveDrive swerveDrive;
+    
     private boolean trustLimelightOne = true;
     private boolean trustLimelightTwo = true;
 
-    public PoseEstimator(
-        SwerveDriveKinematics swerveKinematics,
-        Supplier<Rotation2d> gyroHeadingSupplier,
-        Supplier<SwerveModulePosition[]> modulePositionsSupplier,
-        DoubleSupplier angularVelocitySupplier) {
+    public PoseEstimator(SwerveDrive swerveDrive) {
+
+        this.swerveDrive = swerveDrive;
 
         poseEstimator = new SwerveDrivePoseEstimator(
-            swerveKinematics,
-            gyroHeadingSupplier.get(),
-            modulePositionsSupplier.get(),
+            SwerveDriveConstants.kinematics,
+            swerveDrive.getHeading(),
+            swerveDrive.getModulePositions(),
             new Pose2d(),
             VecBuilder.fill(
                 VisionConstants.odomTranslationStdDevMeters,
@@ -45,10 +36,6 @@ public class PoseEstimator extends SubsystemBase {
                 VisionConstants.visionTranslationStdDevMeters,
                 VisionConstants.visionTranslationStdDevMeters,
                 VisionConstants.visionRotationStdDevRad));
-
-        this.gyroHeadingSupplier = gyroHeadingSupplier;
-        this.modulePositionsSupplier = modulePositionsSupplier;
-        this.angularVelocitySupplier = angularVelocitySupplier;
     }
 
     @Override
@@ -57,7 +44,7 @@ public class PoseEstimator extends SubsystemBase {
         LimelightHelpers.SetRobotOrientation(VisionConstants.limelightOneName, poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate limeLightOnePose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(VisionConstants.limelightOneName);
         trustLimelightOne = true;
-        if(angularVelocitySupplier.getAsDouble() > 360) {
+        if(swerveDrive.getAngularVelocityDegPerSec() > 360) {
             trustLimelightOne = false;
         }
         if(limeLightOnePose.tagCount == 0) {
@@ -73,7 +60,7 @@ public class PoseEstimator extends SubsystemBase {
         LimelightHelpers.SetRobotOrientation(VisionConstants.limelightTwoName, poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate limeLightTwoPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(VisionConstants.limelightTwoName);
         trustLimelightTwo = true;
-        if(angularVelocitySupplier.getAsDouble() > 360) {
+        if(swerveDrive.getAngularVelocityDegPerSec() > 360) {
             trustLimelightTwo = false;
         }
         if(limeLightTwoPose.tagCount == 0) {
@@ -86,7 +73,7 @@ public class PoseEstimator extends SubsystemBase {
         }
 
         // update pose based on odometry
-        poseEstimator.update(gyroHeadingSupplier.get(), modulePositionsSupplier.get());
+        poseEstimator.update(swerveDrive.getHeading(), swerveDrive.getModulePositions());
     }
 
     public Pose2d get() {
@@ -94,11 +81,11 @@ public class PoseEstimator extends SubsystemBase {
     }
 
     public void resetPose(Pose2d pose) {
-        poseEstimator.resetPosition(gyroHeadingSupplier.get(), modulePositionsSupplier.get(), pose);
+        poseEstimator.resetPosition(swerveDrive.getHeading(), swerveDrive.getModulePositions(), pose);
     }
 
     public void resetHeading() {
-        poseEstimator.resetPosition(gyroHeadingSupplier.get(), modulePositionsSupplier.get(), 
+        poseEstimator.resetPosition(swerveDrive.getHeading(), swerveDrive.getModulePositions(), 
         new Pose2d(poseEstimator.getEstimatedPosition().getTranslation(), Rotation2d.fromDegrees(0)));
         // TODO: change based on field mirroring
         // DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red ? Rotation2d.fromDegrees(0) : Rotation2d.fromDegrees(180)));
@@ -109,11 +96,11 @@ public class PoseEstimator extends SubsystemBase {
     }
 
     public Rotation2d getHeading() {
-        return gyroHeadingSupplier.get();
+        return swerveDrive.getHeading();
     }
 
     public double getAngularVelocityDegPerSec() {
-        return angularVelocitySupplier.getAsDouble();
+        return swerveDrive.getAngularVelocityDegPerSec();
     }
 
     public Pose3d getPose3d() {

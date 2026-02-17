@@ -11,11 +11,8 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANDevices;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.TowerConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.drive.PoseEstimator;
 
@@ -33,14 +30,6 @@ public class TurretSys extends SubsystemBase {
   private final SparkClosedLoopController azimuthPID;
 
   private final PoseEstimator poseEstimator;
-  private Pose2d currentPose;
-
-  private double deltaX;
-  private double deltaY;
-  private double thetaHeading;
-  private double deltaTheta;
-  private double thetaTurret;
-  private double thetaBotHeading;
 
   public TurretSys(PoseEstimator poseEstimator) {
 
@@ -109,17 +98,6 @@ public class TurretSys extends SubsystemBase {
 
   @Override
   public void periodic() {
-    currentPose = poseEstimator.getPose();
-
-    deltaX = TurretConstants.blueTargetPose.getX() - currentPose.getX();
-    deltaY = TurretConstants.blueTargetPose.getY() - currentPose.getY();
-    deltaTheta = Math.atan(deltaY / deltaX);
-    thetaBotHeading = currentPose.getRotation().getDegrees();
-    thetaHeading = thetaBotHeading - deltaTheta;
-    thetaTurret = -thetaHeading;
-
-    // this is where a bunch of logic makes me wanna cry
-    azimuthPID.setSetpoint(deltaTheta, ControlType.kVelocity);
 
   }
 }

@@ -7,8 +7,6 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
-import javax.crypto.KEMSpi;
-
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
@@ -27,6 +25,7 @@ public class TowerSys extends SubsystemBase {
   private boolean intaking;
 
   /** Creates a new ExampleSubsystem. */
+  @SuppressWarnings("removal")
   public TowerSys() {
 
     towerMtr = new SparkFlex(CANDevices.towerMtrID, MotorType.kBrushless);
