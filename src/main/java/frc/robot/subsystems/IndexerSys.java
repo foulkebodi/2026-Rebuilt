@@ -4,9 +4,11 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
@@ -14,40 +16,78 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANDevices;
-import frc.robot.Constants.TowerConstants;
+import frc.robot.Constants.IndexerConstants;
 
-public class TowerSys extends SubsystemBase {
+public class IndexerSys extends SubsystemBase {
+
   private final SparkFlex towerMtr;
+  private final SparkFlex spindexerMtr;
 
-  private final DigitalInput beamBreak;
-  private boolean beamBreakBroken;
-  private boolean shooting;
-  private boolean intaking;
+  private final RelativeEncoder towerEnc;
+  private final RelativeEncoder spindexerEnc;
+
+  private final SparkClosedLoopController towerPID;
+  private final SparkClosedLoopController spindexerPID;
+
+  private double targetSpindexerRPM;
+  private double targetTowerRPM;
+  
+ 
 
   /** Creates a new ExampleSubsystem. */
   @SuppressWarnings("removal")
-  public TowerSys() {
+  public IndexerSys() {
 
     towerMtr = new SparkFlex(CANDevices.towerMtrID, MotorType.kBrushless);
     SparkFlexConfig towerSparkFlexConfig = new SparkFlexConfig();
+    towerEnc = towerMtr.getEncoder();
+    towerPID = towerMtr.getClosedLoopController();
+
+     spindexerMtr = new SparkFlex(CANDevices.spindexerMtrID, MotorType.kBrushless);
+    SparkFlexConfig spindexerSparkFlexConfig = new SparkFlexConfig();
+    spindexerEnc = spindexerMtr.getEncoder();
+    spindexerPID = spindexerMtr.getClosedLoopController();
 
     towerSparkFlexConfig.inverted(true);
+    spindexerSparkFlexConfig.inverted(true);
 
     towerSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);
+    spindexerSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);
 
-    towerSparkFlexConfig.smartCurrentLimit(TowerConstants.maxTowerCurrentAmps);
+    towerSparkFlexConfig.smartCurrentLimit(IndexerConstants.maxTowerCurrentAmps);
+    spindexerSparkFlexConfig.smartCurrentLimit(IndexerConstants.maxSpindexerCurrentAmps);
 
     towerSparkFlexConfig.voltageCompensation(9);
+    spindexerSparkFlexConfig.voltageCompensation(9);
 
     towerSparkFlexConfig.softLimit.forwardSoftLimitEnabled(false);
     towerSparkFlexConfig.softLimit.reverseSoftLimitEnabled(false);
+     spindexerSparkFlexConfig.softLimit.forwardSoftLimitEnabled(false);
+    spindexerSparkFlexConfig.softLimit.reverseSoftLimitEnabled(false);
+
+    towerSparkFlexConfig.encoder.positionConversionFactor(IndexerConstants.towerPositionConversionFactor);
+    towerSparkFlexConfig.encoder.velocityConversionFactor(IndexerConstants.towerVelocityConversionFactor);
+
+    spindexerSparkFlexConfig.encoder.positionConversionFactor(IndexerConstants.spindexerPositionConversionFactor);
+    spindexerSparkFlexConfig.encoder.velocityConversionFactor(IndexerConstants.spindexerVelocityConversionFactor);
+
+    towerSparkFlexConfig.closedLoop
+      .p(IndexerConstants.towerP)
+      .d(IndexerConstants.towerD);
+
+    spindexerSparkFlexConfig.closedLoop
+      .p(IndexerConstants.spindexerP)
+      .d(IndexerConstants.spindexerD);
 
     towerMtr.configure(
         towerSparkFlexConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
-    beamBreak = new DigitalInput(CANDevices.beamBreakPort);
+    spindexerMtr.configure(
+      spindexerSparkFlexConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
 
   }
 
@@ -65,27 +105,33 @@ public class TowerSys extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-    if (beamBreakBroken && !shooting) {
-      towerMtr.set(0.0);
-    } else if (shooting) {
-      towerMtr.set(TowerConstants.towerShootingSpeed);
-    } else if (intaking) {
-      towerMtr.set(TowerConstants.towerIntakingSpeed);
-    } else {
-      towerMtr.set(0.0);
-    }
+      spindexerPID.setSetpoint(targetSpindexerRPM, ControlType.kVelocity);
+      towerPID.setSetpoint(targetTowerRPM, ControlType.kVelocity);
+    
   }
 
-  public void setShooting(boolean isShooting) {
-    shooting = isShooting;
+  public void setTargetSpindexerRPM(double targetSpindexerRPM) {
+    this.targetSpindexerRPM = targetSpindexerRPM;
   }
 
-  public void setIntaking(boolean isIntaking) {
-    intaking = isIntaking;
+  public void setTargetTowerRPM(double targetTowerRPM) {
+    this.targetTowerRPM = targetTowerRPM;
   }
 
-  public boolean getbeamBreakBroken() {
-    return beamBreak.get();
+  public double getTargetSpindexerRPM() {
+    return targetSpindexerRPM;
   }
+
+  public double getTargetTowerRPM() {
+    return targetTowerRPM;
+  }
+
+  public double getSpindexerRPM() {
+    return spindexerEnc.getVelocity();
+  }
+
+  public double getTowerRPM() {
+    return towerEnc.getVelocity();
+  }
+  
 }

@@ -10,6 +10,9 @@ import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.commands.ArcadeDriveCmd;
 import frc.robot.commands.LockCmd;
+import frc.robot.subsystems.ClimberSys;
+import frc.robot.subsystems.IndexerSys;
+import frc.robot.subsystems.IntakeSys;
 import frc.robot.subsystems.SpindexerSys;
 import frc.robot.subsystems.TowerSys;
 import frc.robot.subsystems.TurretSys;
@@ -44,10 +47,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 public class RobotContainer {
 	// The robot's subsystems and commands are defined here...
 	private final SwerveDrive swerveDrive = new SwerveDrive();
-	private final TowerSys towerSys = new TowerSys();
-	private final SpindexerSys spindexerSys = new SpindexerSys(towerSys);
 	private final PoseEstimator poseEstimator = new PoseEstimator(swerveDrive);
+	private final IntakeSys intakeSys = new IntakeSys();
+	private final IndexerSys indexerSys = new IndexerSys();
 	private final TurretSys turretSys = new TurretSys(poseEstimator);
+	private final ClimberSys climberSys = new ClimberSys();
 
 	private final CommandXboxController driverController = new CommandXboxController(ControllerConstants.kDriverControllerPort);
 	private final CommandXboxController operatorController = new CommandXboxController(ControllerConstants.kOperatorControllerPort);

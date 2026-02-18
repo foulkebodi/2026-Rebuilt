@@ -15,129 +15,135 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANDevices;
-import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ClimberConstants;
 
-public class IntakeSys extends SubsystemBase {
 
-  private final SparkFlex rollerMtr;
-  private final SparkFlex leftActuatorMtr;
-  private final SparkFlex rightActuatorMtr;
+public class ClimberSys extends SubsystemBase {
 
-  private final RelativeEncoder leftActuatorEnc;
-  private final RelativeEncoder rightActuatorEnc;
-  private final RelativeEncoder rollerEnc;
+  private final SparkFlex HookMtr;
+  private final SparkFlex LeftElevatorMtr;
+  private final SparkFlex RightElevatorMtr;
 
-  private double targetRollerRPM = 0;
+  private final RelativeEncoder LeftElevatorEnc;
+  private final RelativeEncoder RightElevatorEnc;
+  private final RelativeEncoder HookEnc;
 
-  private final SparkClosedLoopController rollerPID;
-  private final SparkClosedLoopController LeftActuatorPID;
-  private final SparkClosedLoopController RightActuatorPID;
+  private final SparkClosedLoopController HookPID;
+  private final SparkClosedLoopController LeftElevatorPID;
+  private final SparkClosedLoopController RightElevatorPID;
+
+
 
   @SuppressWarnings("removal")
-  public IntakeSys() {
-    rollerMtr = new SparkFlex(CANDevices.RollerMtrID, MotorType.kBrushless);
-    SparkFlexConfig RollerMtrSparkFlexConfig = new SparkFlexConfig();
-    rollerPID = rollerMtr.getClosedLoopController();
-    rollerEnc = rollerMtr.getEncoder();
+  public ClimberSys() {
+    HookMtr = new SparkFlex(CANDevices.HookMtrID, MotorType.kBrushless);
+    SparkFlexConfig HookMtrSparkFlexConfig = new SparkFlexConfig();
+    HookPID = HookMtr.getClosedLoopController();
+    HookEnc = HookMtr.getEncoder();
 
-    leftActuatorMtr = new SparkFlex(CANDevices.LeftActuatorMtrID, MotorType.kBrushless);
-    SparkFlexConfig LeftActuatorMtrSparkFlexConfig = new SparkFlexConfig();
-    LeftActuatorPID = leftActuatorMtr.getClosedLoopController();
-    leftActuatorEnc = leftActuatorMtr.getEncoder();
+    LeftElevatorMtr = new SparkFlex(CANDevices.LeftElevatorID, MotorType.kBrushless);
+    SparkFlexConfig LeftElevatorMtrSparkFlexConfig = new SparkFlexConfig();
+    LeftElevatorPID = LeftElevatorMtr.getClosedLoopController();
+    LeftElevatorEnc = LeftElevatorMtr.getEncoder();
 
-    rightActuatorMtr = new SparkFlex(CANDevices.RightActuatorMtrID, MotorType.kBrushless);
-    SparkFlexConfig RightActuatorMtrSparkFlexConfig = new SparkFlexConfig();
-    RightActuatorPID = rightActuatorMtr.getClosedLoopController();
-    rightActuatorEnc = rightActuatorMtr.getEncoder();
+    RightElevatorMtr = new SparkFlex(CANDevices.RightElevatorID, MotorType.kBrushless);
+    SparkFlexConfig RightElevatorMtrSparkFlexConfig = new SparkFlexConfig();
+    RightElevatorPID = RightElevatorMtr.getClosedLoopController();
+    RightElevatorEnc = RightElevatorMtr.getEncoder();
 
-    RollerMtrSparkFlexConfig.inverted(false);
-    LeftActuatorMtrSparkFlexConfig.inverted(true);
-    RightActuatorMtrSparkFlexConfig.inverted(false);
+    HookMtrSparkFlexConfig.inverted(false);
+    LeftElevatorMtrSparkFlexConfig.inverted(true);
+    RightElevatorMtrSparkFlexConfig.inverted(false);
 
-    RollerMtrSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);
-    LeftActuatorMtrSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);
-    RightActuatorMtrSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);
+    HookMtrSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);
+    LeftElevatorMtrSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);
+    RightElevatorMtrSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);
 
-    RollerMtrSparkFlexConfig.smartCurrentLimit(IntakeConstants.maxRollerCurrentAmps);
-    LeftActuatorMtrSparkFlexConfig.smartCurrentLimit(IntakeConstants.maxActuatorCurrentAmps);
-    RightActuatorMtrSparkFlexConfig.smartCurrentLimit(IntakeConstants.maxActuatorCurrentAmps);
+    HookMtrSparkFlexConfig.smartCurrentLimit(ClimberConstants.maxHookCurrentAmps);
+    LeftElevatorMtrSparkFlexConfig.smartCurrentLimit(ClimberConstants.maxElevatorCurrentAmps);
+    RightElevatorMtrSparkFlexConfig.smartCurrentLimit(ClimberConstants.maxElevatorCurrentAmps);
 
-    RollerMtrSparkFlexConfig.voltageCompensation(10);
-    LeftActuatorMtrSparkFlexConfig.voltageCompensation(10);
-    RightActuatorMtrSparkFlexConfig.voltageCompensation(10);
+    HookMtrSparkFlexConfig.voltageCompensation(10);
+    LeftElevatorMtrSparkFlexConfig.voltageCompensation(10);
+    RightElevatorMtrSparkFlexConfig.voltageCompensation(10);
 
-    RollerMtrSparkFlexConfig.softLimit.forwardSoftLimitEnabled(false);
-    RollerMtrSparkFlexConfig.softLimit.reverseSoftLimitEnabled(false);
+    HookMtrSparkFlexConfig.softLimit.forwardSoftLimitEnabled(false);
+    HookMtrSparkFlexConfig.softLimit.reverseSoftLimitEnabled(false);
 
-    LeftActuatorMtrSparkFlexConfig.softLimit.forwardSoftLimitEnabled(true);
-    LeftActuatorMtrSparkFlexConfig.softLimit.reverseSoftLimitEnabled(true);
-    LeftActuatorMtrSparkFlexConfig.softLimit.forwardSoftLimit(IntakeConstants.actuatorMaxPositionInches);
-    LeftActuatorMtrSparkFlexConfig.softLimit.reverseSoftLimit(IntakeConstants.actuatorMinPositionInches);
+    LeftElevatorMtrSparkFlexConfig.softLimit.forwardSoftLimitEnabled(true);
+    LeftElevatorMtrSparkFlexConfig.softLimit.reverseSoftLimitEnabled(true);
+    LeftElevatorMtrSparkFlexConfig.softLimit.forwardSoftLimit(ClimberConstants.ElevatorMaxInches);
+    LeftElevatorMtrSparkFlexConfig.softLimit.reverseSoftLimit(ClimberConstants.ElevatorMinInches);
 
-    RightActuatorMtrSparkFlexConfig.softLimit.forwardSoftLimitEnabled(true);
-    RightActuatorMtrSparkFlexConfig.softLimit.reverseSoftLimitEnabled(true);
-    RightActuatorMtrSparkFlexConfig.softLimit.forwardSoftLimit(IntakeConstants.actuatorMaxPositionInches);
-    RightActuatorMtrSparkFlexConfig.softLimit.reverseSoftLimit(IntakeConstants.actuatorMinPositionInches);
+    RightElevatorMtrSparkFlexConfig.softLimit.forwardSoftLimitEnabled(true);
+    RightElevatorMtrSparkFlexConfig.softLimit.reverseSoftLimitEnabled(true);
+    RightElevatorMtrSparkFlexConfig.softLimit.forwardSoftLimit(ClimberConstants.ElevatorMaxInches);
+    RightElevatorMtrSparkFlexConfig.softLimit.reverseSoftLimit(ClimberConstants.ElevatorMinInches);
 
-    LeftActuatorMtrSparkFlexConfig.encoder.positionConversionFactor(IntakeConstants.actuatorPositionConversionFactor);
-    LeftActuatorMtrSparkFlexConfig.encoder.velocityConversionFactor(IntakeConstants.actuatorVelocityConversionFactor);
+    LeftElevatorMtrSparkFlexConfig.encoder.positionConversionFactor(ClimberConstants.ElevatorPositionConversionFactor);
+    LeftElevatorMtrSparkFlexConfig.encoder.velocityConversionFactor(ClimberConstants.ElevatorVelocityConversionFactor);
 
-    RightActuatorMtrSparkFlexConfig.encoder.positionConversionFactor(IntakeConstants.actuatorPositionConversionFactor);
-    RightActuatorMtrSparkFlexConfig.encoder.velocityConversionFactor(IntakeConstants.actuatorVelocityConversionFactor);
+    RightElevatorMtrSparkFlexConfig.encoder.positionConversionFactor(ClimberConstants.ElevatorPositionConversionFactor);
+    RightElevatorMtrSparkFlexConfig.encoder.velocityConversionFactor(ClimberConstants.ElevatorVelocityConversionFactor);
 
-    RollerMtrSparkFlexConfig.encoder.positionConversionFactor(IntakeConstants.rollerPositionConversionFactor);
-    RollerMtrSparkFlexConfig.encoder.velocityConversionFactor(IntakeConstants.rollerVelocityConversionFactor);
+    HookMtrSparkFlexConfig.encoder.positionConversionFactor(ClimberConstants.HookPositionConversionFactor);
+    HookMtrSparkFlexConfig.encoder.velocityConversionFactor(ClimberConstants.HookVelocityConversionFactor);
 
-    RollerMtrSparkFlexConfig.closedLoop
-        .p(IntakeConstants.RollerP)
-        .d(IntakeConstants.RollerD);
+    HookMtrSparkFlexConfig.closedLoop
+        .p(ClimberConstants.HookP)
+        .d(ClimberConstants.HookD);
 
-    RightActuatorMtrSparkFlexConfig.closedLoop
-        .p(IntakeConstants.actuatorP)
-        .d(IntakeConstants.actuatorD);
+    RightElevatorMtrSparkFlexConfig.closedLoop
+        .p(ClimberConstants.ElevatorP)
+        .d(ClimberConstants.ElevatorD);
 
-    LeftActuatorMtrSparkFlexConfig.closedLoop
-        .p(IntakeConstants.actuatorP)
-        .d(IntakeConstants.actuatorD);
+    LeftElevatorMtrSparkFlexConfig.closedLoop
+        .p(ClimberConstants.ElevatorP)
+        .d(ClimberConstants.ElevatorD);
 
-    rollerMtr.configure(
-        RollerMtrSparkFlexConfig,
+    HookMtr.configure(
+        HookMtrSparkFlexConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
-    leftActuatorMtr.configure(
-        LeftActuatorMtrSparkFlexConfig,
+    LeftElevatorMtr.configure(
+        LeftElevatorMtrSparkFlexConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
-    rightActuatorMtr.configure(
-        RightActuatorMtrSparkFlexConfig,
+    RightElevatorMtr.configure(
+        RightElevatorMtrSparkFlexConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
   }
 
   public void periodic() {
-    if (getActuatorPos() >= IntakeConstants.actuatorSafePositionInches) {
-      rollerPID.setSetpoint(targetRollerRPM, ControlType.kVelocity);
-    } else {
-      rollerPID.setSetpoint(0, ControlType.kVelocity);
-    }
+// currently the control remains within the following methods, but this 
+// can be changed to allow for more complex control logic if desired
+    
   }
 
-  public void setActuatorPos(double targetPos) {
-    LeftActuatorPID.setSetpoint(targetPos, ControlType.kPosition);
-    RightActuatorPID.setSetpoint(targetPos, ControlType.kPosition);
+  public void setClimberPosition(double targetPos) {
+    LeftElevatorPID.setSetpoint(targetPos, ControlType.kPosition);
+    RightElevatorPID.setSetpoint(targetPos, ControlType.kPosition);
   }
 
-  public double getActuatorPos() {
-    return (leftActuatorEnc.getPosition() + rightActuatorEnc.getPosition()) / 2.0;
+  public void manualClimberPosition(double speed) {
+    LeftElevatorMtr.set(speed);
+    RightElevatorMtr.set(speed);
   }
 
-  public void setTargetRollerRPM(double targetRPM) {
-    this.targetRollerRPM = targetRPM;
+  public double getClimberPosition() {
+    return (LeftElevatorEnc.getPosition() + RightElevatorEnc.getPosition()) / 2.0;
   }
 
-  public double getRollerRPM() {
-    return rollerEnc.getVelocity();
+  public void setTargetHookPosition(double targetPosition) {
+    HookPID.setSetpoint(targetPosition, ControlType.kPosition);
+  }
+
+  
+
+  public double getHookPosition() {
+    return HookEnc.getPosition();
   }
 }
