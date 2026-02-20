@@ -6,7 +6,6 @@ package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.TurretSys;
-import frc.robot.subsystems.util.ExampleSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class StopManualAzimuthAngle extends Command {
@@ -22,7 +21,7 @@ public class StopManualAzimuthAngle extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    turretSys.setIsAiming(false);
+    turretSys.setManualAzimuthAngle(null);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -254,7 +254,9 @@ public final class Constants {
         public static final double azimuthMaxAccelerationDegPerSecSq = 360.0;
         public static final double maximumAizmuthAngleDeg = 90.0;
         public static final double minimumAizmuthAngleDeg = -90.0;
-        
+        public static final double azimuthToleranceDeg = 1.0;
+        public static final double azimuthDefaultSetpointDeg = 0.0;
+
         public static final double azimuthPositionConversionFactor = 20.0 / 173.0 * 360.0;
         public static final double azimuthVelocityConversionFactor = 20.0 / 173.0 * 360.0 / 60.0;
 

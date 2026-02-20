@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.security.PrivateKey;
-
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
@@ -17,10 +15,9 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANDevices;
 import frc.robot.Constants.TurretConstants;
@@ -117,20 +114,22 @@ public class TurretSys extends SubsystemBase {
     robotPose = poseEstimator.getPose();
     turretPose = robotPose.transformBy(TurretConstants.robotToTurret);
 
-    targetAzimuthAngle = -1.0 * 
+    targetAzimuthAngle =
       TurretConstants.targetPose.getTranslation()
       .minus(turretPose.getTranslation())
       .getAngle()
       .minus(robotPose.getRotation()).getRadians();
 
-    if(isAiming && targetAzimuthAngle <= Units.degreesToRadians(TurretConstants.maximumAizmuthAngleDeg) && targetAzimuthAngle >= Units.degreesToRadians(TurretConstants.minimumAizmuthAngleDeg)) {
-        azimuthPID.setGoal(targetAzimuthAngle);
+    if (DriverStation.isDisabled()) {
+      azimuthPID.setGoal(azimuthEnc.getPosition());  
+    } else if (isAiming && targetAzimuthAngle <= Units.degreesToRadians(TurretConstants.maximumAizmuthAngleDeg) && targetAzimuthAngle >= Units.degreesToRadians(TurretConstants.minimumAizmuthAngleDeg)) {
+      azimuthPID.setGoal(targetAzimuthAngle);
+    }  /* for troubleshooting only, remove for competition */ else if (manualAzimuthAngle != null) {
+       azimuthPID.setGoal(manualAzimuthAngle);
+    } else {
+      azimuthPID.setGoal(Units.degreesToRadians(TurretConstants.azimuthDefaultSetpointDeg));
     }
     
-    // for troubleshooting only, remove for competition
-    if(manualAzimuthAngle != null) {
-      azimuthPID.setGoal(manualAzimuthAngle);
-    }
 
     azimuthMtr.set(azimuthPID.calculate(azimuthEnc.getPosition()) + azimuthFeedforward.calculate(azimuthPID.getSetpoint().velocity));
   }

@@ -6,7 +6,6 @@ package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.TurretSys;
-import frc.robot.subsystems.util.ExampleSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class StartAiming extends Command {
