@@ -45,7 +45,7 @@ public class IndexerSys extends SubsystemBase {
     spindexerEnc = spindexerMtr.getEncoder();
     spindexerPID = spindexerMtr.getClosedLoopController();
 
-    towerSparkFlexConfig.inverted(true);
+    towerSparkFlexConfig.inverted(true); 
     spindexerSparkFlexConfig.inverted(true);
 
     towerSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);

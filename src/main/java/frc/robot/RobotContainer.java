@@ -107,6 +107,8 @@ public class RobotContainer {
 		driverController.axisGreaterThan(XboxController.Axis.kLeftTrigger.value, ControllerConstants.tiggerPressedThreshold)
 		.onTrue(new LockCmd(swerveDrive));
 
+		
+
 		// binding commands for sysID
 		driverController.a().onTrue(swerveDrive.sysIdDynamicForward());
 		driverController.b().onTrue(swerveDrive.sysIdDynamicReverse());
