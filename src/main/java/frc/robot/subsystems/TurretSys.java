@@ -147,6 +147,10 @@ public class TurretSys extends SubsystemBase {
   public void setIsAiming(boolean isAiming) {
     this.isAiming = isAiming;
   }
+  
+  public boolean isOnTarget(){
+    return (Math.abs(getCurrentAzimuthAngle() - getTargetAzimuthAngle()) <= TurretConstants.azimuthErrorTolerance);
+  }
 
   public void setFlyWheelRPM(double targetRPM) {
     leftFlyWheelPID.setSetpoint(targetRPM, ControlType.kVelocity);
@@ -157,7 +161,13 @@ public class TurretSys extends SubsystemBase {
     return targetAzimuthAngle;
   }
 
+  public double getCurrentAzimuthAngle(){
+    return azimuthEnc.getPosition();
+  }
+
   public Pose2d getTurretPose() {
     return turretPose;
   }
+
+
 }
