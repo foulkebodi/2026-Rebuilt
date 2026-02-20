@@ -69,6 +69,8 @@ public class ClimberSys extends SubsystemBase {
 
     HookMtrSparkFlexConfig.softLimit.forwardSoftLimitEnabled(false);
     HookMtrSparkFlexConfig.softLimit.reverseSoftLimitEnabled(false);
+    HookMtrSparkFlexConfig.softLimit.forwardSoftLimit(ClimberConstants.hookMaxDeg);
+    HookMtrSparkFlexConfig.softLimit.reverseSoftLimit(ClimberConstants.hookMinDeg);
 
     LeftElevatorMtrSparkFlexConfig.softLimit.forwardSoftLimitEnabled(true);
     LeftElevatorMtrSparkFlexConfig.softLimit.reverseSoftLimitEnabled(true);
@@ -80,14 +82,14 @@ public class ClimberSys extends SubsystemBase {
     RightElevatorMtrSparkFlexConfig.softLimit.forwardSoftLimit(ClimberConstants.ElevatorMaxInches);
     RightElevatorMtrSparkFlexConfig.softLimit.reverseSoftLimit(ClimberConstants.ElevatorMinInches);
 
-    LeftElevatorMtrSparkFlexConfig.encoder.positionConversionFactor(ClimberConstants.ElevatorPositionConversionFactor);
-    LeftElevatorMtrSparkFlexConfig.encoder.velocityConversionFactor(ClimberConstants.ElevatorVelocityConversionFactor);
+    LeftElevatorMtrSparkFlexConfig.encoder.positionConversionFactor(ClimberConstants.elevatorPositionConversionFactor);
+    LeftElevatorMtrSparkFlexConfig.encoder.velocityConversionFactor(ClimberConstants.elevatorVelocityConversionFactor);
 
-    RightElevatorMtrSparkFlexConfig.encoder.positionConversionFactor(ClimberConstants.ElevatorPositionConversionFactor);
-    RightElevatorMtrSparkFlexConfig.encoder.velocityConversionFactor(ClimberConstants.ElevatorVelocityConversionFactor);
+    RightElevatorMtrSparkFlexConfig.encoder.positionConversionFactor(ClimberConstants.elevatorPositionConversionFactor);
+    RightElevatorMtrSparkFlexConfig.encoder.velocityConversionFactor(ClimberConstants.elevatorVelocityConversionFactor);
 
-    HookMtrSparkFlexConfig.encoder.positionConversionFactor(ClimberConstants.HookPositionConversionFactor);
-    HookMtrSparkFlexConfig.encoder.velocityConversionFactor(ClimberConstants.HookVelocityConversionFactor);
+    HookMtrSparkFlexConfig.encoder.positionConversionFactor(ClimberConstants.hookPositionConversionFactor);
+    HookMtrSparkFlexConfig.encoder.velocityConversionFactor(ClimberConstants.hookVelocityConversionFactor);
 
     HookMtrSparkFlexConfig.closedLoop
         .p(ClimberConstants.HookP)

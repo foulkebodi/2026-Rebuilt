@@ -32,8 +32,6 @@ public class IndexerSys extends SubsystemBase {
   private double targetSpindexerRPM;
   private double targetTowerRPM;
   
- 
-
   /** Creates a new ExampleSubsystem. */
   @SuppressWarnings("removal")
   public IndexerSys() {
@@ -104,18 +102,14 @@ public class IndexerSys extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-      spindexerPID.setSetpoint(targetSpindexerRPM, ControlType.kVelocity);
-      towerPID.setSetpoint(targetTowerRPM, ControlType.kVelocity);
-    
   }
 
   public void setTargetSpindexerRPM(double targetSpindexerRPM) {
-    this.targetSpindexerRPM = targetSpindexerRPM;
+    spindexerPID.setSetpoint(targetSpindexerRPM, ControlType.kVelocity);
   }
 
   public void setTargetTowerRPM(double targetTowerRPM) {
-    this.targetTowerRPM = targetTowerRPM;
+    towerPID.setSetpoint(targetTowerRPM, ControlType.kVelocity);
   }
 
   public double getTargetSpindexerRPM() {

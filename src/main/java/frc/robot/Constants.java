@@ -12,6 +12,7 @@ import com.pathplanner.lib.config.ModuleConfig;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -86,6 +87,10 @@ public final class Constants {
         public static final int azimuthMtrID = 22;
         public static final int leftFlyWheelMtrID = 23;
         public static final int rightFlyWheelMtrID = 24;
+
+        public static final int HookMtrID = 25;
+        public static final int LeftElevatorID = 26;
+        public static final int RightElevatorID = 27;
 
     }
 
@@ -239,18 +244,85 @@ public final class Constants {
 
         public static final double azimuthP = 0.0;
         public static final double azimuthD = 0.0;
+        public static final double azimuthkS = 0.0;
+        public static final double azimuthkV = 0.0;
+        public static final double azimuthkA = 0.0;
         public static final double flyWheelP = 0.0;
         public static final double flyWheelD = 0.0;
 
         public static final double azimuthMaxVelocityDegPerSec = 180.0;
         public static final double azimuthMaxAccelerationDegPerSecSq = 360.0;
+        public static final double maximumAizmuthAngleDeg = 90.0;
+        public static final double minimumAizmuthAngleDeg = -90.0;
+        
         public static final double azimuthPositionConversionFactor = 20.0 / 173.0 * 360.0;
         public static final double azimuthVelocityConversionFactor = 20.0 / 173.0 * 360.0 / 60.0;
 
         public static final double turretMaxPositionInches = 0.0;
         public static final double turretMinPositionInches = 0.0;
 
-        public static final Pose2d blueTargetPose = new Pose2d(4.62, 4.04, null);
-        public static final Pose2d redTargetPose = new Pose2d(4.62, 4.04, null);
+        public static final Pose2d targetPose = new Pose2d(4.62, 4.04, null);
+
+        public static final double turretOffsetX = 0.0;
+        public static final double turretOffsetY = 0.0;
+        public static final Transform2d robotToTurret = new Transform2d(new Translation2d(turretOffsetX, turretOffsetY), new Rotation2d());
+    }
+
+    public class ClimberConstants {
+        public static final int maxHookCurrentAmps = 20;
+        public static final int maxElevatorCurrentAmps = 40;
+        public static final double ElevatorP = 0.0;
+        public static final double ElevatorD = 0.0;
+
+        public static final double HookP = 0.0;
+        public static final double HookD = 0.0;
+
+        public static final double elevatorPositionConversionFactor = 1.0;
+        public static final double elevatorVelocityConversionFactor = 1.0;
+
+        public static final double hookPositionConversionFactor = 1.0;
+        public static final double hookVelocityConversionFactor = 1.0;
+
+        public static final double ElevatorMinInches = 0.0;
+        public static final double ElevatorMaxInches = 0.0;
+
+        public static final double hookMinDeg = 0.0;
+        public static final double hookMaxDeg = 0.0;
+
+        public static final double ElevatorMinSafeInches = 0.0;
+        public static final double ElevatorMaxSafeInches = 0.0;
+        public static final double hookMinPositionInches = 0.0;
+        public static final double hookMaxPositionInches = 0.0;
+
+        public static final double elevatorClimbPositionInches = 0.0;
+        public static final double elevatorSafePositionInches = 0.0;
+        public static final double elevatorStartPositionInches = 0.0;
+
+        public static final double hookClimbPositionInches = 0.0;
+        public static final double hookSafePositionInches = 0.0;
+        public static final double hookStartPositionInches = 0.0;
+    }
+
+    public class IndexerConstants {
+        public static final int maxTowerCurrentAmps = 30;
+        public static final int maxSpindexerCurrentAmps = 20;
+
+        public static final double towerP = 0.0;
+        public static final double towerD = 0.0;
+
+        public static final double spindexerP = 0.0;
+        public static final double spindexerD = 0.0;
+
+        public static final double towerPositionConversionFactor = 1.0;
+        public static final double towerVelocityConversionFactor = 1.0;
+
+        public static final double spindexerPositionConversionFactor = 1.0;
+        public static final double spindexerVelocityConversionFactor = 1.0;
+
+        public static final double spindexerShootingSpeed = 0.0;
+        public static final double spindexerAgitatingSpeed = 0.0;
+
+        public static final double towerShootingSpeed = 0.0;
+        public static final double towerIntakingSpeed = 0.0;
     }
 }
