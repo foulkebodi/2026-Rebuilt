@@ -83,9 +83,9 @@ public class SwerveDrive extends SubsystemBase {
         // initialzing sysID routines
         sysIdRoutine = new SysIdRoutine(
             new SysIdRoutine.Config(
-                null, // default ramp rate
-                Volts.of(4), // default step voltage
-                Time.ofBaseUnits(3, Seconds) // default timeout)
+                null, // ramp rate
+                Volts.of(4), // step voltage (default 7)
+                Time.ofBaseUnits(3, Seconds) // timeout (default 10)
             ),
             new SysIdRoutine.Mechanism(
                 (voltage) -> {
@@ -96,7 +96,7 @@ public class SwerveDrive extends SubsystemBase {
                 },
                 (log) -> {
                     for (int i = 0; i < modules.length; i++) {
-                        Voltage voltage = Volts.of(modules[i].getCharacterizationVoltage(i));
+                        Voltage voltage = Volts.of(modules[i].getCharacterizationVoltage());
                         Distance distance = Meters.of(modules[i].getDriveDistanceMeters());
                         LinearVelocity velocity = MetersPerSecond.of(modules[i].getDriveSpeedMetersPerSec());
                         log.motor("drive-" + i)
@@ -111,19 +111,19 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     // sysID command factories
-    public Command sysIdQuasistaticForward() {
+    public Command driveSysIdQuasistaticForward() {
         return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward);
     }
 
-    public Command sysIdQuasistaticReverse() {
+    public Command driveSysIdQuasistaticReverse() {
         return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse);
     }
 
-    public Command sysIdDynamicForward() {
+    public Command driveSysIdDynamicForward() {
         return sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward);
     }
 
-    public Command sysIdDynamicReverse() {
+    public Command driveSysIdDynamicReverse() {
         return sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse);
     }
 

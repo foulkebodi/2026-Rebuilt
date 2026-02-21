@@ -54,7 +54,7 @@ public class IntakeSys extends SubsystemBase {
     LeftActuatorMtrSparkFlexConfig.inverted(true);
     RightActuatorMtrSparkFlexConfig.inverted(false);
 
-    RollerMtrSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);
+    RollerMtrSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kCoast);
     LeftActuatorMtrSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);
     RightActuatorMtrSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);
 
@@ -124,9 +124,9 @@ public class IntakeSys extends SubsystemBase {
     }
   }
 
-  public void setActuatorPos(double targetPos) {
-    LeftActuatorPID.setSetpoint(targetPos, ControlType.kPosition);
-    RightActuatorPID.setSetpoint(targetPos, ControlType.kPosition);
+  public void setActuatorPos(double targetPositionInches) {
+    LeftActuatorPID.setSetpoint(targetPositionInches, ControlType.kPosition);
+    RightActuatorPID.setSetpoint(targetPositionInches, ControlType.kPosition);
   }
 
   public double getActuatorPos() {

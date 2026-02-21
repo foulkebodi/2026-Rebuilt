@@ -4,15 +4,12 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.turret.StartAiming;
 import frc.robot.subsystems.IndexerSys;
 import frc.robot.subsystems.IntakeSys;
 import frc.robot.subsystems.TurretSys;
-import frc.robot.subsystems.util.ExampleSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class StartShootingCommand extends SequentialCommandGroup {
@@ -25,7 +22,6 @@ public class StartShootingCommand extends SequentialCommandGroup {
       // new StartIndexing(indexerSys),
       // PS: possibly add a intake in command after a wait or based on a timer to change the setpoint? 
 
-    
     );
    
   }

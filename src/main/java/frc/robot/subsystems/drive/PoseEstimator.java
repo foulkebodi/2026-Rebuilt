@@ -76,10 +76,6 @@ public class PoseEstimator extends SubsystemBase {
         poseEstimator.update(swerveDrive.getHeading(), swerveDrive.getModulePositions());
     }
 
-    public Pose2d get() {
-        return poseEstimator.getEstimatedPosition();
-    }
-
     public void resetPose(Pose2d pose) {
         poseEstimator.resetPosition(swerveDrive.getHeading(), swerveDrive.getModulePositions(), pose);
     }
@@ -96,7 +92,7 @@ public class PoseEstimator extends SubsystemBase {
     }
 
     public Rotation2d getHeading() {
-        return swerveDrive.getHeading();
+        return poseEstimator.getEstimatedPosition().getRotation();
     }
 
     public double getAngularVelocityDegPerSec() {

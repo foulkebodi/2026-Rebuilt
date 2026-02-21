@@ -87,14 +87,14 @@ public class ArcadeDriveCmd extends Command {
                 drive * SwerveDriveConstants.maxAttainableSpeedMetersPerSec,
                 strafe * SwerveDriveConstants.maxAttainableSpeedMetersPerSec,
                 -rot * SwerveDriveConstants.maxAttainableRotationRadPerSec,
-                poseEstimator.get().getRotation()
+                poseEstimator.getPose().getRotation()
             );
         } else {
             swerve.driveFieldRelative(
                 -drive * SwerveDriveConstants.maxAttainableSpeedMetersPerSec,
                 -strafe * SwerveDriveConstants.maxAttainableSpeedMetersPerSec,
                 -rot * SwerveDriveConstants.maxAttainableRotationRadPerSec,
-                poseEstimator.get().getRotation()
+                poseEstimator.getPose().getRotation()
             );
         }
     }

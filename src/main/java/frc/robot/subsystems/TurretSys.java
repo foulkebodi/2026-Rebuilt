@@ -17,8 +17,21 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
+import static edu.wpi.first.units.Units.Radian;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Volts;
+
 import frc.robot.Constants.CANDevices;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.drive.PoseEstimator;
@@ -29,6 +42,8 @@ public class TurretSys extends SubsystemBase {
   private final SparkFlex azimuthMtr;
 
   private final RelativeEncoder azimuthEnc;
+  private final RelativeEncoder leftFlyWheelEnc;
+  private final RelativeEncoder rightFlyWheelEnc;
 
   private final SparkClosedLoopController leftFlyWheelPID;
   private final SparkClosedLoopController rightFlyWheelPID;
@@ -36,14 +51,14 @@ public class TurretSys extends SubsystemBase {
   private final SimpleMotorFeedforward azimuthFeedforward;
   private final PoseEstimator poseEstimator;
 
-  private double targetAzimuthAngle = 0;
+  private double targetAzimuthAngleRad = 0;
   private Double manualAzimuthAngle = null;
   private boolean isAiming = false;
   private Pose2d robotPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
   private Pose2d turretPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
+  private final SysIdRoutine sysIdRoutine;
 
-   @SuppressWarnings("removal")
   public TurretSys(PoseEstimator poseEstimator) {
 
     this.poseEstimator = poseEstimator;
@@ -51,22 +66,29 @@ public class TurretSys extends SubsystemBase {
     leftFlyWheelMtr = new SparkFlex(CANDevices.leftFlyWheelMtrID, MotorType.kBrushless);
     SparkFlexConfig leftFlyWheelMtrSparkFlexConfig = new SparkFlexConfig();
     leftFlyWheelPID = leftFlyWheelMtr.getClosedLoopController();
+    leftFlyWheelEnc = leftFlyWheelMtr.getEncoder();
 
     rightFlyWheelMtr = new SparkFlex(CANDevices.rightFlyWheelMtrID, MotorType.kBrushless);
     SparkFlexConfig rightFlyWheelMtrSparkFlexConfig = new SparkFlexConfig();
     rightFlyWheelPID = rightFlyWheelMtr.getClosedLoopController();
+    rightFlyWheelEnc = rightFlyWheelMtr.getEncoder();
 
     azimuthMtr = new SparkFlex(CANDevices.azimuthMtrID, MotorType.kBrushless);
     SparkFlexConfig azimuthMtrSparkFlexConfig = new SparkFlexConfig();
     azimuthPID = new ProfiledPIDController(
             TurretConstants.azimuthP, 0.0, TurretConstants.azimuthD,
-            new TrapezoidProfile.Constraints(TurretConstants.azimuthMaxVelocityDegPerSec, TurretConstants.azimuthMaxAccelerationDegPerSecSq));
+            new TrapezoidProfile.Constraints(TurretConstants.azimuthMaxVelocityRadPerSec, TurretConstants.azimuthMaxAccelerationRadPerSecSq));
     azimuthFeedforward = new SimpleMotorFeedforward(TurretConstants.azimuthkS, TurretConstants.azimuthkV, TurretConstants.azimuthkA);
     azimuthPID.enableContinuousInput(-Math.PI, Math.PI);
     azimuthEnc = azimuthMtr.getEncoder();
 
-    azimuthMtrSparkFlexConfig.encoder.positionConversionFactor(TurretConstants.azimuthPositionConversionFactor);
-    azimuthMtrSparkFlexConfig.encoder.velocityConversionFactor(TurretConstants.azimuthVelocityConversionFactor);
+    azimuthMtrSparkFlexConfig.encoder.positionConversionFactor(TurretConstants.azimuthPositionConversionFactorRadPerRot);
+    azimuthMtrSparkFlexConfig.encoder.velocityConversionFactor(TurretConstants.azimuthVelocityConversionFactorRadPerRotPerSec);
+
+    leftFlyWheelMtrSparkFlexConfig.encoder.positionConversionFactor(TurretConstants.flyWheelPositionConversionFactorRotPerRot);
+    leftFlyWheelMtrSparkFlexConfig.encoder.velocityConversionFactor(TurretConstants.flyWheelVelocityConversionFactorRotPerRotPerSec);
+    rightFlyWheelMtrSparkFlexConfig.encoder.positionConversionFactor(TurretConstants.flyWheelPositionConversionFactorRotPerRot);
+    rightFlyWheelMtrSparkFlexConfig.encoder.velocityConversionFactor(TurretConstants.flyWheelVelocityConversionFactorRotPerRotPerSec);
 
     azimuthMtrSparkFlexConfig.inverted(false);
     leftFlyWheelMtrSparkFlexConfig.inverted(true);
@@ -86,8 +108,8 @@ public class TurretSys extends SubsystemBase {
 
     azimuthMtrSparkFlexConfig.softLimit.forwardSoftLimitEnabled(true);
     azimuthMtrSparkFlexConfig.softLimit.reverseSoftLimitEnabled(true);
-    azimuthMtrSparkFlexConfig.softLimit.forwardSoftLimit(TurretConstants.turretMaxPositionInches);
-    azimuthMtrSparkFlexConfig.softLimit.reverseSoftLimit(TurretConstants.turretMinPositionInches);
+    azimuthMtrSparkFlexConfig.softLimit.forwardSoftLimit(TurretConstants.maximumAizmuthAngleDeg);
+    azimuthMtrSparkFlexConfig.softLimit.reverseSoftLimit(TurretConstants.minimumAizmuthAngleDeg);
 
     rightFlyWheelMtrSparkFlexConfig.closedLoop
         .p(TurretConstants.flyWheelP)
@@ -96,17 +118,47 @@ public class TurretSys extends SubsystemBase {
     leftFlyWheelMtrSparkFlexConfig.closedLoop
         .p(TurretConstants.flyWheelP)
         .d(TurretConstants.flyWheelD);
+
+    // initialzing sysID routines
+    sysIdRoutine = new SysIdRoutine(
+        new SysIdRoutine.Config(
+            null, // default ramp rate
+            Volts.of(7), // default step voltage
+            Time.ofBaseUnits(10, Seconds) // default timeout)
+        ),
+        new SysIdRoutine.Mechanism(
+            (voltage) -> {
+                setAzimuthVoltage(voltage.in(Volts));
+            },
+            (log) -> {
+                    Voltage voltage = Volts.of(getCharacterizationVoltage());
+                    Angle angle = Angle.ofBaseUnits(azimuthEnc.getPosition(), Radian);
+                    AngularVelocity angularVelocity = AngularVelocity.ofBaseUnits(azimuthEnc.getVelocity(), RadiansPerSecond);
+                    log.motor("azimuth")
+                        .voltage(voltage)
+                        .angularPosition(angle)
+                        .angularVelocity(angularVelocity);
+            },
+            this
+        )
+    );
   }
 
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a
-   * digital sensor).
-   * 
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
+  // sysID command factories
+  public Command sysIdQuasistaticForward() {
+      return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward);
+  }
+
+  public Command sysIdQuasistaticReverse() {
+      return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse);
+  }
+
+  public Command sysIdDynamicForward() {
+      return sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward);
+  }
+
+  public Command sysIdDynamicReverse() {
+      return sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse);
   }
 
   @Override
@@ -114,29 +166,23 @@ public class TurretSys extends SubsystemBase {
     robotPose = poseEstimator.getPose();
     turretPose = robotPose.transformBy(TurretConstants.robotToTurret);
 
-    targetAzimuthAngle =
+    targetAzimuthAngleRad =
       TurretConstants.targetPose.getTranslation()
       .minus(turretPose.getTranslation())
       .getAngle()
-      .minus(robotPose.getRotation()).getRadians();
+      .minus(new Rotation2d(robotPose.getRotation().getRadians())).getRadians();
 
     if (DriverStation.isDisabled()) {
       azimuthPID.setGoal(azimuthEnc.getPosition());  
-    } else if (isAiming && targetAzimuthAngle <= Units.degreesToRadians(TurretConstants.maximumAizmuthAngleDeg) && targetAzimuthAngle >= Units.degreesToRadians(TurretConstants.minimumAizmuthAngleDeg)) {
-      azimuthPID.setGoal(targetAzimuthAngle);
+    } else if (isAiming && targetAzimuthAngleRad <= Units.degreesToRadians(TurretConstants.maximumAizmuthAngleDeg) && targetAzimuthAngleRad >= Units.degreesToRadians(TurretConstants.minimumAizmuthAngleDeg)) {
+      azimuthPID.setGoal(targetAzimuthAngleRad);
     }  /* for troubleshooting only, remove for competition */ else if (manualAzimuthAngle != null) {
        azimuthPID.setGoal(manualAzimuthAngle);
     } else {
       azimuthPID.setGoal(Units.degreesToRadians(TurretConstants.azimuthDefaultSetpointDeg));
     }
     
-
     azimuthMtr.set(azimuthPID.calculate(azimuthEnc.getPosition()) + azimuthFeedforward.calculate(azimuthPID.getSetpoint().velocity));
-  }
-
-  // for sysID profiling only
-  public void setAzimuthVoltage(double voltage) {
-    azimuthMtr.setVoltage(voltage);
   }
 
   public void setManualAzimuthAngle(Double manualAzimuthAngle) {
@@ -146,21 +192,25 @@ public class TurretSys extends SubsystemBase {
   public void setIsAiming(boolean isAiming) {
     this.isAiming = isAiming;
   }
-  
+
   public boolean isOnTarget(){
-    return (Math.abs(getCurrentAzimuthAngle() - getTargetAzimuthAngle()) <= TurretConstants.azimuthErrorTolerance);
+    return (Math.abs(getCurrentAzimuthAngleRad() - getTargetAzimuthAngleRad()) <= Units.degreesToRadians(TurretConstants.azimuthErrorTolerance));
   }
 
-  public void setFlyWheelRPM(double targetRPM) {
+  public void setFlywheelRPM(double targetRPM) {
     leftFlyWheelPID.setSetpoint(targetRPM, ControlType.kVelocity);
     rightFlyWheelPID.setSetpoint(targetRPM, ControlType.kVelocity);
   }
 
-  public double getTargetAzimuthAngle() {
-    return targetAzimuthAngle;
+  public double getFlywheelRPM() {
+    return (leftFlyWheelEnc.getVelocity() + rightFlyWheelEnc.getVelocity()) / 2.0;
   }
 
-  public double getCurrentAzimuthAngle(){
+  public double getTargetAzimuthAngleRad() {
+    return targetAzimuthAngleRad;
+  }
+
+  public double getCurrentAzimuthAngleRad(){
     return azimuthEnc.getPosition();
   }
 
@@ -168,5 +218,12 @@ public class TurretSys extends SubsystemBase {
     return turretPose;
   }
 
+  // for sysID charachterization only
+  public void setAzimuthVoltage(double voltage) {
+    azimuthMtr.setVoltage(voltage);
+  }
 
+  public double getCharacterizationVoltage() {
+    return azimuthMtr.getAppliedOutput() * RobotController.getBatteryVoltage();
+  }
 }

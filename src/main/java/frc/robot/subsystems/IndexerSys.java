@@ -28,9 +28,6 @@ public class IndexerSys extends SubsystemBase {
   private final SparkClosedLoopController towerPID;
   private final SparkClosedLoopController spindexerPID;
 
-  private double targetSpindexerRPM;
-  private double targetTowerRPM;
-  
   /** Creates a new ExampleSubsystem. */
   @SuppressWarnings("removal")
   public IndexerSys() {
@@ -40,13 +37,13 @@ public class IndexerSys extends SubsystemBase {
     towerEnc = towerMtr.getEncoder();
     towerPID = towerMtr.getClosedLoopController();
 
-     spindexerMtr = new SparkFlex(CANDevices.spindexerMtrID, MotorType.kBrushless);
+    spindexerMtr = new SparkFlex(CANDevices.spindexerMtrID, MotorType.kBrushless);
     SparkFlexConfig spindexerSparkFlexConfig = new SparkFlexConfig();
     spindexerEnc = spindexerMtr.getEncoder();
     spindexerPID = spindexerMtr.getClosedLoopController();
 
-    towerSparkFlexConfig.inverted(true); 
-    spindexerSparkFlexConfig.inverted(true);
+    towerSparkFlexConfig.inverted(false); 
+    spindexerSparkFlexConfig.inverted(false);
 
     towerSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);
     spindexerSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);
@@ -54,12 +51,12 @@ public class IndexerSys extends SubsystemBase {
     towerSparkFlexConfig.smartCurrentLimit(IndexerConstants.maxTowerCurrentAmps);
     spindexerSparkFlexConfig.smartCurrentLimit(IndexerConstants.maxSpindexerCurrentAmps);
 
-    towerSparkFlexConfig.voltageCompensation(9);
-    spindexerSparkFlexConfig.voltageCompensation(9);
+    towerSparkFlexConfig.voltageCompensation(10);
+    spindexerSparkFlexConfig.voltageCompensation(10);
 
     towerSparkFlexConfig.softLimit.forwardSoftLimitEnabled(false);
     towerSparkFlexConfig.softLimit.reverseSoftLimitEnabled(false);
-     spindexerSparkFlexConfig.softLimit.forwardSoftLimitEnabled(false);
+    spindexerSparkFlexConfig.softLimit.forwardSoftLimitEnabled(false);
     spindexerSparkFlexConfig.softLimit.reverseSoftLimitEnabled(false);
 
     towerSparkFlexConfig.encoder.positionConversionFactor(IndexerConstants.towerPositionConversionFactor);
@@ -111,14 +108,6 @@ public class IndexerSys extends SubsystemBase {
     towerPID.setSetpoint(targetTowerRPM, ControlType.kVelocity);
   }
 
-  public double getTargetSpindexerRPM() {
-    return targetSpindexerRPM;
-  }
-
-  public double getTargetTowerRPM() {
-    return targetTowerRPM;
-  }
-
   public double getSpindexerRPM() {
     return spindexerEnc.getVelocity();
   }
@@ -126,5 +115,4 @@ public class IndexerSys extends SubsystemBase {
   public double getTowerRPM() {
     return towerEnc.getVelocity();
   }
-  
 }

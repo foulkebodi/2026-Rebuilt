@@ -140,7 +140,7 @@ public class REVSwerveModule extends SwerveModule {
         steerPID.setSetpoint(0.0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
-    public double getCharacterizationVoltage(double volts) {
+    public double getCharacterizationVoltage() {
         return driveMtr.getAppliedOutput() * RobotController.getBatteryVoltage();
     }
 }

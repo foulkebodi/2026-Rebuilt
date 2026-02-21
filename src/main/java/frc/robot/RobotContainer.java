@@ -10,6 +10,8 @@ import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.commands.drive.ArcadeDriveCmd;
 import frc.robot.commands.drive.LockCmd;
+import frc.robot.commands.turret.SetManualAzimuthAngle;
+import frc.robot.commands.turret.SetManualFlywheelRPM;
 import frc.robot.subsystems.ClimberSys;
 import frc.robot.subsystems.IndexerSys;
 import frc.robot.subsystems.IntakeSys;
@@ -25,7 +27,6 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.Joystick;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -62,7 +63,7 @@ public class RobotContainer {
 
 		// configure autobuilder
 		AutoBuilder.configure(
-			poseEstimator::get,
+			poseEstimator::getPose,
 			poseEstimator::resetPose,
 			swerveDrive::getRobotRelativeSpeeds, 
 			(chassisSpeeds, feedforward) -> swerveDrive.driveRobotRelative(chassisSpeeds),
@@ -107,13 +108,36 @@ public class RobotContainer {
 		driverController.axisGreaterThan(XboxController.Axis.kLeftTrigger.value, ControllerConstants.tiggerPressedThreshold)
 		.onTrue(new LockCmd(swerveDrive));
 
-		
+		// binding commands for swerve sysID
+		// driverController.a().onTrue(swerveDrive.driveSysIdDynamicForward());
+		// driverController.b().onTrue(swerveDrive.driveSysIdDynamicReverse());
+		// driverController.x().onTrue(swerveDrive.driveSysIdQuasistaticForward());
+		// driverController.y().onTrue(swerveDrive.driveSysIdQuasistaticReverse());
+		// binding commands for turret sysID
+		// driverController.a().onTrue(turretSys.sysIdDynamicForward());
+		// driverController.b().onTrue(turretSys.sysIdDynamicReverse());
+		// driverController.x().onTrue(turretSys.sysIdQuasistaticForward());
+		// driverController.y().onTrue(turretSys.sysIdQuasistaticReverse());
 
-		// binding commands for sysID
-		driverController.a().onTrue(swerveDrive.sysIdDynamicForward());
-		driverController.b().onTrue(swerveDrive.sysIdDynamicReverse());
-		driverController.x().onTrue(swerveDrive.sysIdQuasistaticForward());
-		driverController.y().onTrue(swerveDrive.sysIdQuasistaticReverse());
+		// turret manual control bindings for testing (DISABLE SOFT LIMITS BEFORE USING)
+		operatorController.a().onTrue(new SetManualAzimuthAngle(turretSys, 0.0));
+		operatorController.b().onTrue(new SetManualAzimuthAngle(turretSys, 25.0));
+		operatorController.x().onTrue(new SetManualAzimuthAngle(turretSys, 120.0));
+		operatorController.y().onTrue(new SetManualAzimuthAngle(turretSys, -90.0));
+
+		// flywheel RPM control bindings for testing
+		operatorController.a().onTrue(new SetManualFlywheelRPM(turretSys, 0.0));
+		operatorController.b().onTrue(new SetManualFlywheelRPM(turretSys, 100.0));
+		operatorController.x().onTrue(new SetManualFlywheelRPM(turretSys, 1000.0));
+		operatorController.y().onTrue(new SetManualFlywheelRPM(turretSys, 7000.0));
+
+		// spindexer RPM control bindings for testing
+
+		// tower RPM control bindings for testing
+
+		// intake roller RPM control bindings for testing
+
+		// intake actuator position control bindings for testing
 
 		// example operator bindings
 		operatorController.a().onTrue(new Command() {});
@@ -130,12 +154,31 @@ public class RobotContainer {
 	}
 
 	public void updateDashboard() {
+		// drive base
 		SmartDashboard.putNumber("FL CANcoder", swerveDrive.getCanCoderAngles()[0].getDegrees());
 		SmartDashboard.putNumber("FR CANcoder", swerveDrive.getCanCoderAngles()[1].getDegrees());
 		SmartDashboard.putNumber("BL CANcoder", swerveDrive.getCanCoderAngles()[2].getDegrees());
 		SmartDashboard.putNumber("BR CANcoder", swerveDrive.getCanCoderAngles()[3].getDegrees());
-		SmartDashboard.putNumber("pos-x", poseEstimator.get().getX());
-		SmartDashboard.putNumber("pos-y", poseEstimator.get().getY());
-		SmartDashboard.putNumber("pos-rot", poseEstimator.get().getRotation().getDegrees());
+		// pose info from pose estimator
+		SmartDashboard.putNumber("pos-x", poseEstimator.getPose().getX());
+		SmartDashboard.putNumber("pos-y", poseEstimator.getPose().getY());
+		SmartDashboard.putNumber("pos-rot", poseEstimator.getHeading().getDegrees());
+		SmartDashboard.putNumber("gyro heading", swerveDrive.getHeading().getDegrees());
+		// turret azimuth info
+		SmartDashboard.putNumber("current azimuth angle rad", turretSys.getCurrentAzimuthAngleRad());
+		SmartDashboard.putNumber("target azimuth angle rad", turretSys.getTargetAzimuthAngleRad());
+		SmartDashboard.putBoolean("on target", turretSys.isOnTarget());
+		SmartDashboard.putNumberArray("turret pose", new double[] {
+			turretSys.getTurretPose().getTranslation().getX(), 
+			turretSys.getTurretPose().getTranslation().getY()});
+		// turret flywheel
+		SmartDashboard.putNumber("flywheel current RPM", turretSys.getFlywheelRPM());
+		// indexer info
+		SmartDashboard.putNumber("tower RPM", indexerSys.getTowerRPM());
+		SmartDashboard.putNumber("spindexer RPM", indexerSys.getSpindexerRPM());
+		// intake info
+		SmartDashboard.putNumber("actuator position inches", intakeSys.getActuatorPos());
+		SmartDashboard.putNumber("roller RPM", intakeSys.getRollerRPM());
+		// climber info
 	}
 }
