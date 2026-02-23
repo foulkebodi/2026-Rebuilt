@@ -41,7 +41,7 @@ public class PoseEstimator extends SubsystemBase {
     @Override
     public void periodic() {
         // filter and update pose based on vision from limelight one
-        LimelightHelpers.SetRobotOrientation(VisionConstants.limelightOneName, poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        LimelightHelpers.SetRobotOrientation(VisionConstants.limelightOneName, poseEstimator.getEstimatedPosition().getRotation().getDegrees(), getAngularVelocityDegPerSec(), 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate limeLightOnePose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(VisionConstants.limelightOneName);
         trustLimelightOne = true;
         if(swerveDrive.getAngularVelocityDegPerSec() > 360) {
@@ -57,7 +57,7 @@ public class PoseEstimator extends SubsystemBase {
         } 
 
         // filter and update pose based on vision from limelight two
-        LimelightHelpers.SetRobotOrientation(VisionConstants.limelightTwoName, poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        LimelightHelpers.SetRobotOrientation(VisionConstants.limelightTwoName, poseEstimator.getEstimatedPosition().getRotation().getDegrees(), getAngularVelocityDegPerSec(), 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate limeLightTwoPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(VisionConstants.limelightTwoName);
         trustLimelightTwo = true;
         if(swerveDrive.getAngularVelocityDegPerSec() > 360) {

@@ -1,0 +1,43 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot.commands.spindexer;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.IndexerSys;
+
+/** An example command that uses an example subsystem. */
+public class SetSpindexerRPM extends Command {
+  
+  private final IndexerSys indexerSys;
+  private double targetRPM;
+  public SetSpindexerRPM(IndexerSys indexerSys, double targetRPM) {
+    this.indexerSys = indexerSys;
+    this.targetRPM = targetRPM;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(indexerSys);
+  }
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    indexerSys.setTargetSpindexerRPM(targetRPM);
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {}
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return true;
+  }
+}

@@ -196,7 +196,11 @@ public final class Constants {
         public static final double visionTranslationStdDevMeters = 0.35;
         public static final double visionRotationStdDevRad = Units.degreesToRadians(30.0);
 
+        public static final double getAngularVelocityDegPerSec = 360.0;
+
         public static final double poseInnacuracyThreshold = 0.5;
+
+
     }
 
     public class IntakeConstants {
@@ -246,10 +250,17 @@ public final class Constants {
         public static final double azimuthPositionConversionFactorRadPerRot = 20.0 / 173.0 * 2.0 * Math.PI;
         public static final double azimuthVelocityConversionFactorRadPerRotPerSec = 20.0 / 173.0 * 2.0 * Math.PI / 60.0;
 
-        public static final double flyWheelPositionConversionFactorRotPerRot = 15.0 / 18.0;
-        public static final double flyWheelVelocityConversionFactorRotPerRotPerSec = 15.0 / 18.0 / 60.0;
+        public static final double flyWheelPositionConversionFactorRot = 1.0;
+        public static final double flyWheelVelocityConversionFactorRPM = 1.0;
 
-        public static final Pose2d targetPose = new Pose2d(4.62, 4.04, null);
+        public static final double zerothDegreeFitConstant = 0.0;
+        public static final double firstDegreeFitConstant = 0.0;
+        public static final double secondDegreeFitConstant = 0.0;
+
+        public static final double flywheelOffsetRPMIncrement = 200.0;
+
+        public static final Pose2d targetPoseBlue = new Pose2d(4.62, 4.04, null);
+        public static final Pose2d targetPoseRed = new Pose2d(11.915, 4.035, null);
 
         public static final double turretOffsetX = 0.0;
         public static final double turretOffsetY = 0.0;
@@ -304,8 +315,8 @@ public final class Constants {
         public static final double towerPositionConversionFactor = 1.0;
         public static final double towerVelocityConversionFactor = 1.0 / 60.0;
 
-        public static final double spindexerPositionConversionFactor = 1.0 / 5.0; 
-        public static final double spindexerVelocityConversionFactor = 1.0 / 5.0 / 60.0;
+        public static final double spindexerPositionConversionFactor = 1.0 / 15.0; 
+        public static final double spindexerVelocityConversionFactor = 1.0 / 15.0 / 60.0;
 
         public static final double spindexerShootingSpeed = 0.0;
         public static final double spindexerAgitatingSpeed = 0.0;

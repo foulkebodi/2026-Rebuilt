@@ -27,8 +27,6 @@ public class IntakeSys extends SubsystemBase {
   private final RelativeEncoder rightActuatorEnc;
   private final RelativeEncoder rollerEnc;
 
-  private double targetRollerRPM = 0;
-
   private final SparkClosedLoopController rollerPID;
   private final SparkClosedLoopController LeftActuatorPID;
   private final SparkClosedLoopController RightActuatorPID;
@@ -117,24 +115,23 @@ public class IntakeSys extends SubsystemBase {
   }
 
   public void periodic() {
-    if (getActuatorPos() >= IntakeConstants.actuatorSafePositionInches) {
-      rollerPID.setSetpoint(targetRollerRPM, ControlType.kVelocity);
-    } else {
-      rollerPID.setSetpoint(0, ControlType.kVelocity);
-    }
   }
 
-  public void setActuatorPos(double targetPositionInches) {
+  public void setTargetActuatorInches(double targetPositionInches) {
     LeftActuatorPID.setSetpoint(targetPositionInches, ControlType.kPosition);
     RightActuatorPID.setSetpoint(targetPositionInches, ControlType.kPosition);
   }
 
-  public double getActuatorPos() {
+  public double getActuatorPositionInches() {
     return (leftActuatorEnc.getPosition() + rightActuatorEnc.getPosition()) / 2.0;
   }
 
   public void setTargetRollerRPM(double targetRPM) {
-    this.targetRollerRPM = targetRPM;
+     if (getActuatorPositionInches() >= IntakeConstants.actuatorSafePositionInches) {
+      rollerPID.setSetpoint(targetRPM, ControlType.kVelocity);
+    } else {
+      rollerPID.setSetpoint(0.0, ControlType.kVelocity);
+    }
   }
 
   public double getRollerRPM() {

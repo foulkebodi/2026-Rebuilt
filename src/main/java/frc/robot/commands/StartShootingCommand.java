@@ -21,7 +21,7 @@ public class StartShootingCommand extends SequentialCommandGroup {
       new WaitUntilCommand(() -> turretSys.isOnTarget())
       // new StartIndexing(indexerSys),
       // PS: possibly add a intake in command after a wait or based on a timer to change the setpoint? 
-
+      
     );
    
   }

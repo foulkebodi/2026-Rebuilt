@@ -5,11 +5,18 @@
 package frc.robot;
 
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.commands.drive.ArcadeDriveCmd;
 import frc.robot.commands.drive.LockCmd;
+import frc.robot.commands.intake.SetIntakeActuatorInches;
+import frc.robot.commands.intake.SetIntakeRollerRPM;
+import frc.robot.commands.spindexer.SetSpindexerRPM;
+import frc.robot.commands.tower.SetTowerRPM;
+import frc.robot.commands.turret.DecrementFlywheelOffset;
+import frc.robot.commands.turret.IncrementFlywheelOffset;
 import frc.robot.commands.turret.SetManualAzimuthAngle;
 import frc.robot.commands.turret.SetManualFlywheelRPM;
 import frc.robot.subsystems.ClimberSys;
@@ -96,7 +103,7 @@ public class RobotContainer {
 
 	
 	private void configureBindings() {
-		// drive controls
+		// driver controls for competition
 		swerveDrive.setDefaultCommand(new ArcadeDriveCmd(
 			() -> MathUtil.applyDeadband(driverController.getLeftY(), ControllerConstants.joystickDeadband),
 			() -> MathUtil.applyDeadband(driverController.getLeftX(), ControllerConstants.joystickDeadband),
@@ -108,11 +115,16 @@ public class RobotContainer {
 		driverController.axisGreaterThan(XboxController.Axis.kLeftTrigger.value, ControllerConstants.tiggerPressedThreshold)
 		.onTrue(new LockCmd(swerveDrive));
 
+		// operator bindings for competition
+		operatorController.rightBumper().onTrue(new IncrementFlywheelOffset(turretSys));
+		operatorController.leftBumper().onTrue(new DecrementFlywheelOffset(turretSys));
+
 		// binding commands for swerve sysID
 		// driverController.a().onTrue(swerveDrive.driveSysIdDynamicForward());
 		// driverController.b().onTrue(swerveDrive.driveSysIdDynamicReverse());
 		// driverController.x().onTrue(swerveDrive.driveSysIdQuasistaticForward());
 		// driverController.y().onTrue(swerveDrive.driveSysIdQuasistaticReverse());
+
 		// binding commands for turret sysID
 		// driverController.a().onTrue(turretSys.sysIdDynamicForward());
 		// driverController.b().onTrue(turretSys.sysIdDynamicReverse());
@@ -120,28 +132,44 @@ public class RobotContainer {
 		// driverController.y().onTrue(turretSys.sysIdQuasistaticReverse());
 
 		// turret manual control bindings for testing (DISABLE SOFT LIMITS BEFORE USING)
-		operatorController.a().onTrue(new SetManualAzimuthAngle(turretSys, 0.0));
-		operatorController.b().onTrue(new SetManualAzimuthAngle(turretSys, 25.0));
-		operatorController.x().onTrue(new SetManualAzimuthAngle(turretSys, 120.0));
-		operatorController.y().onTrue(new SetManualAzimuthAngle(turretSys, -90.0));
+		// operatorController.a().onTrue(new SetManualAzimuthAngle(turretSys, 0.0));
+		// operatorController.b().onTrue(new SetManualAzimuthAngle(turretSys, 25.0));
+		// operatorController.x().onTrue(new SetManualAzimuthAngle(turretSys, 120.0));
+		// operatorController.y().onTrue(new SetManualAzimuthAngle(turretSys, -90.0));
 
 		// flywheel RPM control bindings for testing
-		operatorController.a().onTrue(new SetManualFlywheelRPM(turretSys, 0.0));
-		operatorController.b().onTrue(new SetManualFlywheelRPM(turretSys, 100.0));
-		operatorController.x().onTrue(new SetManualFlywheelRPM(turretSys, 1000.0));
-		operatorController.y().onTrue(new SetManualFlywheelRPM(turretSys, 7000.0));
+		// operatorController.a().onTrue(new SetManualFlywheelRPM(turretSys, 0.0));
+		// operatorController.b().onTrue(new SetManualFlywheelRPM(turretSys, 100.0));
+		// operatorController.x().onTrue(new SetManualFlywheelRPM(turretSys, 1000.0));
+		// operatorController.y().onTrue(new SetManualFlywheelRPM(turretSys, 7000.0));
 
 		// spindexer RPM control bindings for testing
+		// operatorController.a().onTrue(new SetSpindexerRPM(indexerSys, 0.0));
+		// operatorController.b().onTrue(new SetSpindexerRPM(indexerSys, 100.0));
+		// operatorController.x().onTrue(new SetSpindexerRPM(indexerSys, 1000.0));
+		// operatorController.y().onTrue(new SetSpindexerRPM(indexerSys, 7000.0));
 
 		// tower RPM control bindings for testing
+		// operatorController.a().onTrue(new SetTowerRPM(indexerSys, 0.0));
+		// operatorController.b().onTrue(new SetTowerRPM(indexerSys, 100.0));
+		// operatorController.x().onTrue(new SetTowerRPM(indexerSys, 1000.0));
+		// operatorController.y().onTrue(new SetTowerRPM(indexerSys, 7000.0));
 
 		// intake roller RPM control bindings for testing
+		// operatorController.a().onTrue(new SetIntakeRollerRPM(intakeSys, 0.0));
+		// operatorController.b().onTrue(new SetIntakeRollerRPM(intakeSys, 100.0));
+		// operatorController.x().onTrue(new SetIntakeRollerRPM(intakeSys, 1000.0));
+		// operatorController.y().onTrue(new SetIntakeRollerRPM(intakeSys, 7000.0));
 
 		// intake actuator position control bindings for testing
+		// operatorController.a().onTrue(new SetIntakeActuatorInches(intakeSys, 5.0));
+		// operatorController.b().onTrue(new SetIntakeActuatorInches(intakeSys, 8.0));
+		// operatorController.x().onTrue(new SetIntakeActuatorInches(intakeSys, 0.0));
+		// operatorController.y().onTrue(new SetIntakeActuatorInches(intakeSys, IntakeConstants.actuatorMaxPositionInches));
 
 		// example operator bindings
-		operatorController.a().onTrue(new Command() {});
-		operatorController.b().onTrue(new Command() {});
+		// operatorController.a().onTrue(new Command() {});
+		// operatorController.b().onTrue(new Command() {});
 	
 		operatorController.axisGreaterThan(XboxController.Axis.kRightTrigger.value, ControllerConstants.tiggerPressedThreshold)
 		.onTrue(new Command() {});
@@ -166,18 +194,20 @@ public class RobotContainer {
 		SmartDashboard.putNumber("gyro heading", swerveDrive.getHeading().getDegrees());
 		// turret azimuth info
 		SmartDashboard.putNumber("current azimuth angle rad", turretSys.getCurrentAzimuthAngleRad());
-		SmartDashboard.putNumber("target azimuth angle rad", turretSys.getTargetAzimuthAngleRad());
+		SmartDashboard.putNumber("target azimuth angle rad", turretSys.calculateTargetAzimuthAngle());
 		SmartDashboard.putBoolean("on target", turretSys.isOnTarget());
 		SmartDashboard.putNumberArray("turret pose", new double[] {
 			turretSys.getTurretPose().getTranslation().getX(), 
 			turretSys.getTurretPose().getTranslation().getY()});
 		// turret flywheel
 		SmartDashboard.putNumber("flywheel current RPM", turretSys.getFlywheelRPM());
+		SmartDashboard.putNumber("flywheel target RPM", turretSys.calculateTargetFlywheelRPM());
+		SmartDashboard.putNumber("distance to target", turretSys.calculateDistanceToTarget());
 		// indexer info
 		SmartDashboard.putNumber("tower RPM", indexerSys.getTowerRPM());
 		SmartDashboard.putNumber("spindexer RPM", indexerSys.getSpindexerRPM());
 		// intake info
-		SmartDashboard.putNumber("actuator position inches", intakeSys.getActuatorPos());
+		SmartDashboard.putNumber("actuator position inches", intakeSys.getActuatorPositionInches());
 		SmartDashboard.putNumber("roller RPM", intakeSys.getRollerRPM());
 		// climber info
 	}
