@@ -14,6 +14,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.CANDevices;
 import frc.robot.Constants.ClimberConstants;
 
@@ -31,6 +32,21 @@ public class ClimberSys extends SubsystemBase {
   private final SparkClosedLoopController HookPID;
   private final SparkClosedLoopController LeftElevatorPID;
   private final SparkClosedLoopController RightElevatorPID;
+
+  public enum ElevatorState {
+        HOME,
+        L1,
+        L1_HANDOFF,
+        L1_BUFFER,
+        L2,
+        L2_HANDOFF,
+        L2_BUFFER,
+        L3,
+        L3_HANDOFF,
+        L3_BUFFER
+    }
+
+      private ElevatorState currentState = ElevatorState.HOME;
 
 
 
@@ -124,6 +140,42 @@ public class ClimberSys extends SubsystemBase {
 // can be changed to allow for more complex control logic if desired
     
   }
+  public void setState(ElevatorState newState) {
+    currentState = newState;
+
+    switch (newState) {
+        case HOME -> setClimberPosition(0);
+        case L1 -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+        case L1_HANDOFF -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+        case L1_BUFFER -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+        case L2 -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+        case L2_HANDOFF -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+        case L2_BUFFER -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+        case L3 -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+        case L3_HANDOFF -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+        case L3_BUFFER -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+    }
+}
+  public void incrementState() {
+    ElevatorState[] states = ElevatorState.values();
+    int nextIndex = currentState.ordinal() + 1;
+
+    if (nextIndex >= states.length) {
+        nextIndex = states.length - 1;
+    }
+
+    setState(states[nextIndex]);
+}
+public void decrementState() {
+    ElevatorState[] states = ElevatorState.values();
+    int prevIndex = currentState.ordinal() - 1;
+
+    if (prevIndex < 0) {
+        prevIndex = 0;
+    }
+
+    setState(states[prevIndex]);
+}
 
   public void setClimberPosition(double targetPos) {
     LeftElevatorPID.setSetpoint(targetPos, ControlType.kPosition);
