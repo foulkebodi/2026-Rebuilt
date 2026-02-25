@@ -301,6 +301,8 @@ public final class Constants {
         public static final double hookClimbPositionInches = 0.0;
         public static final double hookSafePositionInches = 0.0;
         public static final double hookStartPositionInches = 0.0;
+        
+        public static final double ClimberL1Position = 0;
     }
 
     public class IndexerConstants {
