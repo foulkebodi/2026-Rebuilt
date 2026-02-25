@@ -6,26 +6,27 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Constants;
 import frc.robot.commands.turret.StartAiming;
 import frc.robot.subsystems.IndexerSys;
 import frc.robot.subsystems.IntakeSys;
 import frc.robot.subsystems.TurretSys;
-import frc.robot.Constants;
 import frc.robot.commands.intake.SetIntakeRollerRPM;
+import frc.robot.commands.intake.SetIntakeActuatorInches;
+import frc.robot.commands.spindexer.SetSpindexerRPM;
 
 
 /** An example command that uses an example subsystem. */
-public class StartShootingCommand extends SequentialCommandGroup {
+public class StartIntakingCommand extends SequentialCommandGroup {
  
-  public StartShootingCommand(TurretSys turretSys, IndexerSys indexerSys, IntakeSys intakeSys) {
+  public StartIntakingCommand( IndexerSys indexerSys, IntakeSys intakeSys) {
     super(
-      new StartAiming(turretSys),
-      // new StartFlywheel(turretSys),
-      new WaitUntilCommand(() -> turretSys.isOnTarget()),
-      new SetIndexingRPMs(indexerSys, Constants.IndexerConstants.spindexerShootingSpeed, Constants.IndexerConstants.towerShootingSpeed)
-      // PS: possibly add a intake in command after a wait or based on a timer to change the setpoint? 
+     new SetIntakeRollerRPM(intakeSys, Constants.IntakeConstants.intakingRollerRPM),
+     new SetIntakeActuatorInches(intakeSys, Constants.IntakeConstants.actuatorOutPositionInches),
+     new SetSpindexerRPM(indexerSys, Constants.IndexerConstants.spindexerAgitatingSpeed)
+     )
       
-    );
+    ;
    
   }
 
