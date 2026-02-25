@@ -206,8 +206,8 @@ public final class Constants {
         public static final int maxActuatorCurrentAmps = 20;
 
         public static final double ActuatorPulleyToothCount = 18.0;
-        public static final double actuatorPositionConversionFactor = Units.metersToInches(ActuatorPulleyToothCount * 5.0 / Math.PI) * Math.PI;
-        public static final double actuatorVelocityConversionFactor = Units.metersToInches(ActuatorPulleyToothCount * 5.0 / Math.PI) * Math.PI / 60.0;
+        public static final double actuatorPositionConversionFactor = Units.metersToInches(ActuatorPulleyToothCount * 5.0) / 5.0; // convertInches(tooth * pitch) / ratio
+        public static final double actuatorVelocityConversionFactor = Units.metersToInches(ActuatorPulleyToothCount * 5.0) / 5.0 /60.0;
 
         public static final double rollerPositionConversionFactor = 1.0 / 3.0;
         public static final double rollerVelocityConversionFactor = 1.0 / 3.0 / 60.0;
@@ -219,11 +219,11 @@ public final class Constants {
         public static final double actuatorMinPositionInches = 0.0;
         public static final double actuatorMaxPositionInches = 11.0;
 
-        public static final double RollerP = 0.0;
-        public static final double RollerD = 0.0;
+        public static final double RollerP = 0.5;
+        public static final double RollerD = 0.05;
 
-        public static final double actuatorP = 0.0;
-        public static final double actuatorD = 0.0;
+        public static final double actuatorP = 0.5;
+        public static final double actuatorD = 0.05;
         public static final double intakingRollerRPM = 1000.0;
         public static final double agitatingRollerRPM = 500.0;
         
@@ -239,8 +239,8 @@ public final class Constants {
         public static final double azimuthkS = 0.0;
         public static final double azimuthkV = 0.0;
         public static final double azimuthkA = 0.0;
-        public static final double flyWheelP = 0.0;
-        public static final double flyWheelD = 0.0;
+        public static final double flyWheelP = 0.5;
+        public static final double flyWheelD = 0.05;
 
         public static final double azimuthMaxVelocityRadPerSec = 180.0;
         public static final double azimuthMaxAccelerationRadPerSecSq = 360.0;
@@ -310,11 +310,11 @@ public final class Constants {
         public static final int maxTowerCurrentAmps = 30;
         public static final int maxSpindexerCurrentAmps = 20;
 
-        public static final double towerP = 0.0;
-        public static final double towerD = 0.0;
+        public static final double towerP = 0.5;
+        public static final double towerD = 0.05;
 
-        public static final double spindexerP = 0.0;
-        public static final double spindexerD = 0.0;
+        public static final double spindexerP = 0.5;
+        public static final double spindexerD = 0.05;
 
         public static final double towerPositionConversionFactor = 1.0;
         public static final double towerVelocityConversionFactor = 1.0 / 60.0;
@@ -322,8 +322,8 @@ public final class Constants {
         public static final double spindexerPositionConversionFactor = 1.0 / 15.0; 
         public static final double spindexerVelocityConversionFactor = 1.0 / 15.0 / 60.0;
 
-        public static final double spindexerShootingSpeed = 0.0;
-        public static final double spindexerAgitatingSpeed = 0.0;
+        public static final double spindexerShootingRPM = 0.0;
+        public static final double spindexerAgitatingRPM = 0.0;
 
         public static final double towerShootingRPM = 0.0;
         public static final double towerIntakingRPM = 0.0;
