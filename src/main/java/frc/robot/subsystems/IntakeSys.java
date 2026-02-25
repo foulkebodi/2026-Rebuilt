@@ -31,6 +31,8 @@ public class IntakeSys extends SubsystemBase {
   private final SparkClosedLoopController LeftActuatorPID;
   private final SparkClosedLoopController RightActuatorPID;
 
+  private double targetRollerRPM;
+
   @SuppressWarnings("removal")
   public IntakeSys() {
     rollerMtr = new SparkFlex(CANDevices.RollerMtrID, MotorType.kBrushless);
@@ -115,6 +117,11 @@ public class IntakeSys extends SubsystemBase {
   }
 
   public void periodic() {
+    if (getActuatorPositionInches() >= IntakeConstants.actuatorSafePositionInches) {
+      rollerPID.setSetpoint(targetRollerRPM, ControlType.kVelocity);
+    } else {
+      rollerPID.setSetpoint(0.0, ControlType.kVelocity);
+    }
   }
 
   public void setTargetActuatorInches(double targetPositionInches) {
@@ -127,14 +134,15 @@ public class IntakeSys extends SubsystemBase {
   }
 
   public void setTargetRollerRPM(double targetRPM) {
-     if (getActuatorPositionInches() >= IntakeConstants.actuatorSafePositionInches) {
-      rollerPID.setSetpoint(targetRPM, ControlType.kVelocity);
-    } else {
-      rollerPID.setSetpoint(0.0, ControlType.kVelocity);
-    }
+     this.targetRollerRPM = targetRPM;
   }
 
   public double getRollerRPM() {
     return rollerEnc.getVelocity();
   }
+
+   public void manualAdjustActuator(double speed) {
+    leftActuatorMtr.set(speed);
+    rightActuatorMtr.set(speed);
+   }
 }
