@@ -79,11 +79,9 @@ public final class Constants {
         public static final int LeftActuatorMtrID = 16;
         public static final int RightActuatorMtrID = 17;
 
-        public static final int towerMtrID = 21;
-        public static final int beamBreakPort = 0;
-
         public static final int spindexerMtrID = 20;
-
+        public static final int towerMtrID = 21;
+        
         public static final int azimuthMtrID = 22;
         public static final int leftFlyWheelMtrID = 23;
         public static final int rightFlyWheelMtrID = 24;
@@ -226,6 +224,9 @@ public final class Constants {
 
         public static final double actuatorP = 0.0;
         public static final double actuatorD = 0.0;
+        public static double intakingRollerRPM = 1000.0;
+        public static double agitatingRollerRPM = 500.0;
+        public static double manualActuatorAdjustmentSpeed = 0.4;
     }
 
     public class TurretConstants {
