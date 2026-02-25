@@ -9,6 +9,8 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
+import frc.robot.commands.climber.SetHookPosition;
+import frc.robot.commands.climber.incrimentClimberPosition;
 import frc.robot.commands.drive.ArcadeDriveCmd;
 import frc.robot.commands.drive.LockCmd;
 import frc.robot.commands.intake.SetIntakeActuatorInches;
@@ -119,6 +121,22 @@ public class RobotContainer {
 		// operator bindings for competition
 		operatorController.rightBumper().onTrue(new IncrementFlywheelOffset(turretSys));
 		operatorController.leftBumper().onTrue(new DecrementFlywheelOffset(turretSys));
+
+		//operatorController.axisGreaterThan(XboxController.Axis.kLeftTrigger.value, ControllerConstants.tiggerPressedThreshold)
+		//.onTrue(new ManualAdjustIntakeCommand(intakeSys));
+		//operatorController.axisGreaterThan(XboxController.Axis.kRightTrigger.value, ControllerConstants.tiggerPressedThreshold)
+		//.onTrue(new ManualAdjustIntakeCommand(intakeSys));
+
+		//operatorController.a().onTrue(new SetIntakeActuatorInches(intakeSys, IntakeConstants.actuatorInPositionInches));
+		//operatorController.y().onTrue(new SetIntakeActuatorInches(intakeSys, IntakeConstants.actuatorOutPositionInches));
+
+		//operatorController.b().onTrue(new SetHookPosition(climberSys, Constants.ClimberConstants.hookOutPositionRotations));
+		//operatorController.x().onTrue(new SetHookPosition(climberSys, 0.0));
+
+		//operatorController.povUp().onTrue(new incrimentClimberPosition(climberSys));
+		//operatorController.povDown().onTrue(new incrimentClimberPosition(climberSys));		
+
+
 
 		// binding commands for swerve sysID
 		// driverController.a().onTrue(swerveDrive.driveSysIdDynamicForward());
