@@ -23,6 +23,7 @@ import frc.robot.subsystems.ClimberSys;
 import frc.robot.subsystems.IndexerSys;
 import frc.robot.subsystems.IntakeSys;
 import frc.robot.subsystems.TurretSys;
+import frc.robot.subsystems.ClimberSys.ElevatorState;
 import frc.robot.subsystems.drive.PoseEstimator;
 import frc.robot.subsystems.drive.SwerveDrive;
 
@@ -170,9 +171,8 @@ public class RobotContainer {
 		// example operator bindings
 		// operatorController.a().onTrue(new Command() {});
 		// operatorController.b().onTrue(new Command() {});
-	
-		operatorController.axisGreaterThan(XboxController.Axis.kRightTrigger.value, ControllerConstants.tiggerPressedThreshold)
-		.onTrue(new Command() {});
+		// operatorController.axisGreaterThan(XboxController.Axis.kRightTrigger.value, ControllerConstants.tiggerPressedThreshold)
+		// .onTrue(new Command() {});
 	}
 
 	public Command getAutonomousCommand() {
@@ -210,5 +210,8 @@ public class RobotContainer {
 		SmartDashboard.putNumber("actuator position inches", intakeSys.getActuatorPositionInches());
 		SmartDashboard.putNumber("roller RPM", intakeSys.getRollerRPM());
 		// climber info
+		SmartDashboard.putNumber("climber extension inches", climberSys.getClimberPosition());
+		SmartDashboard.putNumber("climber hook position degrees", climberSys.getHookPosition());
+		SmartDashboard.putString("climber current state", climberSys.getCurrentState().toString());
 	}
 }

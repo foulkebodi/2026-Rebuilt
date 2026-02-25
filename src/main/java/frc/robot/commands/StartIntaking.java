@@ -5,30 +5,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
-import frc.robot.commands.turret.StartAiming;
 import frc.robot.subsystems.IndexerSys;
 import frc.robot.subsystems.IntakeSys;
-import frc.robot.subsystems.TurretSys;
 import frc.robot.commands.intake.SetIntakeRollerRPM;
 import frc.robot.commands.intake.SetIntakeActuatorInches;
 import frc.robot.commands.spindexer.SetSpindexerRPM;
 
-
 /** An example command that uses an example subsystem. */
-public class StartIntakingCommand extends SequentialCommandGroup {
- 
-  public StartIntakingCommand( IndexerSys indexerSys, IntakeSys intakeSys) {
+public class StartIntaking extends SequentialCommandGroup {
+  public StartIntaking( IndexerSys indexerSys, IntakeSys intakeSys) {
     super(
      new SetIntakeRollerRPM(intakeSys, Constants.IntakeConstants.intakingRollerRPM),
      new SetIntakeActuatorInches(intakeSys, Constants.IntakeConstants.actuatorOutPositionInches),
      new SetSpindexerRPM(indexerSys, Constants.IndexerConstants.spindexerAgitatingSpeed)
-     )
-      
-    ;
-   
+    );
   }
-
- 
 }

@@ -34,21 +34,18 @@ public class ClimberSys extends SubsystemBase {
   private final SparkClosedLoopController RightElevatorPID;
 
   public enum ElevatorState {
-        HOME,
-        L1,
-        L1_HANDOFF,
-        L1_BUFFER,
-        L2,
-        L2_HANDOFF,
-        L2_BUFFER,
-        L3,
-        L3_HANDOFF,
-        L3_BUFFER
-    }
-
-      private ElevatorState currentState = ElevatorState.HOME;
-
-
+    HOME,
+    L1,
+    L1_HANDOFF,
+    L1_BUFFER,
+    L2,
+    L2_HANDOFF,
+    L2_BUFFER,
+    L3,
+    L3_HANDOFF,
+    L3_BUFFER
+  }
+  private ElevatorState currentState = ElevatorState.HOME;
 
   @SuppressWarnings("removal")
   public ClimberSys() {
@@ -136,55 +133,51 @@ public class ClimberSys extends SubsystemBase {
   }
 
   public void periodic() {
-// currently the control remains within the following methods, but this 
-// can be changed to allow for more complex control logic if desired
-    
+    // currently the control remains within the following methods, but this 
+    // can be changed to allow for more complex control logic if desired  
   }
+
   public void setState(ElevatorState newState) {
     currentState = newState;
-
     switch (newState) {
-        case HOME -> setClimberPosition(0);
-        case L1 -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-        case L1_HANDOFF -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-        case L1_BUFFER -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-        case L2 -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-        case L2_HANDOFF -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-        case L2_BUFFER -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-        case L3 -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-        case L3_HANDOFF -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-        case L3_BUFFER -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+      case HOME -> setClimberPosition(0);
+      case L1 -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+      case L1_HANDOFF -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+      case L1_BUFFER -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+      case L2 -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+      case L2_HANDOFF -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+      case L2_BUFFER -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+      case L3 -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+      case L3_HANDOFF -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+      case L3_BUFFER -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
     }
-}
+  }
+
   public void incrementState() {
     ElevatorState[] states = ElevatorState.values();
     int nextIndex = currentState.ordinal() + 1;
-
     if (nextIndex >= states.length) {
-        nextIndex = states.length - 1;
+      nextIndex = states.length - 1;
     }
-
     setState(states[nextIndex]);
-}
-public void decrementState() {
+  }
+
+  public void decrementState() {
     ElevatorState[] states = ElevatorState.values();
     int prevIndex = currentState.ordinal() - 1;
-
     if (prevIndex < 0) {
         prevIndex = 0;
-    }
-
+    } 
     setState(states[prevIndex]);
-}
+  }
+
+  public ElevatorState getCurrentState() {
+    return currentState;
+  }
 
   public void setClimberPosition(double targetPos) {
     LeftElevatorPID.setSetpoint(targetPos, ControlType.kPosition);
     RightElevatorPID.setSetpoint(targetPos, ControlType.kPosition);
-  }
-
-  public void manualClimberPosition(double speed) {
-    LeftElevatorMtr.set(speed);
-    RightElevatorMtr.set(speed);
   }
 
   public double getClimberPosition() {
@@ -195,9 +188,12 @@ public void decrementState() {
     HookPID.setSetpoint(targetPosition, ControlType.kPosition);
   }
 
-  
-
   public double getHookPosition() {
     return HookEnc.getPosition();
   }
+
+  // public void manualClimberPosition(double speed) {
+  //   LeftElevatorMtr.set(speed);
+  //   RightElevatorMtr.set(speed);
+  // }
 }

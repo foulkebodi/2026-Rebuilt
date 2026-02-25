@@ -2,27 +2,26 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.intake;
+package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.IntakeSys;
+import frc.robot.subsystems.TurretSys;
 
 /** An example command that uses an example subsystem. */
-public class ManualAdjustActuator extends Command {
+public class StartFlywheel extends Command {
   
-  private final IntakeSys intakeSys;
-  public ManualAdjustActuator(IntakeSys intakeSys) {
-    this.intakeSys = intakeSys;
-    // Use addRequirements()`` here to declare subsystem dependencies.
-    addRequirements(intakeSys);
+  private final TurretSys turretSys;
+
+  public StartFlywheel(TurretSys turretSys) {
+    this.turretSys = turretSys;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(turretSys);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeSys.manualAdjustActuator(Constants.IntakeConstants.manualActuatorAdjustmentSpeed);
-  
+    turretSys.setIsFiring(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

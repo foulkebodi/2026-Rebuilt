@@ -147,7 +147,7 @@ public class TurretSys extends SubsystemBase {
   @Override
   public void periodic() {
     if (DriverStation.isDisabled()) {
-      azimuthPID.setGoal(azimuthEnc.getPosition());  
+      azimuthPID.setGoal(getCurrentAzimuthAngleRad());  
     } else if (isAiming && calculateTargetAzimuthAngle() <= Units.degreesToRadians(TurretConstants.maximumAizmuthAngleDeg) && calculateTargetAzimuthAngle() >= Units.degreesToRadians(TurretConstants.minimumAizmuthAngleDeg)) {
       azimuthPID.setGoal(calculateTargetAzimuthAngle());
     } /* for troubleshooting only, remove for competition */ else if (manualAzimuthAngle != null) {
@@ -156,7 +156,7 @@ public class TurretSys extends SubsystemBase {
       azimuthPID.setGoal(Units.degreesToRadians(TurretConstants.azimuthDefaultSetpointDeg));
     }
     
-    azimuthMtr.set(azimuthPID.calculate(azimuthEnc.getPosition()) + azimuthFeedforward.calculate(azimuthPID.getSetpoint().velocity));
+    azimuthMtr.set(azimuthPID.calculate(getCurrentAzimuthAngleRad()) + azimuthFeedforward.calculate(azimuthPID.getSetpoint().velocity));
 
     if (isFiring) {
       setFlywheelRPM(calculateTargetFlywheelRPM());

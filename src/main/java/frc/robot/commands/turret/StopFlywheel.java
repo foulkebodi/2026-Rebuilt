@@ -2,38 +2,26 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.IndexerSys;
-import frc.robot.subsystems.util.ExampleSubsystem;
-
+import frc.robot.subsystems.TurretSys;
 
 /** An example command that uses an example subsystem. */
-public class SetIndexingRPMs extends Command {
-  @SuppressWarnings({"unused", "PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final IndexerSys indexerSys;
-  private final double agitatorSpeed;
-  private final double towerSpeed;
+public class StopFlywheel extends Command {
+  
+  private final TurretSys turretSys;
 
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
-  public SetIndexingRPMs(IndexerSys indexerSys, double agitatorSpeed, double towerSpeed) {
-    this.indexerSys = indexerSys;
-    this.agitatorSpeed = agitatorSpeed;
-    this.towerSpeed = towerSpeed;
+  public StopFlywheel(TurretSys turretSys) {
+    this.turretSys = turretSys;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(indexerSys);
+    addRequirements(turretSys);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    indexerSys.setTargetSpindexerRPM(agitatorSpeed);
-    indexerSys.setTargetTowerRPM(towerSpeed);
+    turretSys.setIsFiring(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
