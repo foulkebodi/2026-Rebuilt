@@ -18,7 +18,7 @@ public class StartIntaking extends SequentialCommandGroup {
     super(
      new SetIntakeRollerRPM(intakeSys, Constants.IntakeConstants.intakingRollerRPM),
      new SetIntakeActuatorInches(intakeSys, Constants.IntakeConstants.actuatorOutPositionInches),
-     new SetSpindexerRPM(indexerSys, Constants.IndexerConstants.spindexerAgitatingSpeed)
+     new SetSpindexerRPM(indexerSys, Constants.IndexerConstants.spindexerAgitatingRPM)
     );
   }
 }

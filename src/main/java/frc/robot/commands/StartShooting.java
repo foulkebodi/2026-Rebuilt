@@ -27,7 +27,7 @@ public class StartShooting extends SequentialCommandGroup {
       new StartFlywheel(turretSys),
       new WaitUntilCommand(() -> turretSys.isOnTarget()),
       new SetTowerRPM(indexerSys, IndexerConstants.towerShootingRPM),
-      new SetSpindexerRPM(indexerSys, IndexerConstants.spindexerAgitatingSpeed),
+      new SetSpindexerRPM(indexerSys, IndexerConstants.spindexerAgitatingRPM),
       new WaitCommand(2.0),
       new SetIntakeActuatorInches(intakeSys, Constants.IntakeConstants.actuatorInPositionInches)
     );
