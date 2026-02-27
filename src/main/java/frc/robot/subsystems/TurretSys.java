@@ -129,11 +129,15 @@ public class TurretSys extends SubsystemBase {
 
     rightFlyWheelMtrSparkFlexConfig.closedLoop
         .p(TurretConstants.flyWheelP)
-        .d(TurretConstants.flyWheelD);
+        .d(TurretConstants.flyWheelD)
+        .feedForward.kS(TurretConstants.flyWheelkS)
+        .kV(TurretConstants.flyWheelkV);
 
     leftFlyWheelMtrSparkFlexConfig.closedLoop
         .p(TurretConstants.flyWheelP)
-        .d(TurretConstants.flyWheelD);
+        .d(TurretConstants.flyWheelD)
+        .feedForward.kS(TurretConstants.flyWheelkS)
+        .kV(TurretConstants.flyWheelkV);
 
     leftFlyWheelMtr.configure(leftFlyWheelMtrSparkFlexConfig,
         ResetMode.kResetSafeParameters,
@@ -149,25 +153,25 @@ public class TurretSys extends SubsystemBase {
 
     // initialzing sysID routines
     sysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null, // default ramp rate
-            Volts.of(7), // default step voltage
-            Time.ofBaseUnits(10, Seconds) // default timeout)
-        ),
-        new SysIdRoutine.Mechanism(
-            (voltage) -> {
-              setAzimuthVoltage(voltage.in(Volts));
-            },
-            (log) -> {
-              Voltage voltage = Volts.of(getCharacterizationVoltage());
-              Angle angle = Angle.ofBaseUnits(azimuthEnc.getPosition(), Radian);
-              AngularVelocity angularVelocity = AngularVelocity.ofBaseUnits(azimuthEnc.getVelocity(), RadiansPerSecond);
-              log.motor("azimuth")
-                  .voltage(voltage)
-                  .angularPosition(angle)
-                  .angularVelocity(angularVelocity);
-            },
-            this));
+      new SysIdRoutine.Config(
+        null, // default ramp rate
+        Volts.of(7), // default step voltage
+        Time.ofBaseUnits(10, Seconds) // default timeout)
+      ),
+      new SysIdRoutine.Mechanism(
+        (voltage) -> {
+          setAzimuthVoltage(voltage.in(Volts));
+        },
+        (log) -> {
+          Voltage voltage = Volts.of(getCharacterizationVoltage());
+          Angle angle = Angle.ofBaseUnits(azimuthEnc.getPosition(), Radian);
+          AngularVelocity angularVelocity = AngularVelocity.ofBaseUnits(azimuthEnc.getVelocity(), RadiansPerSecond);
+          log.motor("azimuth")
+            .voltage(voltage)
+            .angularPosition(angle)
+            .angularVelocity(angularVelocity);
+        },
+      this));
   }
 
   @Override
@@ -194,9 +198,8 @@ public class TurretSys extends SubsystemBase {
             */ {
       setFlywheelRPM(manualFlywheelRPM);
     } // else {
-    // //setFlywheelRPM(0.0);
-    // //}
-
+    //setFlywheelRPM(0.0);
+    //}
   }
 
   public void setManualAzimuthAngle(Double manualAzimuthAngle) {

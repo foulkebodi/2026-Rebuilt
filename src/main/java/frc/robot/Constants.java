@@ -245,7 +245,8 @@ public final class Constants {
 
         public static final double flyWheelP = 0.00012;
         public static final double flyWheelD = 0.00;
-        public static final double flyWheelF = 0.00018;
+        public static final double flyWheelkS = 0.00018;
+        public static final double flyWheelkV = 0.00018;
 
         public static final double azimuthMaxVelocityRadPerSec = 180.0;
         public static final double azimuthMaxAccelerationRadPerSecSq = 360.0;
