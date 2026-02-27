@@ -47,14 +47,14 @@ public class PoseEstimator extends SubsystemBase {
         if(swerveDrive.getAngularVelocityDegPerSec() > 360) {
             trustLimelightOne = false;
         }
-        if(limeLightOnePose.tagCount == 0) {
-            trustLimelightOne = false;
-        }
-        if(trustLimelightOne) {
-            poseEstimator.addVisionMeasurement(
-            limeLightOnePose.pose,
-            limeLightOnePose.timestampSeconds);
-        } 
+        // if(  limeLightOnePose.tagCount == 0) {
+        //     trustLimelightOne = false;
+        // }
+        // if(trustLimelightOne) {
+        //     poseEstimator.addVisionMeasurement(
+        //     limeLightOnePose.pose,
+        //     limeLightOnePose.timestampSeconds);
+        // } 
 
         // filter and update pose based on vision from limelight two
         LimelightHelpers.SetRobotOrientation(VisionConstants.limelightTwoName, poseEstimator.getEstimatedPosition().getRotation().getDegrees(), getAngularVelocityDegPerSec(), 0, 0, 0, 0);
@@ -63,14 +63,14 @@ public class PoseEstimator extends SubsystemBase {
         if(swerveDrive.getAngularVelocityDegPerSec() > 360) {
             trustLimelightTwo = false;
         }
-        if(limeLightTwoPose.tagCount == 0) {
-            trustLimelightTwo = false;
-        }
-        if(trustLimelightTwo) {
-            poseEstimator.addVisionMeasurement(
-            limeLightTwoPose.pose,
-            limeLightTwoPose.timestampSeconds);
-        }
+        // if(limeLightTwoPose.tagCount == 0) {
+        //     trustLimelightTwo = false;
+        // }
+        // if(trustLimelightTwo) {
+        //     poseEstimator.addVisionMeasurement(
+        //     limeLightTwoPose.pose,
+        //     limeLightTwoPose.timestampSeconds);
+        // }
 
         // update pose based on odometry
         poseEstimator.update(swerveDrive.getHeading(), swerveDrive.getModulePositions());

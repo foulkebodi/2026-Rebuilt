@@ -81,7 +81,7 @@ public final class Constants {
 
         public static final int spindexerMtrID = 20;
         public static final int towerMtrID = 21;
-        
+
         public static final int azimuthMtrID = 22;
         public static final int leftFlyWheelMtrID = 23;
         public static final int rightFlyWheelMtrID = 24;
@@ -136,7 +136,8 @@ public final class Constants {
         public static final double driveFreeSpeedRadPerSec = driveFreeSpeedMetersPerSec / wheelRadiusMeters;
 
         public static final double driveNominalOperatingVoltage = 12.4;
-        public static final double driveStallTorqueNewtonMeters = 3.6 / driveGearReduction; // Motor's stall torque times gear ratio
+        public static final double driveStallTorqueNewtonMeters = 3.6 / driveGearReduction; // Motor's stall torque
+                                                                                            // times gear ratio
         public static final double driveStallCurrentAmps = 211.0;
         public static final double driveFreeCurrentAmps = 3.6;
 
@@ -150,10 +151,10 @@ public final class Constants {
 
     public static class SwerveDriveConstants {
         // TODO: set these offsets based on module's zero position
-        public static final Rotation2d flModuleOffset = Rotation2d.fromDegrees(0); //162.5
-        public static final Rotation2d frModuleOffset = Rotation2d.fromDegrees(0); //122.0
-        public static final Rotation2d blModuleOffset = Rotation2d.fromDegrees(0); //-151.6
-        public static final Rotation2d brModuleOffset = Rotation2d.fromDegrees(0); //-102.8
+        public static final Rotation2d flModuleOffset = Rotation2d.fromDegrees(-109.5); // 162.5
+        public static final Rotation2d frModuleOffset = Rotation2d.fromDegrees(57.4); // 122.0
+        public static final Rotation2d blModuleOffset = Rotation2d.fromDegrees(106.1); // -151.6
+        public static final Rotation2d brModuleOffset = Rotation2d.fromDegrees(-30.4); // -102.8
 
         // Set these dimensions for the distance between the center of each wheel.
         // NOTE: these values are different from the robot's overall dimenstions.
@@ -198,49 +199,53 @@ public final class Constants {
 
         public static final double poseInnacuracyThreshold = 0.5;
 
-
     }
 
     public class IntakeConstants {
-        public static final int maxRollerCurrentAmps = 20;
+        public static final int maxRollerCurrentAmps = 45;
         public static final int maxActuatorCurrentAmps = 20;
 
         public static final double ActuatorPulleyToothCount = 18.0;
-        public static final double actuatorPositionConversionFactor = Units.metersToInches(ActuatorPulleyToothCount * 5.0) / 5.0; // convertInches(tooth * pitch) / ratio
-        public static final double actuatorVelocityConversionFactor = Units.metersToInches(ActuatorPulleyToothCount * 5.0) / 5.0 /60.0;
+        public static final double actuatorPositionConversionFactor = 0.95; // Units.metersToInches(ActuatorPulleyToothCount
+                                                                            // * 5.0) / 5.0; // convertInches(tooth *
+                                                                            // pitch) / ratio
+        public static final double actuatorVelocityConversionFactor = 0.95 / 60;// Units.metersToInches(ActuatorPulleyToothCount
+                                                                                // * 5.0) / 5.0 /60.0;
 
         public static final double rollerPositionConversionFactor = 1.0 / 3.0;
-        public static final double rollerVelocityConversionFactor = 1.0 / 3.0 / 60.0;
+        public static final double rollerVelocityConversionFactor = 1.0 / 3.0;
 
-        public static final double actuatorOutPositionInches = 11.0;
+        public static final double actuatorOutPositionInches = 12;
         public static final double actuatorInPositionInches = 0.0;
         public static final double actuatorSafePositionInches = 5.0;
 
         public static final double actuatorMinPositionInches = 0.0;
-        public static final double actuatorMaxPositionInches = 11.0;
+        public static final double actuatorMaxPositionInches = 12.5;
 
-        public static final double RollerP = 0.5;
-        public static final double RollerD = 0.05;
+        public static final double RollerP = 0.0010;
+        public static final double RollerD = 0.0002;
 
-        public static final double actuatorP = 0.5;
+        public static final double actuatorP = 1;
         public static final double actuatorD = 0.05;
-        public static final double intakingRollerRPM = 1000.0;
+        public static final double intakingRollerRPM = 3999.0;
         public static final double agitatingRollerRPM = 500.0;
-        
+
         // public static final double manualActuatorAdjustmentSpeed = 0.4;
     }
 
     public class TurretConstants {
         public static final int maxAzimuthCurrentAmps = 20;
-        public static final int maxFlyWheelCurrentAmps = 20;
+        public static final int maxFlyWheelCurrentAmps = 40;
 
         public static final double azimuthP = 0.0;
         public static final double azimuthD = 0.0;
         public static final double azimuthkS = 0.0;
         public static final double azimuthkV = 0.0;
         public static final double azimuthkA = 0.0;
-        public static final double flyWheelP = 0.5;
-        public static final double flyWheelD = 0.05;
+
+        public static final double flyWheelP = 0.00012;
+        public static final double flyWheelD = 0.00;
+        public static final double flyWheelF = 0.00018;
 
         public static final double azimuthMaxVelocityRadPerSec = 180.0;
         public static final double azimuthMaxAccelerationRadPerSecSq = 360.0;
@@ -252,8 +257,8 @@ public final class Constants {
         public static final double azimuthPositionConversionFactorRadPerRot = 20.0 / 173.0 * 2.0 * Math.PI;
         public static final double azimuthVelocityConversionFactorRadPerRotPerSec = 20.0 / 173.0 * 2.0 * Math.PI / 60.0;
 
-        public static final double flyWheelPositionConversionFactorRot = 1.0;
-        public static final double flyWheelVelocityConversionFactorRPM = 1.0;
+        public static final double flyWheelPositionConversionFactorRot = 15.0 / 18.0;
+        public static final double flyWheelVelocityConversionFactorRPM = 15.0 / 18.0;
 
         public static final double zerothDegreeFitConstant = 0.0;
         public static final double firstDegreeFitConstant = 0.0;
@@ -266,7 +271,8 @@ public final class Constants {
 
         public static final double turretOffsetX = 0.0;
         public static final double turretOffsetY = 0.0;
-        public static final Transform2d robotToTurret = new Transform2d(new Translation2d(turretOffsetX, turretOffsetY), new Rotation2d());
+        public static final Transform2d robotToTurret = new Transform2d(new Translation2d(turretOffsetX, turretOffsetY),
+                new Rotation2d());
     }
 
     public class ClimberConstants {
@@ -301,30 +307,28 @@ public final class Constants {
 
         public static final double hookOutPositionRotations = 0.25;
 
-       
-        
         public static final double ClimberL1Position = 0;
-        
+
     }
 
     public class IndexerConstants {
-        public static final int maxTowerCurrentAmps = 30;
-        public static final int maxSpindexerCurrentAmps = 20;
+        public static final int maxTowerCurrentAmps = 50;
+        public static final int maxSpindexerCurrentAmps = 50;
 
-        public static final double towerP = 0.5;
-        public static final double towerD = 0.05;
+        public static final double towerP = 0.00015;
+        public static final double towerD = 0.00;
 
-        public static final double spindexerP = 0.5;
-        public static final double spindexerD = 0.05;
+        public static final double spindexerP = 0.005;
+        public static final double spindexerD = 0.0005;
 
         public static final double towerPositionConversionFactor = 1.0;
         public static final double towerVelocityConversionFactor = 1.0 / 60.0;
 
-        public static final double spindexerPositionConversionFactor = 1.0 / 15.0; 
-        public static final double spindexerVelocityConversionFactor = 1.0 / 15.0 / 60.0;
+        public static final double spindexerPositionConversionFactor = 1.0 / 15.0;
+        public static final double spindexerVelocityConversionFactor = 1.0 / 15.0;
 
-        public static final double spindexerShootingRPM = 0.0;
-        public static final double spindexerAgitatingRPM = 0.0;
+        public static final double spindexerShootingRPM = 5000.0;
+        public static final double spindexerAgitatingRPM = 5000.0;
 
         public static final double towerShootingRPM = 0.0;
         public static final double towerIntakingRPM = 0.0;

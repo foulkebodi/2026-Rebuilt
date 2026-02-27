@@ -14,11 +14,12 @@ import frc.robot.commands.spindexer.SetSpindexerRPM;
 
 /** An example command that uses an example subsystem. */
 public class StartIntaking extends SequentialCommandGroup {
-  public StartIntaking( IndexerSys indexerSys, IntakeSys intakeSys) {
+  public StartIntaking(IndexerSys indexerSys, IntakeSys intakeSys) {
     super(
-     new SetIntakeRollerRPM(intakeSys, Constants.IntakeConstants.intakingRollerRPM),
-     new SetIntakeActuatorInches(intakeSys, Constants.IntakeConstants.actuatorOutPositionInches),
-     new SetSpindexerRPM(indexerSys, Constants.IndexerConstants.spindexerAgitatingRPM)
+        new SetIntakeRollerRPM(intakeSys, Constants.IntakeConstants.intakingRollerRPM),
+        new SetIntakeActuatorInches(intakeSys, Constants.IntakeConstants.actuatorOutPositionInches)
+    // new SetSpindexerRPM(indexerSys,
+    // Constants.IndexerConstants.spindexerAgitatingRPM)
     );
   }
 }

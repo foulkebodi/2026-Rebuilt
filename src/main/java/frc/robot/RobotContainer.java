@@ -9,6 +9,7 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
+import frc.robot.commands.StartIntaking;
 import frc.robot.commands.climber.SetHookPosition;
 import frc.robot.commands.climber.incrimentClimberPosition;
 import frc.robot.commands.drive.ArcadeDriveCmd;
@@ -47,9 +48,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 
@@ -62,81 +66,94 @@ public class RobotContainer {
 	private final TurretSys turretSys = new TurretSys(poseEstimator);
 	private final ClimberSys climberSys = new ClimberSys();
 
-	private final CommandXboxController driverController = new CommandXboxController(ControllerConstants.kDriverControllerPort);
-	private final CommandXboxController operatorController = new CommandXboxController(ControllerConstants.kOperatorControllerPort);
+	private final CommandXboxController driverController = new CommandXboxController(
+			ControllerConstants.kDriverControllerPort);
+	private final CommandXboxController operatorController = new CommandXboxController(
+			ControllerConstants.kOperatorControllerPort);
 
 	private final SendableChooser<Command> autoChooser;
 
 	public RobotContainer() {
 		// register named commands
-		NamedCommands.registerCommand("exampleCommand", new Command() {});
+		NamedCommands.registerCommand("exampleCommand", new Command() {
+		});
 
 		// configure autobuilder
 		AutoBuilder.configure(
-			poseEstimator::getPose,
-			poseEstimator::resetPose,
-			swerveDrive::getRobotRelativeSpeeds, 
-			(chassisSpeeds, feedforward) -> swerveDrive.driveRobotRelative(chassisSpeeds),
-			new PPHolonomicDriveController(
-				new PIDConstants(SwerveDriveConstants.autoTranslationKp, SwerveDriveConstants.autoTranslationKd),
-				new PIDConstants(SwerveDriveConstants.autoRotationKp, SwerveDriveConstants.autoRotationKd)),
-			new RobotConfig(RobotConstants.massKg, RobotConstants.momentOfInertiaKgMetersSq, 
-				SwerveModuleConstants.moduleConfig, SwerveDriveConstants.kinematics.getModules()),
-			() -> {
-				var alliance = DriverStation.getAlliance();
-				if (alliance.isPresent()) {
-					return alliance.get() == DriverStation.Alliance.Red;
-				} 
-				return false;
-			},
-			swerveDrive);
+				poseEstimator::getPose,
+				poseEstimator::resetPose,
+				swerveDrive::getRobotRelativeSpeeds,
+				(chassisSpeeds, feedforward) -> swerveDrive.driveRobotRelative(chassisSpeeds),
+				new PPHolonomicDriveController(
+						new PIDConstants(SwerveDriveConstants.autoTranslationKp,
+								SwerveDriveConstants.autoTranslationKd),
+						new PIDConstants(SwerveDriveConstants.autoRotationKp, SwerveDriveConstants.autoRotationKd)),
+				new RobotConfig(RobotConstants.massKg, RobotConstants.momentOfInertiaKgMetersSq,
+						SwerveModuleConstants.moduleConfig, SwerveDriveConstants.kinematics.getModules()),
+				() -> {
+					var alliance = DriverStation.getAlliance();
+					if (alliance.isPresent()) {
+						return alliance.get() == DriverStation.Alliance.Red;
+					}
+					return false;
+				},
+				swerveDrive);
 
 		// create auto
-		new PathPlannerAuto("TranslationTestOne");
+		// new PathPlannerAuto("TranslationTestOne");
 
 		// build auto chooser
 		autoChooser = AutoBuilder.buildAutoChooser("Do Nothing");
 
 		// send auto chooser to dashboard
 		SmartDashboard.putData("auto chooser", autoChooser);
-	
+
 		// Configure the trigger bindings
 		configureBindings();
 	}
 
-	
 	private void configureBindings() {
 		// driver controls for competition
 		swerveDrive.setDefaultCommand(new ArcadeDriveCmd(
-			() -> MathUtil.applyDeadband(driverController.getLeftY(), ControllerConstants.joystickDeadband),
-			() -> MathUtil.applyDeadband(driverController.getLeftX(), ControllerConstants.joystickDeadband),
-			() -> MathUtil.applyDeadband(driverController.getRightX(), ControllerConstants.joystickDeadband),
-			true,
-			swerveDrive,
-			poseEstimator));
-			
-		driverController.axisGreaterThan(XboxController.Axis.kLeftTrigger.value, ControllerConstants.tiggerPressedThreshold)
-		.onTrue(new LockCmd(swerveDrive));
+				() -> MathUtil.applyDeadband(driverController.getLeftY(), ControllerConstants.joystickDeadband),
+				() -> MathUtil.applyDeadband(driverController.getLeftX(), ControllerConstants.joystickDeadband),
+				() -> MathUtil.applyDeadband(driverController.getRightX(), ControllerConstants.joystickDeadband),
+				true,
+				swerveDrive,
+				poseEstimator));
+
+		driverController
+				.axisGreaterThan(XboxController.Axis.kLeftTrigger.value, ControllerConstants.tiggerPressedThreshold)
+				.onTrue(new LockCmd(swerveDrive));
+
+		driverController
+				.axisGreaterThan(XboxController.Axis.kRightTrigger.value, ControllerConstants.tiggerPressedThreshold)
+				.onTrue(new StartIntaking(indexerSys, intakeSys))
+				.onFalse(new SetIntakeRollerRPM(intakeSys, 0));
 
 		// operator bindings for competition
 		operatorController.rightBumper().onTrue(new IncrementFlywheelOffset(turretSys));
 		operatorController.leftBumper().onTrue(new DecrementFlywheelOffset(turretSys));
 
-		//operatorController.axisGreaterThan(XboxController.Axis.kLeftTrigger.value, ControllerConstants.tiggerPressedThreshold)
-		//.onTrue(new ManualAdjustIntakeCommand(intakeSys));
-		//operatorController.axisGreaterThan(XboxController.Axis.kRightTrigger.value, ControllerConstants.tiggerPressedThreshold)
-		//.onTrue(new ManualAdjustIntakeCommand(intakeSys));
+		// operatorController.axisGreaterThan(XboxController.Axis.kLeftTrigger.value,
+		// ControllerConstants.tiggerPressedThreshold)
+		// .onTrue(new ManualAdjustIntakeCommand(intakeSys));
+		// operatorController.axisGreaterThan(XboxController.Axis.kRightTrigger.value,
+		// ControllerConstants.tiggerPressedThreshold)
+		// .onTrue(new ManualAdjustIntakeCommand(intakeSys));
 
-		//operatorController.a().onTrue(new SetIntakeActuatorInches(intakeSys, IntakeConstants.actuatorInPositionInches));
-		//operatorController.y().onTrue(new SetIntakeActuatorInches(intakeSys, IntakeConstants.actuatorOutPositionInches));
+		// operatorController.a().onTrue(new SetIntakeActuatorInches(intakeSys,
+		// IntakeConstants.actuatorInPositionInches));
+		// operatorController.y().onTrue(new SetIntakeActuatorInches(intakeSys,
+		// IntakeConstants.actuatorOutPositionInches));
 
-		//operatorController.b().onTrue(new SetHookPosition(climberSys, Constants.ClimberConstants.hookOutPositionRotations));
-		//operatorController.x().onTrue(new SetHookPosition(climberSys, 0.0));
+		// operatorController.b().onTrue(new SetHookPosition(climberSys,
+		// Constants.ClimberConstants.hookOutPositionRotations));
+		// operatorController.x().onTrue(new SetHookPosition(climberSys, 0.0));
 
-		//operatorController.povUp().onTrue(new incrimentClimberPosition(climberSys));
-		//operatorController.povDown().onTrue(new incrimentClimberPosition(climberSys));		
-
-
+		// operatorController.povUp().onTrue(new incrimentClimberPosition(climberSys));
+		// operatorController.povDown().onTrue(new
+		// incrimentClimberPosition(climberSys));
 
 		// binding commands for swerve sysID
 		// driverController.a().onTrue(swerveDrive.driveSysIdDynamicForward());
@@ -158,9 +175,9 @@ public class RobotContainer {
 
 		// flywheel RPM control bindings for testing
 		// operatorController.a().onTrue(new SetManualFlywheelRPM(turretSys, 0.0));
-		// operatorController.b().onTrue(new SetManualFlywheelRPM(turretSys, 100.0));
+		// operatorController.b().onTrue(new SetManualFlywheelRPM(turretSys, 2000.0));
 		// operatorController.x().onTrue(new SetManualFlywheelRPM(turretSys, 1000.0));
-		// operatorController.y().onTrue(new SetManualFlywheelRPM(turretSys, 7000.0));
+		// driverController.y().onTrue(new SetManualFlywheelRPM(turretSys, 7000.0))
 
 		// spindexer RPM control bindings for testing
 		// operatorController.a().onTrue(new SetSpindexerRPM(indexerSys, 0.0));
@@ -171,32 +188,35 @@ public class RobotContainer {
 		// tower RPM control bindings for testing
 		// operatorController.a().onTrue(new SetTowerRPM(indexerSys, 0.0));
 		// operatorController.b().onTrue(new SetTowerRPM(indexerSys, 100.0));
-		// operatorController.x().onTrue(new SetTowerRPM(indexerSys, 1000.0));
+		// driverController.x().onTrue(new SetTowerRPM(indexerSys,1000.0));
 		// operatorController.y().onTrue(new SetTowerRPM(indexerSys, 7000.0));
 
 		// intake roller RPM control bindings for testing
 		// operatorController.a().onTrue(new SetIntakeRollerRPM(intakeSys, 0.0));
-		// operatorController.b().onTrue(new SetIntakeRollerRPM(intakeSys, 100.0));
-		// operatorController.x().onTrue(new SetIntakeRollerRPM(intakeSys, 1000.0));
+		// operatorController.b().onTrue(new SetIntakeRollerRPM(intakeSys, 0.0));
+		// operatorController.x().onTrue(new SetIntakeRollerRPM(intakeSys, 2200.0));
 		// operatorController.y().onTrue(new SetIntakeRollerRPM(intakeSys, 7000.0));
 
 		// intake actuator position control bindings for testing
-		// operatorController.a().onTrue(new SetIntakeActuatorInches(intakeSys, 5.0));
+		// operatorController.a().onTrue(new SetIntakeActuatorInches(intakeSys, 0.0));
 		// operatorController.b().onTrue(new SetIntakeActuatorInches(intakeSys, 8.0));
 		// operatorController.x().onTrue(new SetIntakeActuatorInches(intakeSys, 0.0));
-		// operatorController.y().onTrue(new SetIntakeActuatorInches(intakeSys, IntakeConstants.actuatorMaxPositionInches));
+		// operatorController.y().onTrue(new SetIntakeActuatorInches(intakeSys,
+		// IntakeConstants.actuatorOutPositionInches));
 
 		// example operator bindings
 		// operatorController.a().onTrue(new Command() {});
 		// operatorController.b().onTrue(new Command() {});
-		// operatorController.axisGreaterThan(XboxController.Axis.kRightTrigger.value, ControllerConstants.tiggerPressedThreshold)
+		// operatorController.axisGreaterThan(XboxController.Axis.kRightTrigger.value,
+		// ControllerConstants.tiggerPressedThreshold)
 		// .onTrue(new Command() {});
 	}
 
 	public Command getAutonomousCommand() {
 		// return autoChooser.getSelected();
 		// return new ExampleCommand(null);
-		return new Command() {};
+		return new Command() {
+		};
 	}
 
 	public void updateDashboard() {
@@ -215,12 +235,14 @@ public class RobotContainer {
 		SmartDashboard.putNumber("target azimuth angle rad", turretSys.calculateTargetAzimuthAngle());
 		SmartDashboard.putBoolean("on target", turretSys.isOnTarget());
 		SmartDashboard.putNumberArray("turret pose", new double[] {
-			turretSys.getTurretPose().getTranslation().getX(), 
-			turretSys.getTurretPose().getTranslation().getY()});
+				turretSys.getTurretPose().getTranslation().getX(),
+				turretSys.getTurretPose().getTranslation().getY() });
 		// turret flywheel
 		SmartDashboard.putNumber("flywheel current RPM", turretSys.getFlywheelRPM());
 		SmartDashboard.putNumber("flywheel target RPM", turretSys.calculateTargetFlywheelRPM());
+		SmartDashboard.putNumber("flywheel manual rpm", turretSys.getManualFlywheelRPM());
 		SmartDashboard.putNumber("distance to target", turretSys.calculateDistanceToTarget());
+		SmartDashboard.putBoolean("is Firing", turretSys.getIsFiring());
 		// indexer info
 		SmartDashboard.putNumber("tower RPM", indexerSys.getTowerRPM());
 		SmartDashboard.putNumber("spindexer RPM", indexerSys.getSpindexerRPM());

@@ -18,7 +18,6 @@ import frc.robot.Constants;
 import frc.robot.Constants.CANDevices;
 import frc.robot.Constants.ClimberConstants;
 
-
 public class ClimberSys extends SubsystemBase {
 
   private final SparkFlex HookMtr;
@@ -45,6 +44,7 @@ public class ClimberSys extends SubsystemBase {
     L3_HANDOFF,
     L3_BUFFER
   }
+
   private ElevatorState currentState = ElevatorState.HOME;
 
   @SuppressWarnings("removal")
@@ -133,8 +133,8 @@ public class ClimberSys extends SubsystemBase {
   }
 
   public void periodic() {
-    // currently the control remains within the following methods, but this 
-    // can be changed to allow for more complex control logic if desired  
+    // currently the control remains within the following methods, but this
+    // can be changed to allow for more complex control logic if desired
   }
 
   public void setState(ElevatorState newState) {
@@ -166,8 +166,8 @@ public class ClimberSys extends SubsystemBase {
     ElevatorState[] states = ElevatorState.values();
     int prevIndex = currentState.ordinal() - 1;
     if (prevIndex < 0) {
-        prevIndex = 0;
-    } 
+      prevIndex = 0;
+    }
     setState(states[prevIndex]);
   }
 
@@ -193,7 +193,7 @@ public class ClimberSys extends SubsystemBase {
   }
 
   // public void manualClimberPosition(double speed) {
-  //   LeftElevatorMtr.set(speed);
-  //   RightElevatorMtr.set(speed);
+  // LeftElevatorMtr.set(speed);
+  // RightElevatorMtr.set(speed);
   // }
 }

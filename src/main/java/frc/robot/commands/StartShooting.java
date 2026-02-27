@@ -20,16 +20,15 @@ import frc.robot.commands.tower.SetTowerRPM;
 
 /** An example command that uses an example subsystem. */
 public class StartShooting extends SequentialCommandGroup {
- 
+
   public StartShooting(TurretSys turretSys, IndexerSys indexerSys, IntakeSys intakeSys) {
     super(
-      new StartAiming(turretSys),
-      new StartFlywheel(turretSys),
-      new WaitUntilCommand(() -> turretSys.isOnTarget()),
-      new SetTowerRPM(indexerSys, IndexerConstants.towerShootingRPM),
-      new SetSpindexerRPM(indexerSys, IndexerConstants.spindexerAgitatingRPM),
-      new WaitCommand(2.0),
-      new SetIntakeActuatorInches(intakeSys, Constants.IntakeConstants.actuatorInPositionInches)
-    );
+        new StartAiming(turretSys),
+        new StartFlywheel(turretSys),
+        new WaitUntilCommand(() -> turretSys.isOnTarget()),
+        new SetTowerRPM(indexerSys, IndexerConstants.towerShootingRPM),
+        new SetSpindexerRPM(indexerSys, IndexerConstants.spindexerAgitatingRPM),
+        new WaitCommand(2.0),
+        new SetIntakeActuatorInches(intakeSys, Constants.IntakeConstants.actuatorInPositionInches));
   }
 }

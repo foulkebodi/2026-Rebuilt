@@ -50,9 +50,9 @@ public class IntakeSys extends SubsystemBase {
     RightActuatorPID = rightActuatorMtr.getClosedLoopController();
     rightActuatorEnc = rightActuatorMtr.getEncoder();
 
-    RollerMtrSparkFlexConfig.inverted(false);
-    LeftActuatorMtrSparkFlexConfig.inverted(true);
-    RightActuatorMtrSparkFlexConfig.inverted(false);
+    RollerMtrSparkFlexConfig.inverted(true);
+    LeftActuatorMtrSparkFlexConfig.inverted(false);
+    RightActuatorMtrSparkFlexConfig.inverted(true);
 
     RollerMtrSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kCoast);
     LeftActuatorMtrSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);
@@ -134,15 +134,15 @@ public class IntakeSys extends SubsystemBase {
   }
 
   public void setTargetRollerRPM(double targetRPM) {
-     this.targetRollerRPM = targetRPM;
+    this.targetRollerRPM = targetRPM;
   }
 
   public double getRollerRPM() {
     return rollerEnc.getVelocity();
   }
 
-  //  public void manualAdjustActuator(double speed) {
-  //   leftActuatorMtr.set(speed);
-  //   rightActuatorMtr.set(speed);
-  //  }
+  // public void manualAdjustActuator(double speed) {
+  // leftActuatorMtr.set(speed);
+  // rightActuatorMtr.set(speed);
+  // }
 }

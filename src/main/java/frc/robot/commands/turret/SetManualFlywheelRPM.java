@@ -9,9 +9,10 @@ import frc.robot.subsystems.TurretSys;
 
 /** An example command that uses an example subsystem. */
 public class SetManualFlywheelRPM extends Command {
-  
+
   private final TurretSys turretSys;
   private double flywheelRPM;
+
   public SetManualFlywheelRPM(TurretSys turretSys, double flywheelRPM) {
     this.turretSys = turretSys;
     this.flywheelRPM = flywheelRPM;
@@ -22,18 +23,19 @@ public class SetManualFlywheelRPM extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    turretSys.setFlywheelRPM(flywheelRPM);
+    turretSys.setManualFlywheelRPM(flywheelRPM);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

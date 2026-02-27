@@ -42,8 +42,8 @@ public class IndexerSys extends SubsystemBase {
     spindexerEnc = spindexerMtr.getEncoder();
     spindexerPID = spindexerMtr.getClosedLoopController();
 
-    towerSparkFlexConfig.inverted(false); 
-    spindexerSparkFlexConfig.inverted(false);
+    towerSparkFlexConfig.inverted(false);
+    spindexerSparkFlexConfig.inverted(true);
 
     towerSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);
     spindexerSparkFlexConfig.idleMode(com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake);
@@ -66,12 +66,12 @@ public class IndexerSys extends SubsystemBase {
     spindexerSparkFlexConfig.encoder.velocityConversionFactor(IndexerConstants.spindexerVelocityConversionFactor);
 
     towerSparkFlexConfig.closedLoop
-      .p(IndexerConstants.towerP)
-      .d(IndexerConstants.towerD);
+        .p(IndexerConstants.towerP)
+        .d(IndexerConstants.towerD);
 
     spindexerSparkFlexConfig.closedLoop
-      .p(IndexerConstants.spindexerP)
-      .d(IndexerConstants.spindexerD);
+        .p(IndexerConstants.spindexerP)
+        .d(IndexerConstants.spindexerD);
 
     towerMtr.configure(
         towerSparkFlexConfig,
@@ -79,9 +79,9 @@ public class IndexerSys extends SubsystemBase {
         PersistMode.kPersistParameters);
 
     spindexerMtr.configure(
-      spindexerSparkFlexConfig,
-      ResetMode.kResetSafeParameters,
-      PersistMode.kPersistParameters);
+        spindexerSparkFlexConfig,
+        ResetMode.kResetSafeParameters,
+        PersistMode.kPersistParameters);
 
   }
 
