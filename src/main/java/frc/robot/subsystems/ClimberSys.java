@@ -105,31 +105,31 @@ public class ClimberSys extends SubsystemBase {
     HookMtrSparkFlexConfig.encoder.velocityConversionFactor(ClimberConstants.hookVelocityConversionFactor);
 
     HookMtrSparkFlexConfig.closedLoop
-        .p(ClimberConstants.HookP)
-        .d(ClimberConstants.HookD);
+      .p(ClimberConstants.HookP)
+      .d(ClimberConstants.HookD);
 
     RightElevatorMtrSparkFlexConfig.closedLoop
-        .p(ClimberConstants.ElevatorP)
-        .d(ClimberConstants.ElevatorD);
+      .p(ClimberConstants.ElevatorP)
+      .d(ClimberConstants.ElevatorD);
 
     LeftElevatorMtrSparkFlexConfig.closedLoop
-        .p(ClimberConstants.ElevatorP)
-        .d(ClimberConstants.ElevatorD);
+      .p(ClimberConstants.ElevatorP)
+      .d(ClimberConstants.ElevatorD);
 
     HookMtr.configure(
-        HookMtrSparkFlexConfig,
-        ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
+      HookMtrSparkFlexConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
 
     LeftElevatorMtr.configure(
-        LeftElevatorMtrSparkFlexConfig,
-        ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
+      LeftElevatorMtrSparkFlexConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
 
     RightElevatorMtr.configure(
-        RightElevatorMtrSparkFlexConfig,
-        ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
+      RightElevatorMtrSparkFlexConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
   }
 
   public void periodic() {

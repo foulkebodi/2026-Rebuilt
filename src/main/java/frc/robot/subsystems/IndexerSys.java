@@ -66,22 +66,22 @@ public class IndexerSys extends SubsystemBase {
     spindexerSparkFlexConfig.encoder.velocityConversionFactor(IndexerConstants.spindexerVelocityConversionFactor);
 
     towerSparkFlexConfig.closedLoop
-        .p(IndexerConstants.towerP)
-        .d(IndexerConstants.towerD);
+      .p(IndexerConstants.towerP)
+      .d(IndexerConstants.towerD);
 
     spindexerSparkFlexConfig.closedLoop
-        .p(IndexerConstants.spindexerP)
-        .d(IndexerConstants.spindexerD);
+      .p(IndexerConstants.spindexerP)
+      .d(IndexerConstants.spindexerD);
 
     towerMtr.configure(
-        towerSparkFlexConfig,
-        ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
+      towerSparkFlexConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
 
     spindexerMtr.configure(
-        spindexerSparkFlexConfig,
-        ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
+      spindexerSparkFlexConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
 
   }
 

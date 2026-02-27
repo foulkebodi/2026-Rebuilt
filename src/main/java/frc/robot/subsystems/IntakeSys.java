@@ -89,31 +89,31 @@ public class IntakeSys extends SubsystemBase {
     RollerMtrSparkFlexConfig.encoder.velocityConversionFactor(IntakeConstants.rollerVelocityConversionFactor);
 
     RollerMtrSparkFlexConfig.closedLoop
-        .p(IntakeConstants.RollerP)
-        .d(IntakeConstants.RollerD);
+      .p(IntakeConstants.RollerP)
+      .d(IntakeConstants.RollerD);
 
     RightActuatorMtrSparkFlexConfig.closedLoop
-        .p(IntakeConstants.actuatorP)
-        .d(IntakeConstants.actuatorD);
+      .p(IntakeConstants.actuatorP)
+      .d(IntakeConstants.actuatorD);
 
     LeftActuatorMtrSparkFlexConfig.closedLoop
-        .p(IntakeConstants.actuatorP)
-        .d(IntakeConstants.actuatorD);
+      .p(IntakeConstants.actuatorP)
+      .d(IntakeConstants.actuatorD);
 
     rollerMtr.configure(
-        RollerMtrSparkFlexConfig,
-        ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
+      RollerMtrSparkFlexConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
 
     leftActuatorMtr.configure(
-        LeftActuatorMtrSparkFlexConfig,
-        ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
+      LeftActuatorMtrSparkFlexConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
 
     rightActuatorMtr.configure(
-        RightActuatorMtrSparkFlexConfig,
-        ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
+      RightActuatorMtrSparkFlexConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
   }
 
   public void periodic() {

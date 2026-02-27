@@ -10,7 +10,6 @@ import frc.robot.subsystems.IndexerSys;
 import frc.robot.subsystems.IntakeSys;
 import frc.robot.commands.intake.SetIntakeRollerRPM;
 import frc.robot.commands.intake.SetIntakeActuatorInches;
-import frc.robot.commands.spindexer.SetSpindexerRPM;
 
 /** An example command that uses an example subsystem. */
 public class StartIntaking extends SequentialCommandGroup {

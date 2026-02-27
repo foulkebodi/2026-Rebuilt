@@ -143,10 +143,10 @@ public final class Constants {
 
         // FIXME: uncomment once pathplannerlib is released
         public static final ModuleConfig moduleConfig = new ModuleConfig(
-                wheelRadiusMeters, SwerveDriveConstants.maxAttainableSpeedMetersPerSec, wheelCoefficientOfFriction,
-                new DCMotor(driveNominalOperatingVoltage, driveStallTorqueNewtonMeters, driveStallCurrentAmps,
-                        driveFreeCurrentAmps, driveFreeSpeedRadPerSec, 1),
-                driveMtrCurrentLimitAmps, 1);
+            wheelRadiusMeters, SwerveDriveConstants.maxAttainableSpeedMetersPerSec, wheelCoefficientOfFriction,
+            new DCMotor(driveNominalOperatingVoltage, driveStallTorqueNewtonMeters, driveStallCurrentAmps,
+                    driveFreeCurrentAmps, driveFreeSpeedRadPerSec, 1),
+            driveMtrCurrentLimitAmps, 1);
     }
 
     public static class SwerveDriveConstants {
@@ -195,10 +195,7 @@ public final class Constants {
         public static final double visionTranslationStdDevMeters = 0.35;
         public static final double visionRotationStdDevRad = Units.degreesToRadians(30.0);
 
-        public static final double getAngularVelocityDegPerSec = 360.0;
-
-        public static final double poseInnacuracyThreshold = 0.5;
-
+        public static final double angularVelocityDegPerSecThreshold = 360.0;
     }
 
     public class IntakeConstants {
@@ -243,10 +240,11 @@ public final class Constants {
         public static final double azimuthkV = 0.0;
         public static final double azimuthkA = 0.0;
 
-        public static final double flyWheelP = 0.00012;
-        public static final double flyWheelD = 0.00;
-        public static final double flyWheelkS = 0.00018;
-        public static final double flyWheelkV = 0.00018;
+        public static final double flywheelkP = 0.00012;
+        public static final double flywheelkD = 0.00;
+        public static final double flywheelkS = 0.05; // increment voltage setpoint until the flywheel moves to find this value
+        public static final double flywheelkV = 0.067; // calculated from ReCalc
+        public static final double flywheelkA = 0.06; // calculated from ReCalc
 
         public static final double azimuthMaxVelocityRadPerSec = 180.0;
         public static final double azimuthMaxAccelerationRadPerSecSq = 360.0;

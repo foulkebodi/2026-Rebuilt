@@ -3,9 +3,7 @@ package frc.robot.subsystems.drive;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.VisionConstants;
@@ -44,33 +42,27 @@ public class PoseEstimator extends SubsystemBase {
         LimelightHelpers.SetRobotOrientation(VisionConstants.limelightOneName, poseEstimator.getEstimatedPosition().getRotation().getDegrees(), getAngularVelocityDegPerSec(), 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate limeLightOnePose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(VisionConstants.limelightOneName);
         trustLimelightOne = true;
-        if(swerveDrive.getAngularVelocityDegPerSec() > 360) {
+        if(limeLightOnePose == null || limeLightOnePose.tagCount == 0 || swerveDrive.getAngularVelocityDegPerSec() > VisionConstants.angularVelocityDegPerSecThreshold) {
             trustLimelightOne = false;
         }
-        // if(  limeLightOnePose.tagCount == 0) {
-        //     trustLimelightOne = false;
-        // }
-        // if(trustLimelightOne) {
-        //     poseEstimator.addVisionMeasurement(
-        //     limeLightOnePose.pose,
-        //     limeLightOnePose.timestampSeconds);
-        // } 
+        if(trustLimelightOne) {
+            poseEstimator.addVisionMeasurement(
+            limeLightOnePose.pose,
+            limeLightOnePose.timestampSeconds);
+        }
 
         // filter and update pose based on vision from limelight two
         LimelightHelpers.SetRobotOrientation(VisionConstants.limelightTwoName, poseEstimator.getEstimatedPosition().getRotation().getDegrees(), getAngularVelocityDegPerSec(), 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate limeLightTwoPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(VisionConstants.limelightTwoName);
         trustLimelightTwo = true;
-        if(swerveDrive.getAngularVelocityDegPerSec() > 360) {
+        if(limeLightTwoPose == null || limeLightTwoPose.tagCount == 0 || swerveDrive.getAngularVelocityDegPerSec() > VisionConstants.angularVelocityDegPerSecThreshold) {
             trustLimelightTwo = false;
         }
-        // if(limeLightTwoPose.tagCount == 0) {
-        //     trustLimelightTwo = false;
-        // }
-        // if(trustLimelightTwo) {
-        //     poseEstimator.addVisionMeasurement(
-        //     limeLightTwoPose.pose,
-        //     limeLightTwoPose.timestampSeconds);
-        // }
+        if(trustLimelightTwo) {
+            poseEstimator.addVisionMeasurement(
+            limeLightTwoPose.pose,
+            limeLightTwoPose.timestampSeconds);
+        }
 
         // update pose based on odometry
         poseEstimator.update(swerveDrive.getHeading(), swerveDrive.getModulePositions());
@@ -97,10 +89,5 @@ public class PoseEstimator extends SubsystemBase {
 
     public double getAngularVelocityDegPerSec() {
         return swerveDrive.getAngularVelocityDegPerSec();
-    }
-
-    public Pose3d getPose3d() {
-        Pose3d position3d = new Pose3d(getPose().getX(), getPose().getY(), 0.0, new Rotation3d(0.0, 0.0, getPose().getRotation().getRadians()) );
-        return position3d;
     }
 }

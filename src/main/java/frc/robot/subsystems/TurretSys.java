@@ -79,27 +79,27 @@ public class TurretSys extends SubsystemBase {
     azimuthMtr = new SparkFlex(CANDevices.azimuthMtrID, MotorType.kBrushless);
     SparkFlexConfig azimuthMtrSparkFlexConfig = new SparkFlexConfig();
     azimuthPID = new ProfiledPIDController(
-        TurretConstants.azimuthP, 0.0, TurretConstants.azimuthD,
-        new TrapezoidProfile.Constraints(TurretConstants.azimuthMaxVelocityRadPerSec,
-            TurretConstants.azimuthMaxAccelerationRadPerSecSq));
+      TurretConstants.azimuthP, 0.0, TurretConstants.azimuthD,
+      new TrapezoidProfile.Constraints(TurretConstants.azimuthMaxVelocityRadPerSec,
+      TurretConstants.azimuthMaxAccelerationRadPerSecSq));
     azimuthFeedforward = new SimpleMotorFeedforward(TurretConstants.azimuthkS, TurretConstants.azimuthkV,
-        TurretConstants.azimuthkA);
+      TurretConstants.azimuthkA);
     azimuthPID.enableContinuousInput(-Math.PI, Math.PI);
     azimuthEnc = azimuthMtr.getEncoder();
 
     azimuthMtrSparkFlexConfig.encoder
-        .positionConversionFactor(TurretConstants.azimuthPositionConversionFactorRadPerRot);
+      .positionConversionFactor(TurretConstants.azimuthPositionConversionFactorRadPerRot);
     azimuthMtrSparkFlexConfig.encoder
-        .velocityConversionFactor(TurretConstants.azimuthVelocityConversionFactorRadPerRotPerSec);
+      .velocityConversionFactor(TurretConstants.azimuthVelocityConversionFactorRadPerRotPerSec);
 
     leftFlyWheelMtrSparkFlexConfig.encoder
-        .positionConversionFactor(TurretConstants.flyWheelPositionConversionFactorRot);
+      .positionConversionFactor(TurretConstants.flyWheelPositionConversionFactorRot);
     leftFlyWheelMtrSparkFlexConfig.encoder
-        .velocityConversionFactor(TurretConstants.flyWheelVelocityConversionFactorRPM);
+      .velocityConversionFactor(TurretConstants.flyWheelVelocityConversionFactorRPM);
     rightFlyWheelMtrSparkFlexConfig.encoder
-        .positionConversionFactor(TurretConstants.flyWheelPositionConversionFactorRot);
+      .positionConversionFactor(TurretConstants.flyWheelPositionConversionFactorRot);
     rightFlyWheelMtrSparkFlexConfig.encoder
-        .velocityConversionFactor(TurretConstants.flyWheelVelocityConversionFactorRPM);
+      .velocityConversionFactor(TurretConstants.flyWheelVelocityConversionFactorRPM);
 
     azimuthMtrSparkFlexConfig.inverted(false);
     leftFlyWheelMtrSparkFlexConfig.inverted(true);
@@ -128,28 +128,29 @@ public class TurretSys extends SubsystemBase {
     rightFlyWheelMtrSparkFlexConfig.softLimit.reverseSoftLimitEnabled(false);
 
     rightFlyWheelMtrSparkFlexConfig.closedLoop
-        .p(TurretConstants.flyWheelP)
-        .d(TurretConstants.flyWheelD)
-        .feedForward.kS(TurretConstants.flyWheelkS)
-        .kV(TurretConstants.flyWheelkV);
+      .p(TurretConstants.flywheelkP)
+      .d(TurretConstants.flywheelkD)
+      .feedForward.kS(TurretConstants.flywheelkS)
+      .kV(TurretConstants.flywheelkV);
 
     leftFlyWheelMtrSparkFlexConfig.closedLoop
-        .p(TurretConstants.flyWheelP)
-        .d(TurretConstants.flyWheelD)
-        .feedForward.kS(TurretConstants.flyWheelkS)
-        .kV(TurretConstants.flyWheelkV);
+      .p(TurretConstants.flywheelkP)
+      .d(TurretConstants.flywheelkD)
+      .feedForward.kS(TurretConstants.flywheelkS)
+      .kV(TurretConstants.flywheelkV)
+      .kA(TurretConstants.flywheelkA);
 
     leftFlyWheelMtr.configure(leftFlyWheelMtrSparkFlexConfig,
-        ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
 
     rightFlyWheelMtr.configure(rightFlyWheelMtrSparkFlexConfig,
-        ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
 
     azimuthMtr.configure(azimuthMtrSparkFlexConfig,
-        ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
 
     // initialzing sysID routines
     sysIdRoutine = new SysIdRoutine(
@@ -189,7 +190,7 @@ public class TurretSys extends SubsystemBase {
     }
 
     azimuthMtr.set(azimuthPID.calculate(getCurrentAzimuthAngleRad())
-        + azimuthFeedforward.calculate(azimuthPID.getSetpoint().velocity));
+      + azimuthFeedforward.calculate(azimuthPID.getSetpoint().velocity));
 
     if (isFiring) {
       setFlywheelRPM(calculateTargetFlywheelRPM());
@@ -228,9 +229,9 @@ public class TurretSys extends SubsystemBase {
 
   public double calculateTargetAzimuthAngle() {
     return TurretConstants.targetPoseBlue.getTranslation()
-        .minus(calculateTurretPose().getTranslation())
-        .getAngle()
-        .minus(new Rotation2d(poseEstimator.getPose().getRotation().getRadians())).getRadians();
+      .minus(calculateTurretPose().getTranslation())
+      .getAngle()
+      .minus(new Rotation2d(poseEstimator.getPose().getRotation().getRadians())).getRadians();
   }
 
   public double calculateDistanceToTarget() {
@@ -255,14 +256,14 @@ public class TurretSys extends SubsystemBase {
 
   public double calculateTargetFlywheelRPM() {
     return flywheelOffsetRPM +
-        TurretConstants.zerothDegreeFitConstant +
-        TurretConstants.firstDegreeFitConstant * calculateDistanceToTarget() +
-        TurretConstants.secondDegreeFitConstant * Math.pow(calculateDistanceToTarget(), 2);
+      TurretConstants.zerothDegreeFitConstant +
+      TurretConstants.firstDegreeFitConstant * calculateDistanceToTarget() +
+      TurretConstants.secondDegreeFitConstant * Math.pow(calculateDistanceToTarget(), 2);
   }
 
   public boolean isOnTarget() {
     return (Math.abs(getCurrentAzimuthAngleRad() - calculateTargetAzimuthAngle()) <= Units
-        .degreesToRadians(TurretConstants.azimuthErrorTolerance));
+      .degreesToRadians(TurretConstants.azimuthErrorTolerance));
   }
 
   public void setFlywheelRPM(double targetRPM) {
