@@ -13,10 +13,13 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CANDevices;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.TurretConstants;
 
 public class ClimberSys extends SubsystemBase {
 
@@ -29,8 +32,11 @@ public class ClimberSys extends SubsystemBase {
   private final RelativeEncoder HookEnc;
 
   private final SparkClosedLoopController HookPID;
-  private final SparkClosedLoopController LeftElevatorPID;
-  private final SparkClosedLoopController RightElevatorPID;
+  //private final SparkClosedLoopController LeftElevatorPID;
+  //private final SparkClosedLoopController RightElevatorPID;
+
+  private final ProfiledPIDController LeftElevatorPID;
+  private final ProfiledPIDController RightElevatorPID;
 
   public enum ElevatorState {
     HOME,
@@ -47,6 +53,8 @@ public class ClimberSys extends SubsystemBase {
 
   private ElevatorState currentState = ElevatorState.HOME;
 
+  private double targetElevatorPosition;
+
   @SuppressWarnings("removal")
   public ClimberSys() {
     HookMtr = new SparkFlex(CANDevices.HookMtrID, MotorType.kBrushless);
@@ -56,12 +64,20 @@ public class ClimberSys extends SubsystemBase {
 
     LeftElevatorMtr = new SparkFlex(CANDevices.LeftElevatorID, MotorType.kBrushless);
     SparkFlexConfig LeftElevatorMtrSparkFlexConfig = new SparkFlexConfig();
-    LeftElevatorPID = LeftElevatorMtr.getClosedLoopController();
+   // LeftElevatorPID = LeftElevatorMtr.getClosedLoopController();
+    LeftElevatorPID = new ProfiledPIDController(
+      ClimberConstants.ElevatorP, 0.0, ClimberConstants.ElevatorD,
+      new TrapezoidProfile.Constraints(ClimberConstants.ElevatorMaxVelocityInchesPerSecond,
+      ClimberConstants.ElevatorMaxAccelerationInchesPerSecond));
     LeftElevatorEnc = LeftElevatorMtr.getEncoder();
 
     RightElevatorMtr = new SparkFlex(CANDevices.RightElevatorID, MotorType.kBrushless);
     SparkFlexConfig RightElevatorMtrSparkFlexConfig = new SparkFlexConfig();
-    RightElevatorPID = RightElevatorMtr.getClosedLoopController();
+    //RightElevatorPID = RightElevatorMtr.getClosedLoopController();
+    RightElevatorPID = new ProfiledPIDController(
+      ClimberConstants.ElevatorP, 0.0, ClimberConstants.ElevatorD,
+      new TrapezoidProfile.Constraints(ClimberConstants.ElevatorMaxVelocityInchesPerSecond,
+      ClimberConstants.ElevatorMaxAccelerationInchesPerSecond));
     RightElevatorEnc = RightElevatorMtr.getEncoder();
 
     HookMtrSparkFlexConfig.inverted(false);
@@ -77,8 +93,8 @@ public class ClimberSys extends SubsystemBase {
     RightElevatorMtrSparkFlexConfig.smartCurrentLimit(ClimberConstants.maxElevatorCurrentAmps);
 
     HookMtrSparkFlexConfig.voltageCompensation(10);
-    LeftElevatorMtrSparkFlexConfig.voltageCompensation(10);
-    RightElevatorMtrSparkFlexConfig.voltageCompensation(10);
+    LeftElevatorMtrSparkFlexConfig.voltageCompensation(12);
+    RightElevatorMtrSparkFlexConfig.voltageCompensation(12);
 
     HookMtrSparkFlexConfig.softLimit.forwardSoftLimitEnabled(false);
     HookMtrSparkFlexConfig.softLimit.reverseSoftLimitEnabled(false);
@@ -133,52 +149,61 @@ public class ClimberSys extends SubsystemBase {
   }
 
   public void periodic() {
+    LeftElevatorMtr.set(LeftElevatorPID.calculate(getClimberPosition()));
+    RightElevatorMtr.set(RightElevatorPID.calculate(getClimberPosition()));
+    
     // currently the control remains within the following methods, but this
     // can be changed to allow for more complex control logic if desired
   }
 
-  public void setState(ElevatorState newState) {
-    currentState = newState;
-    switch (newState) {
-      case HOME -> setClimberPosition(0);
-      case L1 -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-      case L1_HANDOFF -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-      case L1_BUFFER -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-      case L2 -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-      case L2_HANDOFF -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-      case L2_BUFFER -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-      case L3 -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-      case L3_HANDOFF -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-      case L3_BUFFER -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
-    }
-  }
+  // public void setState(ElevatorState newState) {
+  //   currentState = newState;
+  //   switch (newState) {
+  //     case HOME -> setClimberPosition(0);
+  //     case L1 -> setClimberPosition(Constants.ClimberConstants.ClimberL1Position);
+  //     case L1_HANDOFF -> setClimberPosition(Constants.ClimberConstants.ClimberL1HandoffPosition);
+  //     case L1_BUFFER -> setClimberPosition(Constants.ClimberConstants.ClimberL1BufferPosition);
+  //     case L2 -> setClimberPosition(Constants.ClimberConstants.ClimberL2Position);
+  //     case L2_HANDOFF -> setClimberPosition(Constants.ClimberConstants.ClimberL2HandoffPosition);
+  //     case L2_BUFFER -> setClimberPosition(Constants.ClimberConstants.ClimberL2BufferPosition);
+  //     case L3 -> setClimberPosition(Constants.ClimberConstants.ClimberL3Position);
+  //     case L3_HANDOFF -> setClimberPosition(Constants.ClimberConstants.ClimberL3HandoffPosition);
+  //     case L3_BUFFER -> setClimberPosition(Constants.ClimberConstants.ClimberL3BufferPosition);
+  //   }
+  // }
 
-  public void incrementState() {
-    ElevatorState[] states = ElevatorState.values();
-    int nextIndex = currentState.ordinal() + 1;
-    if (nextIndex >= states.length) {
-      nextIndex = states.length - 1;
-    }
-    setState(states[nextIndex]);
-  }
+  // public void incrementState() {
+  //   ElevatorState[] states = ElevatorState.values();
+  //   int nextIndex = currentState.ordinal() + 1;
+  //   if (nextIndex >= states.length) {
+  //     nextIndex = states.length - 1;
+  //   }
+  //   setState(states[nextIndex]);
+  // }
 
-  public void decrementState() {
-    ElevatorState[] states = ElevatorState.values();
-    int prevIndex = currentState.ordinal() - 1;
-    if (prevIndex < 0) {
-      prevIndex = 0;
-    }
-    setState(states[prevIndex]);
-  }
+  // public void decrementState() {
+  //   ElevatorState[] states = ElevatorState.values();
+  //   int prevIndex = currentState.ordinal() - 1;
+  //   if (prevIndex < 0) {
+  //     prevIndex = 0;
+  //   }
+  //   setState(states[prevIndex]);
+  // }
 
   public ElevatorState getCurrentState() {
     return currentState;
   }
 
-  public void setClimberPosition(double targetPos) {
-    LeftElevatorPID.setSetpoint(targetPos, ControlType.kPosition);
-    RightElevatorPID.setSetpoint(targetPos, ControlType.kPosition);
+  // public void setClimberPosition(double targetPos) {
+  //   LeftElevatorPID.setSetpoint(targetPos, ControlType.kPosition);
+  //   RightElevatorPID.setSetpoint(targetPos, ControlType.kPosition);
+  // }
+  public void setClimberPosition(double targetpos){
+   LeftElevatorPID.setGoal(targetpos);
+   RightElevatorPID.setGoal(targetpos);
   }
+  
+  
 
   public double getClimberPosition() {
     return (LeftElevatorEnc.getPosition() + RightElevatorEnc.getPosition()) / 2.0;

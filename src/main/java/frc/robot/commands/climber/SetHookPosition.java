@@ -12,16 +12,16 @@ import frc.robot.subsystems.ClimberSys;
 public class SetHookPosition extends Command {
   @SuppressWarnings({"unused", "PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ClimberSys climberSys;
-  private final double targethookPositionRotations;
+  private final double targethookPositionDeg;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public SetHookPosition(ClimberSys climberSys, double targethookPositionRotations) {
+  public SetHookPosition(ClimberSys climberSys, double targethookPositionDeg) {
     this.climberSys = climberSys;
-    this.targethookPositionRotations = targethookPositionRotations;
+    this.targethookPositionDeg = targethookPositionDeg;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climberSys);
   }
@@ -29,7 +29,7 @@ public class SetHookPosition extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    climberSys.setTargetHookPosition(targethookPositionRotations);
+    climberSys.setTargetHookPosition(targethookPositionDeg);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

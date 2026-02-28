@@ -140,9 +140,4 @@ public class IntakeSys extends SubsystemBase {
   public double getRollerRPM() {
     return rollerEnc.getVelocity();
   }
-
-  // public void manualAdjustActuator(double speed) {
-  // leftActuatorMtr.set(speed);
-  // rightActuatorMtr.set(speed);
-  // }
 }

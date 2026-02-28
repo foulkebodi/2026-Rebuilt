@@ -4,6 +4,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.VisionConstants;
@@ -16,6 +17,8 @@ public class PoseEstimator extends SubsystemBase {
     
     private boolean trustLimelightOne = true;
     private boolean trustLimelightTwo = true;
+    private Field2d field = new Field2d();
+
 
     public PoseEstimator(SwerveDrive swerveDrive) {
 
@@ -90,4 +93,9 @@ public class PoseEstimator extends SubsystemBase {
     public double getAngularVelocityDegPerSec() {
         return swerveDrive.getAngularVelocityDegPerSec();
     }
+    public Field2d getField(){
+        field.setRobotPose(getPose());
+        return field;
+    }
+
 }

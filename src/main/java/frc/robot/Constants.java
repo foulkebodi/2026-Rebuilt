@@ -94,14 +94,14 @@ public final class Constants {
 
     public static class SwerveModuleConstants {
         // TODO: Tune the below PID and FF values using the SysID routines.
-        public static final double driveKp = 0.12;
+        public static final double driveKp = 0.18;
         public static final double driveKd = 0.0;
 
         public static final double steerKp = 0.45;
-        public static final double steerKd = 0.25;
+        public static final double steerKd = 0.15;
 
-        public static final double driveKsVolts = 0.667;
-        public static final double driveKvVoltSecsPerMeter = 2.44;
+        public static final double driveKsVolts = 1.11607;
+        public static final double driveKvVoltSecsPerMeter = 2.9583;
         public static final double driveKaVoldSecsPerMeterSq = 0.0;
 
         public static final SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(driveKsVolts,
@@ -109,7 +109,7 @@ public final class Constants {
 
         // TODO: Change this value depending on your breakers and the current usage of
         // the rest of your robot.
-        public static final int driveMtrCurrentLimitAmps = 40;
+        public static final int driveMtrCurrentLimitAmps = 60;
         public static final int steerMtrCurrentLimitAmps = 40;
 
         // TODO: Change this number based on actual wheel diamter.
@@ -171,8 +171,8 @@ public final class Constants {
         );
 
         // TODO: Tune these values based on actual robot performaance.
-        public static final double maxAttainableSpeedMetersPerSec = Units.feetToMeters(20.1 * 0.9);
-        public static final double maxAttainableRotationRadPerSec = 13.4;
+        public static final double maxAttainableSpeedMetersPerSec = Units.feetToMeters(16.5);
+        public static final double maxAttainableRotationRadPerSec = 5.0;
 
         public static final double skewCompensationRatioOmegaPerTheta = 0.1;
 
@@ -182,6 +182,13 @@ public final class Constants {
 
         public static final double autoRotationKp = 8.0;
         public static final double autoRotationKd = 0.0;
+
+
+        public static final double autoAimkP = 10.9;
+        public static final double autoAimkD = 0.5;
+        public static final double autoAimTurnSpeedRadPerSec = 2.0 * Math.PI;
+        public static final double autoAimTurnAccelRadPerSecSq = 3.0 * Math.PI;
+        public static final double autoAimToleranceRad = 0.005;
     }
 
     public class VisionConstants {
@@ -214,6 +221,7 @@ public final class Constants {
 
         public static final double actuatorOutPositionInches = 12;
         public static final double actuatorInPositionInches = 0.0;
+        public static final double actuatorBufferPositionInches = 7.0;
         public static final double actuatorSafePositionInches = 5.0;
 
         public static final double actuatorMinPositionInches = 0.0;
@@ -231,23 +239,23 @@ public final class Constants {
     }
 
     public class TurretConstants {
-        public static final int maxAzimuthCurrentAmps = 20;
+        public static final int maxAzimuthCurrentAmps = 30;
         public static final int maxFlyWheelCurrentAmps = 40;
 
-        public static final double azimuthP = 0.0;
-        public static final double azimuthD = 0.0;
-        public static final double azimuthkS = 0.0;
-        public static final double azimuthkV = 0.0;
-        public static final double azimuthkA = 0.0;
+        public static final double azimuthP = 1.4;
+        public static final double azimuthD = 0.02;
+        public static final double azimuthkS = 6.8; // 2.8
+        public static final double azimuthkV = 0; // 10.5
+        public static final double azimuthkA = 0; // 2.0
 
-        public static final double flywheelkP = 0.00012;
-        public static final double flywheelkD = 0.00;
-        public static final double flywheelkS = 0.05; // increment voltage setpoint until the flywheel moves to find this value
-        public static final double flywheelkV = 0.067; // calculated from ReCalc
+        public static final double flywheelkP = 0.00028;// 0.0003
+        public static final double flywheelkD = 0.0125;
+        public static final double flywheelkS = 0.2; // increment voltage setpoint until the flywheel moves to find this value
+        public static final double flywheelkV = 0.0022;//0.00215; // calculated from ReCalc
         public static final double flywheelkA = 0.06; // calculated from ReCalc
 
-        public static final double azimuthMaxVelocityRadPerSec = 180.0;
-        public static final double azimuthMaxAccelerationRadPerSecSq = 360.0;
+        public static final double azimuthMaxVelocityRadPerSec = 18000.0;
+        public static final double azimuthMaxAccelerationRadPerSecSq = 36000.0;
         public static final double maximumAizmuthAngleDeg = 90.0;
         public static final double minimumAizmuthAngleDeg = -90.0;
         public static final double azimuthErrorTolerance = 5;
@@ -259,54 +267,65 @@ public final class Constants {
         public static final double flyWheelPositionConversionFactorRot = 15.0 / 18.0;
         public static final double flyWheelVelocityConversionFactorRPM = 15.0 / 18.0;
 
-        public static final double zerothDegreeFitConstant = 0.0;
-        public static final double firstDegreeFitConstant = 0.0;
-        public static final double secondDegreeFitConstant = 0.0;
+        public static final double zerothDegreeFitConstant = 1664.0;
+        public static final double firstDegreeFitConstant = 112.0;
+        public static final double secondDegreeFitConstant = 21.1;
 
-        public static final double flywheelOffsetRPMIncrement = 200.0;
+        public static final double flywheelOffsetRPMIncrement = 50.0;
 
         public static final Pose2d targetPoseBlue = new Pose2d(4.62, 4.04, null);
         public static final Pose2d targetPoseRed = new Pose2d(11.915, 4.035, null);
 
-        public static final double turretOffsetX = 0.0;
-        public static final double turretOffsetY = 0.0;
-        public static final Transform2d robotToTurret = new Transform2d(new Translation2d(turretOffsetX, turretOffsetY),
+        public static final double turretOffsetXInches = -5.75;
+        public static final double turretOffsetYInches = 1.5;
+        
+        public static final Transform2d robotToTurret = new Transform2d(new Translation2d(Units.inchesToMeters(turretOffsetXInches), Units.inchesToMeters(turretOffsetYInches)),
                 new Rotation2d());
+        public static final double flywheelRPMErrorTolerance = 30.0;
     }
 
     public class ClimberConstants {
         public static final int maxHookCurrentAmps = 20;
-        public static final int maxElevatorCurrentAmps = 40;
-        public static final double ElevatorP = 0.0;
+        public static final int maxElevatorCurrentAmps = 50;
+        public static final double ElevatorP = 0.5;
         public static final double ElevatorD = 0.0;
 
         public static final double HookP = 0.0;
         public static final double HookD = 0.0;
 
-        public static final double elevatorPositionConversionFactor = 1.0;
-        public static final double elevatorVelocityConversionFactor = 1.0;
+        public static final double elevatorPositionConversionFactor = 5.5/45.0;
+        public static final double elevatorVelocityConversionFactor = 5.5/45.0 / 60.0;
 
-        public static final double hookPositionConversionFactor = 1.0;
+        public static final double hookPositionConversionFactor = 1.0*360.0;
         public static final double hookVelocityConversionFactor = 1.0;
 
         public static final double ElevatorMinInches = 0.0;
-        public static final double ElevatorMaxInches = 0.0;
+        public static final double ElevatorMaxInches = 9.5;
 
-        public static final double hookMinDeg = 0.0;
-        public static final double hookMaxDeg = 0.0;
+        public static final double hookMinDeg = -5.0;
+        public static final double hookMaxDeg = 100.0;
 
-        public static final double ElevatorMinSafeInches = 0.0;
-        public static final double ElevatorMaxSafeInches = 0.0;
-        public static final double hookMinPositionInches = 0.0;
-        public static final double hookMaxPositionInches = 0.0;
+        public static final double hookOutPositionDeg = 90.0;
 
         public static final double elevatorClimbPositionInches = 0.0;
         public static final double elevatorSafePositionInches = 0.0;
         public static final double elevatorStartPositionInches = 0.0;
 
-        public static final double hookOutPositionRotations = 0.25;
 
-        public static final double ClimberL1Position = 0;
+        public static final double ClimberL1Position = 6.0;
+        public static final double ClimberL1HandoffPosition = 0.0;
+        public static final double ClimberL1BufferPosition = 3.0;
+        public static final double ClimberL2Position = 9;
+        public static final double ClimberL2HandoffPosition = 4.0;
+        public static final double ClimberL2BufferPosition = 6.5;
+        public static final double ClimberL3Position = 9;
+        public static final double ClimberL3HandoffPosition = 4.0;
+        public static final double ClimberL3BufferPosition = 6.5;
+       
+
+        
+        public static final double ElevatorMaxVelocityInchesPerSecond = 5.0;
+        public static final double ElevatorMaxAccelerationInchesPerSecond = 10.0;
 
     }
 
@@ -329,7 +348,12 @@ public final class Constants {
         public static final double spindexerShootingRPM = 5000.0;
         public static final double spindexerAgitatingRPM = 5000.0;
 
-        public static final double towerShootingRPM = 0.0;
+        public static final double towerShootingRPM = 3000.0;
         public static final double towerIntakingRPM = 0.0;
+    }
+
+    public class FieldConstants {
+        public static final Translation2d redAllianceHubPose = new Translation2d(11.915, 4.035);
+        public static final Translation2d blueAllianceHubPose = new Translation2d(4.62, 4.04);
     }
 }

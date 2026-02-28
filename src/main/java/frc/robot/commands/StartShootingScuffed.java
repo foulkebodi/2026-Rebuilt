@@ -19,17 +19,13 @@ import frc.robot.commands.spindexer.SetSpindexerRPM;
 import frc.robot.commands.tower.SetTowerRPM;
 
 /** An example command that uses an example subsystem. */
-public class StartShooting extends SequentialCommandGroup {
+public class StartShootingScuffed extends SequentialCommandGroup {
 
-  public StartShooting(TurretSys turretSys, IndexerSys indexerSys, IntakeSys intakeSys) {
+  public StartShootingScuffed(TurretSys turretSys, IndexerSys indexerSys, IntakeSys intakeSys) {
     super(
-        new StartAiming(turretSys),
         new StartFlywheel(turretSys),
-        new WaitUntilCommand(() -> turretSys.isOnTarget()),
         new WaitUntilCommand(() -> turretSys.isAtSpeed()),
         new SetTowerRPM(indexerSys, IndexerConstants.towerShootingRPM),
         new SetSpindexerRPM(indexerSys, IndexerConstants.spindexerAgitatingRPM));
-  //       new WaitCommand(2.0),
-  //       new SetIntakeActuatorInches(intakeSys, Constants.IntakeConstants.actuatorInPositionInches));
   }
 }

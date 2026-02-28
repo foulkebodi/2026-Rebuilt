@@ -20,7 +20,10 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.Optional;
+
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -45,6 +48,8 @@ public class SwerveDrive extends SubsystemBase {
     private final StructArrayPublisher<SwerveModuleState> publisher;
 
     private final SysIdRoutine sysIdRoutine;
+
+    private Optional<Double> omegaOverrideRadPerSec = Optional.empty();
 
     public SwerveDrive() {
         modules = new SwerveModule[] {
@@ -185,13 +190,22 @@ public class SwerveDrive extends SubsystemBase {
     public ChassisSpeeds getFieldRelativeSpeeds(Rotation2d robotHeading) {
         return ChassisSpeeds.fromRobotRelativeSpeeds(getRobotRelativeSpeeds(), robotHeading);
     }
-
+    public double getRobotVelocity() {
+        return Math.hypot(SwerveDriveConstants.kinematics.toChassisSpeeds(getModuleStates()).vxMetersPerSecond, SwerveDriveConstants.kinematics.toChassisSpeeds(getModuleStates()).vyMetersPerSecond);
+    }
+    
     public void driveFieldRelative(double xMetersPerSec, double yMetersPerSec, double omegaRadPerSec, Rotation2d heading) {
+        if(omegaOverrideRadPerSec.isPresent()) {
+            omegaRadPerSec = omegaOverrideRadPerSec.get();
+           
+        }
+         SmartDashboard.putBoolean("Recieved Heading Override", omegaOverrideRadPerSec.isPresent());
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xMetersPerSec, yMetersPerSec, omegaRadPerSec, heading);
         driveRobotRelative(chassisSpeeds);
     }
 
     public void driveRobotRelative(ChassisSpeeds chassisSpeeds) {
+       
         chassisSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
 
         // only lock wheels if all inputs are zero
@@ -258,5 +272,14 @@ public class SwerveDrive extends SubsystemBase {
         for(SwerveModule module : modules) {
             module.applyCharacterizationVoltage(volts);
         }
+    }
+    
+
+    public void setOmegaOverrideRadPerSec(Optional<Double> omegaOverrideRadPerSec){
+        this.omegaOverrideRadPerSec = omegaOverrideRadPerSec;
+    }
+
+    public boolean hasOmegaOverride() {
+        return omegaOverrideRadPerSec.isPresent();
     }
 }

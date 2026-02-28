@@ -26,7 +26,7 @@ public class incrimentClimberPosition extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    climberSys.incrementState();
+    //climberSys.incrementState();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

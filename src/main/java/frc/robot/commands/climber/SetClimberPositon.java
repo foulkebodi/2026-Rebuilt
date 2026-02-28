@@ -8,16 +8,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ClimberSys;
 
 /** An example command that uses an example subsystem. */
-public class decrimentClimberPosition extends Command {
+public class SetClimberPositon extends Command {
   @SuppressWarnings({"unused", "PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ClimberSys climberSys;
+  private double targetClimberPosition;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public decrimentClimberPosition(ClimberSys climberSys) {
+  public SetClimberPositon(ClimberSys climberSys, double targetClimberPosition) {
+     this.targetClimberPosition = targetClimberPosition;
     this.climberSys = climberSys;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climberSys);
@@ -26,7 +28,7 @@ public class decrimentClimberPosition extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //climberSys.decrementState();
+    climberSys.setClimberPosition(targetClimberPosition);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

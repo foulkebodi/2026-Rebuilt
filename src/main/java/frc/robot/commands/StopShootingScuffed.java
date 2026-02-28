@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.turret.StartAiming;
 import frc.robot.commands.turret.StartFlywheel;
+import frc.robot.commands.turret.StopFlywheel;
 import frc.robot.subsystems.IndexerSys;
 import frc.robot.subsystems.IntakeSys;
 import frc.robot.subsystems.TurretSys;
@@ -19,17 +20,12 @@ import frc.robot.commands.spindexer.SetSpindexerRPM;
 import frc.robot.commands.tower.SetTowerRPM;
 
 /** An example command that uses an example subsystem. */
-public class StartShooting extends SequentialCommandGroup {
+public class StopShootingScuffed extends SequentialCommandGroup {
 
-  public StartShooting(TurretSys turretSys, IndexerSys indexerSys, IntakeSys intakeSys) {
+  public StopShootingScuffed(TurretSys turretSys, IndexerSys indexerSys, IntakeSys intakeSys) {
     super(
-        new StartAiming(turretSys),
-        new StartFlywheel(turretSys),
-        new WaitUntilCommand(() -> turretSys.isOnTarget()),
-        new WaitUntilCommand(() -> turretSys.isAtSpeed()),
-        new SetTowerRPM(indexerSys, IndexerConstants.towerShootingRPM),
-        new SetSpindexerRPM(indexerSys, IndexerConstants.spindexerAgitatingRPM));
-  //       new WaitCommand(2.0),
-  //       new SetIntakeActuatorInches(intakeSys, Constants.IntakeConstants.actuatorInPositionInches));
+        new StopFlywheel(turretSys),
+        new SetTowerRPM(indexerSys,0),
+        new SetSpindexerRPM(indexerSys, 0));
   }
 }
