@@ -26,7 +26,10 @@ import frc.robot.commands.turret.DecrementFlywheelOffset;
 import frc.robot.commands.turret.IncrementFlywheelOffset;
 import frc.robot.commands.turret.SetManualAzimuthAngle;
 import frc.robot.commands.turret.SetManualFlywheelRPM;
+import frc.robot.commands.turret.StartAiming;
+import frc.robot.commands.turret.StopAiming;
 import frc.robot.commands.turret.StopFlywheel;
+import frc.robot.commands.turret.StopManualAzimuthAngle;
 import frc.robot.subsystems.ClimberSys;
 import frc.robot.subsystems.IndexerSys;
 import frc.robot.subsystems.IntakeSys;
@@ -43,7 +46,9 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.MathUtil;
-
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import edu.wpi.first.wpilibj.XboxController;
@@ -129,6 +134,7 @@ public class RobotContainer {
 				swerveDrive,
 				poseEstimator));
 
+		driverController.start().onTrue(Commands.runOnce(() -> poseEstimator.resetPose(new Pose2d(new Translation2d(0,0),new Rotation2d(0))), poseEstimator));
 		driverController.start().onTrue(Commands.runOnce(() -> poseEstimator.resetHeading(), poseEstimator));
 
 		driverController
@@ -148,10 +154,10 @@ public class RobotContainer {
 		operatorController.rightBumper().onTrue(new IncrementFlywheelOffset(turretSys));
 		operatorController.leftBumper().onTrue(new DecrementFlywheelOffset(turretSys));
 
-		operatorController.a().onTrue(new SetIntakeActuatorInches(intakeSys,
-				IntakeConstants.actuatorInPositionInches));
-		operatorController.y().onTrue(new SetIntakeActuatorInches(intakeSys,
-				IntakeConstants.actuatorBufferPositionInches));
+		// operatorController.a().onTrue(new SetIntakeActuatorInches(intakeSys,
+				// IntakeConstants.actuatorInPositionInches));
+		// operatorController.y().onTrue(new SetIntakeActuatorInches(intakeSys,
+				// IntakeConstants.actuatorBufferPositionInches));
 
 		// operatorController.b().onTrue(new SetHookPosition(climberSys,
 		// Constants.ClimberConstants.hookOutPositionDeg));
@@ -174,10 +180,10 @@ public class RobotContainer {
 		// driverController.y().onTrue(turretSys.sysIdQuasistaticReverse());
 
 		// turret manual control bindings for testing (DISABLE SOFT LIMITS BEFORE USING)
-		// operatorController.a().onTrue(new SetManualAzimuthAngle(turretSys, 0.0));
-		// operatorController.b().onTrue(new SetManualAzimuthAngle(turretSys, 25.0));
-		// operatorController.x().onTrue(new SetManualAzimuthAngle(turretSys, 120.0));
-		// operatorController.y().onTrue(new SetManualAzimuthAngle(turretSys, -90.0)); //-90
+		operatorController.a().onTrue(new StartAiming(turretSys));
+		operatorController.b().onTrue(new StopAiming(turretSys));
+		operatorController.x().onTrue(new StopManualAzimuthAngle(turretSys));
+		// operatorController.y().onTrue(new StartAiming(turretSys)); //-90
 
 		// flywheel RPM control bindings for testing
 		// operatorController.a().onTrue(new SetManualFlywheelRPM(turretSys, 0.0));
@@ -272,6 +278,6 @@ public class RobotContainer {
 		// SmartDashboard.putString("climber current state", climberSys.getCurrentState().toString());
 		// field
 		SmartDashboard.putData("robot field", poseEstimator.getField());
-		SmartDashboard.putData("robot field", poseEstimator.getField());
+		SmartDashboard.putData("turret field", turretSys.getTurretField());
 	}
 }

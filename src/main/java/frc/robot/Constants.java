@@ -143,10 +143,10 @@ public final class Constants {
 
         // FIXME: uncomment once pathplannerlib is released
         public static final ModuleConfig moduleConfig = new ModuleConfig(
-            wheelRadiusMeters, SwerveDriveConstants.maxAttainableSpeedMetersPerSec, wheelCoefficientOfFriction,
-            new DCMotor(driveNominalOperatingVoltage, driveStallTorqueNewtonMeters, driveStallCurrentAmps,
-                    driveFreeCurrentAmps, driveFreeSpeedRadPerSec, 1),
-            driveMtrCurrentLimitAmps, 1);
+                wheelRadiusMeters, SwerveDriveConstants.maxAttainableSpeedMetersPerSec, wheelCoefficientOfFriction,
+                new DCMotor(driveNominalOperatingVoltage, driveStallTorqueNewtonMeters, driveStallCurrentAmps,
+                        driveFreeCurrentAmps, driveFreeSpeedRadPerSec, 1),
+                driveMtrCurrentLimitAmps, 1);
     }
 
     public static class SwerveDriveConstants {
@@ -182,7 +182,6 @@ public final class Constants {
 
         public static final double autoRotationKp = 8.0;
         public static final double autoRotationKd = 0.0;
-
 
         public static final double autoAimkP = 10.9;
         public static final double autoAimkD = 0.5;
@@ -242,16 +241,17 @@ public final class Constants {
         public static final int maxAzimuthCurrentAmps = 30;
         public static final int maxFlyWheelCurrentAmps = 40;
 
-        public static final double azimuthP = 1.4;
-        public static final double azimuthD = 0.02;
-        public static final double azimuthkS = 6.8; // 2.8
+        public static final double azimuthP = 6.0;
+        public static final double azimuthD = 5.0;
+        public static final double azimuthkS = 2.8; // 2.8
         public static final double azimuthkV = 0; // 10.5
         public static final double azimuthkA = 0; // 2.0
 
         public static final double flywheelkP = 0.00028;// 0.0003
         public static final double flywheelkD = 0.0125;
-        public static final double flywheelkS = 0.2; // increment voltage setpoint until the flywheel moves to find this value
-        public static final double flywheelkV = 0.0022;//0.00215; // calculated from ReCalc
+        public static final double flywheelkS = 0.2; // increment voltage setpoint until the flywheel moves to find this
+                                                     // value
+        public static final double flywheelkV = 0.0022;// 0.00215; // calculated from ReCalc
         public static final double flywheelkA = 0.06; // calculated from ReCalc
 
         public static final double azimuthMaxVelocityRadPerSec = 18000.0;
@@ -261,8 +261,8 @@ public final class Constants {
         public static final double azimuthErrorTolerance = 5;
         public static final double azimuthDefaultSetpointDeg = 0.0;
 
-        public static final double azimuthPositionConversionFactorRadPerRot = 20.0 / 173.0 * 2.0 * Math.PI;
-        public static final double azimuthVelocityConversionFactorRadPerRotPerSec = 20.0 / 173.0 * 2.0 * Math.PI / 60.0;
+        public static final double azimuthPositionConversionFactorRadPerRot = 20.0 / 173.0 / 5.0 * 2.0 * Math.PI;
+        public static final double azimuthVelocityConversionFactorRadPerRotPerSec = 20.0 / 173.0 * 2.0 * Math.PI;
 
         public static final double flyWheelPositionConversionFactorRot = 15.0 / 18.0;
         public static final double flyWheelVelocityConversionFactorRPM = 15.0 / 18.0;
@@ -276,10 +276,11 @@ public final class Constants {
         public static final Pose2d targetPoseBlue = new Pose2d(4.62, 4.04, null);
         public static final Pose2d targetPoseRed = new Pose2d(11.915, 4.035, null);
 
-        public static final double turretOffsetXInches = -5.75;
-        public static final double turretOffsetYInches = 1.5;
-        
-        public static final Transform2d robotToTurret = new Transform2d(new Translation2d(Units.inchesToMeters(turretOffsetXInches), Units.inchesToMeters(turretOffsetYInches)),
+        public static final double turretOffsetXInches = -1.5; // -5.75
+        public static final double turretOffsetYInches = -5.75; // 1.5
+
+        public static final Transform2d robotToTurret = new Transform2d(
+                new Translation2d(Units.inchesToMeters(turretOffsetXInches), Units.inchesToMeters(turretOffsetYInches)),
                 new Rotation2d());
         public static final double flywheelRPMErrorTolerance = 30.0;
     }
@@ -293,10 +294,10 @@ public final class Constants {
         public static final double HookP = 0.0;
         public static final double HookD = 0.0;
 
-        public static final double elevatorPositionConversionFactor = 5.5/45.0;
-        public static final double elevatorVelocityConversionFactor = 5.5/45.0 / 60.0;
+        public static final double elevatorPositionConversionFactor = 5.5 / 45.0;
+        public static final double elevatorVelocityConversionFactor = 5.5 / 45.0 / 60.0;
 
-        public static final double hookPositionConversionFactor = 1.0*360.0;
+        public static final double hookPositionConversionFactor = 1.0 * 360.0;
         public static final double hookVelocityConversionFactor = 1.0;
 
         public static final double ElevatorMinInches = 0.0;
@@ -311,7 +312,6 @@ public final class Constants {
         public static final double elevatorSafePositionInches = 0.0;
         public static final double elevatorStartPositionInches = 0.0;
 
-
         public static final double ClimberL1Position = 6.0;
         public static final double ClimberL1HandoffPosition = 0.0;
         public static final double ClimberL1BufferPosition = 3.0;
@@ -321,9 +321,7 @@ public final class Constants {
         public static final double ClimberL3Position = 9;
         public static final double ClimberL3HandoffPosition = 4.0;
         public static final double ClimberL3BufferPosition = 6.5;
-       
 
-        
         public static final double ElevatorMaxVelocityInchesPerSecond = 5.0;
         public static final double ElevatorMaxAccelerationInchesPerSecond = 10.0;
 
