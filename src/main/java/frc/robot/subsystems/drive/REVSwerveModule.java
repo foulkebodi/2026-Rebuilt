@@ -46,7 +46,7 @@ public class REVSwerveModule extends SwerveModule {
         SparkFlexConfig driveConfig = new SparkFlexConfig();
         SparkFlexConfig steerConfig = new SparkFlexConfig();
 
-        driveConfig.idleMode(IdleMode.kCoast);
+        driveConfig.idleMode(IdleMode.kBrake);
         steerConfig.idleMode(IdleMode.kBrake);
 
         driveConfig.smartCurrentLimit(SwerveModuleConstants.driveMtrCurrentLimitAmps);
