@@ -271,7 +271,7 @@ public final class Constants {
         public static final double firstDegreeFitConstant = 112.0;
         public static final double secondDegreeFitConstant = 21.1;
 
-        public static final double flywheelOffsetRPMIncrement = 50.0;
+        public static final double flywheelOffsetRPMIncrement = 10.0;
 
         public static final Pose2d targetPoseBlue = new Pose2d(4.62, 4.04, null);
         public static final Pose2d targetPoseRed = new Pose2d(11.915, 4.035, null);
@@ -351,7 +351,7 @@ public final class Constants {
         public static final double spindexerShootingRPM = 5000.0;
         public static final double spindexerAgitatingRPM = 5000.0;
 
-        public static final double towerShootingRPM = 3000.0;
+        public static final double towerShootingRPM = 4500.0;
         public static final double towerIntakingRPM = 0.0;
     }
 

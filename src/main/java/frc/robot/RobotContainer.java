@@ -6,6 +6,8 @@ package frc.robot;
 
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.IndexerConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.commands.StartIntaking;
 import frc.robot.commands.StartShooting;
@@ -13,7 +15,9 @@ import frc.robot.commands.StopShooting;
 import frc.robot.commands.climber.SetClimberPositon;
 import frc.robot.commands.drive.ArcadeDriveCmd;
 import frc.robot.commands.drive.LockCmd;
+import frc.robot.commands.intake.SetIntakeActuatorInches;
 import frc.robot.commands.intake.SetIntakeRollerRPM;
+import frc.robot.commands.spindexer.SetSpindexerRPM;
 import frc.robot.commands.tower.SetTowerRPM;
 import frc.robot.commands.turret.DecrementAzimuthOffset;
 import frc.robot.commands.turret.DecrementFlywheelOffset;
@@ -144,8 +148,8 @@ public class RobotContainer {
 				swerveDrive,
 				poseEstimator));
 
-		driverController.start().onTrue(Commands.runOnce(
-				() -> poseEstimator.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0))), poseEstimator));
+		// driverController.start().onTrue(Commands.runOnce(
+				// () -> poseEstimator.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0))), poseEstimator));
 		driverController.start().onTrue(Commands.runOnce(() -> poseEstimator.resetHeading(), poseEstimator));
 
 		driverController
@@ -165,13 +169,25 @@ public class RobotContainer {
 		operatorController.povLeft().onTrue(new IncrementAzimuthOffset(turretSys));
 		operatorController.povRight().onTrue(new DecrementAzimuthOffset(turretSys));
 		operatorController.rightStick().onTrue(new ToggleIsPassing(turretSys));
-		
 		operatorController.a().onTrue(new SetClimberPositon(climberSys, 0.0));
+		operatorController.b().onTrue(new SetClimberPositon(climberSys, 3.5));
 		operatorController.y().onTrue(new SetClimberPositon(climberSys, ClimberConstants.ElevatorMaxInches));
 
-		operatorController.x().onTrue(new StopManualFlywheelRPM(turretSys));
-		operatorController.a().onTrue(new SetManualFlywheelRPM(turretSys, 0.0));
-		operatorController.b().onTrue(new StartAiming(turretSys, 2000.0));
+		
+		// operatorController.x().onTrue(new StopManualFlywheelRPM(turretSys));
+		// operatorController.a().onTrue(new SetManualFlywheelRPM(turretSys, 1500.0));
+		// operatorController
+		// 		.axisGreaterThan(XboxController.Axis.kLeftTrigger.value, ControllerConstants.tiggerPressedThreshold)
+		// 		.onTrue(new SetIntakeRollerRPM(intakeSys, IntakeConstants.intakingRollerRPM))
+		// 		.onTrue(new SetSpindexerRPM(indexerSys, IndexerConstants.spindexerAgitatingRPM))
+		// 		.onTrue(new SetTowerRPM(indexerSys, IndexerConstants.towerShootingRPM))
+		// 		.onFalse(new SetIntakeRollerRPM(intakeSys, 0))
+		// 		.onFalse(new SetSpindexerRPM(indexerSys, 0))
+		// 		.onFalse(new SetTowerRPM(indexerSys, 0));
+		
+		// operatorController.povRight().onTrue(new SetIntakeActuatorInches(intakeSys, IntakeConstants.actuatorOutPositionInches));
+		// operatorController.povLeft().onTrue(new SetIntakeActuatorInches(intakeSys, 5.0));
+
 		// binding commands for swerve sysID
 		// driverController.a().onTrue(swerveDrive.driveSysIdDynamicForward());
 		// driverController.b().onTrue(swerveDrive.driveSysIdDynamicReverse());
@@ -188,7 +204,6 @@ public class RobotContainer {
 		// operatorController.a().onTrue(new StartAiming(turretSys));
 		// operatorController.b().onTrue(new StopAiming(turretSys));
 		// operatorController.x().onTrue(new StopManualAzimuthAngle(turretSys));
-		// operatorController.y().onTrue(new StartAiming(turretSys)); //-90
 
 		// flywheel RPM control bindings for testing
 		// operatorController.x().onTrue(new SetManualFlywheelRPM(turretSys, 0.0));
@@ -210,25 +225,19 @@ public class RobotContainer {
 
 		// intake roller RPM control bindings for testing
 		// operatorController.a().onTrue(new SetIntakeRollerRPM(intakeSys, 0.0));
-		// operatorController.b().onTrue(new SetIntakeRollerRPM(intakeSys, 0.0));
 		// operatorController.x().onTrue(new SetIntakeRollerRPM(intakeSys, 2200.0));
 		// operatorController.y().onTrue(new SetIntakeRollerRPM(intakeSys, 7000.0));
 
 		// intake actuator position control bindings for testing
-		// operatorController.a().onTrue(new SetIntakeActuatorInches(intakeSys, 0.0));
 		// operatorController.b().onTrue(new SetIntakeActuatorInches(intakeSys, 8.0));
 		// operatorController.x().onTrue(new SetIntakeActuatorInches(intakeSys, 0.0));
-		// operatorController.y().onTrue(new
-		// SetIntakeActuatorInches(intakeSys,IntakeConstants.actuatorOutPositionInches));
+		// operatorController.y().onTrue(new SetIntakeActuatorInches(intakeSys,IntakeConstants.actuatorOutPositionInches));
 
 		// climber position control bindings for testing
 		// operatorController.a().onTrue(new SetClimberPositon(climberSys, 0.0));
-		// operatorController.b().onTrue(new SetClimberPositon(climberSys, 3.0));
-		// operatorController.x().onTrue(new SetClimberPositon(climberSys, 6.0));
-		// operatorController.y().onTrue(new SetClimberPositon(climberSys, 9.4));
-		// operatorController.b().onTrue(new SetHookPosition(climberSys,
-		// Constants.ClimberConstants.hookOutPositionDeg));
-		// operatorController.x().onTrue(new SetHookPosition(climberSys, 0.0));
+		// operatorController.b().onTrue(new SetClimberPositon(climberSys, 3.5));
+		// operatorController.y().onTrue(new SetClimberPositon(climberSys, ClimberConstants.ElevatorMaxInches));
+
 	}
 
 	public Command getAutonomousCommand() {
