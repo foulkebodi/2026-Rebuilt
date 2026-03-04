@@ -225,13 +225,17 @@ public final class Constants {
         public static final double actuatorMinPositionInches = 0.0;
         public static final double actuatorMaxPositionInches = 12.5;
 
-        public static final double RollerP = 0.0010;
-        public static final double RollerD = 0.0002;
+        public static final double RollerP = 0.001; //0.0002;   //0.0010;
+        public static final double RollerD = 0.0002; //0.0;  //0.0002;
+        public static final double RollerkS =0.0; //0.35;
+        public static final double RollerkV =0.0;// 0.005;
 
         public static final double actuatorP = 1;
         public static final double actuatorD = 0.05;
         public static final double intakingRollerRPM = 3999.0;
         public static final double agitatingRollerRPM = 500.0;
+        
+        
 
         // public static final double manualActuatorAdjustmentSpeed = 0.4;
     }
@@ -304,30 +308,31 @@ public final class Constants {
         public static final double hookVelocityConversionFactor = 1.0;
 
         public static final double ElevatorMinInches = 0.0;
-        public static final double ElevatorMaxInches = 9.5;
+        public static final double ElevatorMaxInches = 9.75;
 
         public static final double hookMinDeg = -5.0;
         public static final double hookMaxDeg = 100.0;
 
         public static final double hookOutPositionDeg = 90.0;
 
-        public static final double elevatorClimbPositionInches = 0.0;
-        public static final double elevatorSafePositionInches = 0.0;
-        public static final double elevatorStartPositionInches = 0.0;
+        public static final double elevatorClimbPositionInches = 3.5;
+        public static final double ElevatorUpPositionInches = 9.5;
 
-        public static final double ClimberL1Position = 6.0;
-        public static final double ClimberL1HandoffPosition = 0.0;
-        public static final double ClimberL1BufferPosition = 3.0;
-        public static final double ClimberL2Position = 9;
-        public static final double ClimberL2HandoffPosition = 4.0;
-        public static final double ClimberL2BufferPosition = 6.5;
-        public static final double ClimberL3Position = 9;
-        public static final double ClimberL3HandoffPosition = 4.0;
-        public static final double ClimberL3BufferPosition = 6.5;
+        
+
+        // public static final double ClimberL1Position = 6.0;
+        // public static final double ClimberL1HandoffPosition = 0.0;
+        // public static final double ClimberL1BufferPosition = 3.0;
+        // public static final double ClimberL2Position = 9;
+        // public static final double ClimberL2HandoffPosition = 4.0;
+        // public static final double ClimberL2BufferPosition = 6.5;
+        // public static final double ClimberL3Position = 9;
+        // public static final double ClimberL3HandoffPosition = 4.0;
+        // public static final double ClimberL3BufferPosition = 6.5;
 
         public static final double ElevatorMaxVelocityInchesPerSecond = 5.0;
         public static final double ElevatorMaxAccelerationInchesPerSecond = 10.0;
-
+     
     }
 
     public class IndexerConstants {

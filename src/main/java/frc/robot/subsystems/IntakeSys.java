@@ -90,7 +90,9 @@ public class IntakeSys extends SubsystemBase {
 
     RollerMtrSparkFlexConfig.closedLoop
       .p(IntakeConstants.RollerP)
-      .d(IntakeConstants.RollerD);
+      .d(IntakeConstants.RollerD).feedForward
+      .kS(IntakeConstants.RollerkS)
+      .kV(IntakeConstants.RollerkV);
 
     RightActuatorMtrSparkFlexConfig.closedLoop
       .p(IntakeConstants.actuatorP)

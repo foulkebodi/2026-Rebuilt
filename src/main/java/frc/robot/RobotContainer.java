@@ -166,15 +166,15 @@ public class RobotContainer {
 		// operator bindings for competition
 		operatorController.povUp().onTrue(new IncrementFlywheelOffset(turretSys));
 		operatorController.povDown().onTrue(new DecrementFlywheelOffset(turretSys));
-		operatorController.povLeft().onTrue(new IncrementAzimuthOffset(turretSys));
-		operatorController.povRight().onTrue(new DecrementAzimuthOffset(turretSys));
-		operatorController.rightStick().onTrue(new ToggleIsPassing(turretSys));
+		// operatorController.povLeft().onTrue(new IncrementAzimuthOffset(turretSys));
+		// operatorController.povRight().onTrue(new DecrementAzimuthOffset(turretSys));
+		// operatorController.rightStick().onTrue(new ToggleIsPassing(turretSys));
 		operatorController.a().onTrue(new SetClimberPositon(climberSys, 0.0));
-		operatorController.b().onTrue(new SetClimberPositon(climberSys, 3.5));
-		operatorController.y().onTrue(new SetClimberPositon(climberSys, ClimberConstants.ElevatorMaxInches));
+		operatorController.b().onTrue(new SetClimberPositon(climberSys, ClimberConstants.elevatorClimbPositionInches));
+		operatorController.y().onTrue(new SetClimberPositon(climberSys, ClimberConstants.ElevatorUpPositionInches));
 
 		
-		// operatorController.x().onTrue(new StopManualFlywheelRPM(turretSys));
+		// operatorController.b().onTrue(new StopManualFlywheelRPM(turretSys));
 		// operatorController.a().onTrue(new SetManualFlywheelRPM(turretSys, 1500.0));
 		// operatorController
 		// 		.axisGreaterThan(XboxController.Axis.kLeftTrigger.value, ControllerConstants.tiggerPressedThreshold)
@@ -184,7 +184,7 @@ public class RobotContainer {
 		// 		.onFalse(new SetIntakeRollerRPM(intakeSys, 0))
 		// 		.onFalse(new SetSpindexerRPM(indexerSys, 0))
 		// 		.onFalse(new SetTowerRPM(indexerSys, 0));
-		
+		// operatorController.b().onTrue(new SetIntakeActuatorInches(intakeSys, 5.0));
 		// operatorController.povRight().onTrue(new SetIntakeActuatorInches(intakeSys, IntakeConstants.actuatorOutPositionInches));
 		// operatorController.povLeft().onTrue(new SetIntakeActuatorInches(intakeSys, 5.0));
 
@@ -225,8 +225,9 @@ public class RobotContainer {
 
 		// intake roller RPM control bindings for testing
 		// operatorController.a().onTrue(new SetIntakeRollerRPM(intakeSys, 0.0));
-		// operatorController.x().onTrue(new SetIntakeRollerRPM(intakeSys, 2200.0));
-		// operatorController.y().onTrue(new SetIntakeRollerRPM(intakeSys, 7000.0));
+		// operatorController.b().onTrue(new SetIntakeRollerRPM(intakeSys, 1000.0));
+		// operatorController.x().onTrue(new SetIntakeRollerRPM(intakeSys, 2000.0));
+		// operatorController.y().onTrue(new SetIntakeRollerRPM(intakeSys, 500.0));
 
 		// intake actuator position control bindings for testing
 		// operatorController.b().onTrue(new SetIntakeActuatorInches(intakeSys, 8.0));
