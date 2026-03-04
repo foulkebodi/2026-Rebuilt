@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightTrenchToMidline"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MidlineToRightTrench"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 4.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooting"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightTrenchToCloseFuel"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CloseFuelToRightTrenchThrough"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightTrenchToClimb"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

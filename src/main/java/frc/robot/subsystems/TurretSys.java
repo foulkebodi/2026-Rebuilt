@@ -13,29 +13,13 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Time;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
-import static edu.wpi.first.units.Units.Radian;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static edu.wpi.first.units.Units.Seconds;
-import static edu.wpi.first.units.Units.Volts;
-import static edu.wpi.first.units.Units.VoltsPerRadianPerSecond;
 
 import frc.robot.Constants.CANDevices;
 import frc.robot.Constants.TurretConstants;
@@ -53,7 +37,6 @@ public class TurretSys extends SubsystemBase {
   private final SparkClosedLoopController leftFlyWheelPID;
   private final SparkClosedLoopController rightFlyWheelPID;
   private final SparkClosedLoopController azimuthPID;
-  // private final SimpleMotorFeedforward azimuthFeedforward;
   private final PoseEstimator poseEstimator;
 
   private Double manualAzimuthAngle = 0.0;
@@ -63,7 +46,7 @@ public class TurretSys extends SubsystemBase {
   private boolean isPassing = false;
   private double flywheelOffsetRPM = 0.0;
   private double aziumthOffsetDeg = 0.0;
-  private final SysIdRoutine sysIdRoutine;
+  // private final SysIdRoutine sysIdRoutine;
   private Field2d field = new Field2d();
 
   @SuppressWarnings("removal")
@@ -83,13 +66,6 @@ public class TurretSys extends SubsystemBase {
 
     azimuthMtr = new SparkFlex(CANDevices.azimuthMtrID, MotorType.kBrushless);
     SparkFlexConfig azimuthMtrSparkFlexConfig = new SparkFlexConfig();
-    // azimuthPID = new ProfiledPIDController(
-    // TurretConstants.azimuthP, 0.0, TurretConstants.azimuthD,
-    // new TrapezoidProfile.Constraints(TurretConstants.azimuthMaxVelocityRadPerSec,
-    // TurretConstants.azimuthMaxAccelerationRadPerSecSq));
-    // azimuthFeedforward = new SimpleMotorFeedforward(TurretConstants.azimuthkS,
-    // TurretConstants.azimuthkV,
-    // TurretConstants.azimuthkA);
     azimuthPID = azimuthMtr.getClosedLoopController();
     azimuthEnc = azimuthMtr.getEncoder();
 
@@ -163,27 +139,27 @@ public class TurretSys extends SubsystemBase {
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
-    // initialzing sysID routines
-    sysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null, // default ramp rate
-            Volts.of(12), // default step voltage
-            Time.ofBaseUnits(10, Seconds) // default timeout)
-        ),
-        new SysIdRoutine.Mechanism(
-            (voltage) -> {
-              setAzimuthVoltage(voltage.in(Volts));
-            },
-            (log) -> {
-              Voltage voltage = Volts.of(getCharacterizationVoltage());
-              Angle angle = Angle.ofBaseUnits(azimuthEnc.getPosition(), Radian);
-              AngularVelocity angularVelocity = AngularVelocity.ofBaseUnits(azimuthEnc.getVelocity(), RadiansPerSecond);
-              log.motor("azimuth")
-                  .voltage(voltage)
-                  .angularPosition(angle)
-                  .angularVelocity(angularVelocity);
-            },
-            this));
+    // // initialzing sysID routines
+    // sysIdRoutine = new SysIdRoutine(
+    //     new SysIdRoutine.Config(
+    //         null, // default ramp rate
+    //         Volts.of(12), // default step voltage
+    //         Time.ofBaseUnits(10, Seconds) // default timeout)
+    //     ),
+    //     new SysIdRoutine.Mechanism(
+    //         (voltage) -> {
+    //           setAzimuthVoltage(voltage.in(Volts));
+    //         },
+    //         (log) -> {
+    //           Voltage voltage = Volts.of(getCharacterizationVoltage());
+    //           Angle angle = Angle.ofBaseUnits(azimuthEnc.getPosition(), Radian);
+    //           AngularVelocity angularVelocity = AngularVelocity.ofBaseUnits(azimuthEnc.getVelocity(), RadiansPerSecond);
+    //           log.motor("azimuth")
+    //               .voltage(voltage)
+    //               .angularPosition(angle)
+    //               .angularVelocity(angularVelocity);
+    //         },
+    //         this));
   }
 
   @Override
@@ -377,28 +353,28 @@ public class TurretSys extends SubsystemBase {
     return field;
   }
 
-  // for sysID charachterization only
-  public void setAzimuthVoltage(double voltage) {
-    azimuthMtr.setVoltage(voltage);
-  }
+  // // for sysID charachterization only
+  // public void setAzimuthVoltage(double voltage) {
+  //   azimuthMtr.setVoltage(voltage);
+  // }
 
-  public double getCharacterizationVoltage() {
-    return azimuthMtr.getAppliedOutput() * RobotController.getBatteryVoltage();
-  }
+  // public double getCharacterizationVoltage() {
+  //   return azimuthMtr.getAppliedOutput() * RobotController.getBatteryVoltage();
+  // }
 
-  public Command sysIdQuasistaticForward() {
-    return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward);
-  }
+  // public Command sysIdQuasistaticForward() {
+  //   return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward);
+  // }
 
-  public Command sysIdQuasistaticReverse() {
-    return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse);
-  }
+  // public Command sysIdQuasistaticReverse() {
+  //   return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse);
+  // }
 
-  public Command sysIdDynamicForward() {
-    return sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward);
-  }
+  // public Command sysIdDynamicForward() {
+  //   return sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward);
+  // }
 
-  public Command sysIdDynamicReverse() {
-    return sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse);
-  }
+  // public Command sysIdDynamicReverse() {
+  //   return sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse);
+  // }
 }

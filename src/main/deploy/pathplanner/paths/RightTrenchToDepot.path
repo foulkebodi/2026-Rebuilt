@@ -3,34 +3,34 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.136011363636364,
-        "y": 2.241613636363637
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 7.0022613636363635,
-        "y": 0.8089659090909092
-      },
-      "isLocked": false,
-      "linkedName": "RightMidline"
-    },
-    {
-      "anchor": {
         "x": 4.010192045454543,
         "y": 0.6327193181804922
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.889726136363634,
+        "y": 0.6886170454532189
+      },
+      "isLocked": false,
+      "linkedName": "RightTrench"
+    },
+    {
+      "anchor": {
+        "x": 0.7666363636363633,
+        "y": 1.128477272727273
+      },
       "prevControl": {
-        "x": 6.167294318181816,
-        "y": 0.46186704545321966
+        "x": 1.539647727272727,
+        "y": 1.0254090909090916
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "RightTrench"
+      "linkedName": "Depot"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.765723270440252,
+      "waypointRelativePos": 0.3480243161094224,
       "rotationDegrees": 0.0
     }
   ],
@@ -38,8 +38,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "StartShooting",
-      "waypointRelativePos": 0.8940754039497308,
+      "name": "StartIntaking",
+      "waypointRelativePos": 0.6701208981001727,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -58,14 +58,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 0.0,
+    "rotation": -70.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 90.0
+    "velocity": 2.0,
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

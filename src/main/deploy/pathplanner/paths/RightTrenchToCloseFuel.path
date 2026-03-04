@@ -8,61 +8,61 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.2009476010101,
-        "y": 0.7338415404027138
+        "x": 5.054157954545452,
+        "y": 0.6680034090895833
       },
       "isLocked": false,
       "linkedName": "RightTrench"
     },
     {
       "anchor": {
-        "x": 8.136011363636364,
-        "y": 1.1078636363636372
+        "x": 5.909738636363636,
+        "y": 1.1800113636363643
       },
       "prevControl": {
-        "x": 8.145755808080809,
-        "y": 0.48421919191919205
+        "x": 5.909738636363636,
+        "y": 0.406931290932389
       },
       "nextControl": {
-        "x": 8.128880495368676,
-        "y": 1.5642392054955365
+        "x": 5.909738636363636,
+        "y": 2.087011363636363
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.136011363636364,
-        "y": 2.241613636363637
+        "x": 5.909738636363636,
+        "y": 2.973397727272727
       },
       "prevControl": {
-        "x": 8.136011363636364,
-        "y": 1.8128580808080823
+        "x": 5.920045454545455,
+        "y": 1.942715909090909
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "RightMidline"
+      "linkedName": "RightCloseFuel"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.24528301886792453,
+      "waypointRelativePos": 0.2583586626139818,
       "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 0.7352697095435783,
+      "waypointRelativePos": 0.954407294832826,
       "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.1692307692307593,
+      "minWaypointRelativePos": 1.2469775474956828,
       "maxWaypointRelativePos": 2.0,
       "constraints": {
-        "maxVelocity": 1.25,
-        "maxAcceleration": 1.0,
-        "maxAngularVelocity": 5.0,
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 240.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
         "unlimited": false
@@ -73,7 +73,7 @@
   "eventMarkers": [
     {
       "name": "StartIntaking",
-      "waypointRelativePos": 0.111310592459605,
+      "waypointRelativePos": 0.10017271157167525,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

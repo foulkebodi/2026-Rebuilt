@@ -166,9 +166,9 @@ public class RobotContainer {
 		// operator bindings for competition
 		operatorController.povUp().onTrue(new IncrementFlywheelOffset(turretSys));
 		operatorController.povDown().onTrue(new DecrementFlywheelOffset(turretSys));
-		// operatorController.povLeft().onTrue(new IncrementAzimuthOffset(turretSys));
-		// operatorController.povRight().onTrue(new DecrementAzimuthOffset(turretSys));
-		// operatorController.rightStick().onTrue(new ToggleIsPassing(turretSys));
+		operatorController.povLeft().onTrue(new IncrementAzimuthOffset(turretSys));
+		operatorController.povRight().onTrue(new DecrementAzimuthOffset(turretSys));
+		operatorController.start().onTrue(new ToggleIsPassing(turretSys));
 		operatorController.a().onTrue(new SetClimberPositon(climberSys, 0.0));
 		operatorController.b().onTrue(new SetClimberPositon(climberSys, ClimberConstants.elevatorClimbPositionInches));
 		operatorController.y().onTrue(new SetClimberPositon(climberSys, ClimberConstants.ElevatorUpPositionInches));

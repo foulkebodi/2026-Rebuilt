@@ -20,8 +20,8 @@
         "y": 0.6327193181804922
       },
       "prevControl": {
-        "x": 6.167294318181816,
-        "y": 0.46186704545321966
+        "x": 6.167294318181815,
+        "y": 0.5340147727259467
       },
       "nextControl": null,
       "isLocked": false,
@@ -36,19 +36,7 @@
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "StartShooting",
-      "waypointRelativePos": 0.8940754039497308,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "StartShooting"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
     "maxAcceleration": 2.5,
@@ -58,7 +46,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 2.0,
     "rotation": 0.0
   },
   "reversed": false,

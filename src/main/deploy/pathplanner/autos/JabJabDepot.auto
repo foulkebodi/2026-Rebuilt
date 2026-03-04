@@ -17,33 +17,21 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 5.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShooting"
+            "pathName": "RightTrenchToCloseFuel"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "RightTrenchToClimb"
+            "pathName": "CloseFuelToRightTrenchThrough"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ClimberDown"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 10.0
+            "pathName": "RightTrenchToDepot"
           }
         }
       ]

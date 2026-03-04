@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightTrenchToMidline"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MidlineToRightTrenchThrough"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightTrenchToDepot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShooting"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DepotToClimb"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ClimberDown"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 10.0
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
