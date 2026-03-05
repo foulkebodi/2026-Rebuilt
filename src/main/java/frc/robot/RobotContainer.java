@@ -86,13 +86,11 @@ public class RobotContainer {
 	public RobotContainer() {
 
 		// register named commands
-		NamedCommands.registerCommand("StartIntaking", new StartIntaking(intakeSys));
+		NamedCommands.registerCommand("StartIntaking", new StartIntaking(intakeSys, indexerSys));
 		NamedCommands.registerCommand("StartShooting", new StartShooting(turretSys, indexerSys, intakeSys));
 		NamedCommands.registerCommand("StopShooting", new StopShooting(turretSys, indexerSys, intakeSys));
-		NamedCommands.registerCommand("ClimberUp", new Command() {
-		});
-		NamedCommands.registerCommand("ClimberDown", new Command() {
-		});
+		NamedCommands.registerCommand("ClimberUp", new SetClimberPositon(climberSys, ClimberConstants.ElevatorUpPositionInches));
+		NamedCommands.registerCommand("ClimberDown", new SetClimberPositon(climberSys, ClimberConstants.elevatorClimbPositionInches));
 
 		// configure autobuilder
 		try {
@@ -160,15 +158,15 @@ public class RobotContainer {
 
 		driverController
 				.axisGreaterThan(XboxController.Axis.kRightTrigger.value, ControllerConstants.tiggerPressedThreshold)
-				.onTrue(new StartIntaking(intakeSys))
+				.onTrue(new StartIntaking(intakeSys, indexerSys))
 				.onFalse(new SetIntakeRollerRPM(intakeSys, 0));
 
 		// operator bindings for competition
-		operatorController.povUp().onTrue(new IncrementFlywheelOffset(turretSys));
-		operatorController.povDown().onTrue(new DecrementFlywheelOffset(turretSys));
-		operatorController.povLeft().onTrue(new IncrementAzimuthOffset(turretSys));
-		operatorController.povRight().onTrue(new DecrementAzimuthOffset(turretSys));
-		operatorController.start().onTrue(new ToggleIsPassing(turretSys));
+		// operatorController.povUp().onTrue(new IncrementFlywheelOffset(turretSys));
+		// operatorController.povDown().onTrue(new DecrementFlywheelOffset(turretSys));
+		// operatorController.povLeft().onTrue(new IncrementAzimuthOffset(turretSys));
+		// operatorController.povRight().onTrue(new DecrementAzimuthOffset(turretSys));
+		// operatorController.start().onTrue(new ToggleIsPassing(turretSys));
 		operatorController.a().onTrue(new SetClimberPositon(climberSys, 0.0));
 		operatorController.b().onTrue(new SetClimberPositon(climberSys, ClimberConstants.elevatorClimbPositionInches));
 		operatorController.y().onTrue(new SetClimberPositon(climberSys, ClimberConstants.ElevatorUpPositionInches));
@@ -184,25 +182,25 @@ public class RobotContainer {
 		// 		.onFalse(new SetIntakeRollerRPM(intakeSys, 0))
 		// 		.onFalse(new SetSpindexerRPM(indexerSys, 0))
 		// 		.onFalse(new SetTowerRPM(indexerSys, 0));
-		// operatorController.b().onTrue(new SetIntakeActuatorInches(intakeSys, 5.0));
+		// // operatorController.b().onTrue(new SetIntakeActuatorInches(intakeSys, 5.0));
 		// operatorController.povRight().onTrue(new SetIntakeActuatorInches(intakeSys, IntakeConstants.actuatorOutPositionInches));
 		// operatorController.povLeft().onTrue(new SetIntakeActuatorInches(intakeSys, 5.0));
 
-		// binding commands for swerve sysID
-		// driverController.a().onTrue(swerveDrive.driveSysIdDynamicForward());
-		// driverController.b().onTrue(swerveDrive.driveSysIdDynamicReverse());
-		// driverController.x().onTrue(swerveDrive.driveSysIdQuasistaticForward());
-		// driverController.y().onTrue(swerveDrive.driveSysIdQuasistaticReverse());
+		// // binding commands for swerve sysID
+		// // driverController.a().onTrue(swerveDrive.driveSysIdDynamicForward());
+		// // driverController.b().onTrue(swerveDrive.driveSysIdDynamicReverse());
+		// // driverController.x().onTrue(swerveDrive.driveSysIdQuasistaticForward());
+		// // driverController.y().onTrue(swerveDrive.driveSysIdQuasistaticReverse());
 
-		// binding commands for turret sysID
-		// driverController.a().onTrue(turretSys.sysIdDynamicForward());
-		// driverController.b().onTrue(turretSys.sysIdDynamicReverse());
-		// driverController.x().onTrue(turretSys.sysIdQuasistaticForward());
-		// driverController.y().onTrue(turretSys.sysIdQuasistaticReverse());
+		// // binding commands for turret sysID
+		// // driverController.a().onTrue(turretSys.sysIdDynamicForward());
+		// // driverController.b().onTrue(turretSys.sysIdDynamicReverse());
+		// // driverController.x().onTrue(turretSys.sysIdQuasistaticForward());
+		// // driverController.y().onTrue(turretSys.sysIdQuasistaticReverse());
 
-		// turret manual control bindings for testing (DISABLE SOFT LIMITS BEFORE USING)
-		// operatorController.a().onTrue(new StartAiming(turretSys));
-		// operatorController.b().onTrue(new StopAiming(turretSys));
+		// // turret manual control bindings for testing (DISABLE SOFT LIMITS BEFORE USING)
+		// operatorController.x().onTrue(new StartAiming(turretSys));
+		// operatorController.y().onTrue(new StopAiming(turretSys));
 		// operatorController.x().onTrue(new StopManualAzimuthAngle(turretSys));
 
 		// flywheel RPM control bindings for testing
@@ -226,13 +224,13 @@ public class RobotContainer {
 		// intake roller RPM control bindings for testing
 		// operatorController.a().onTrue(new SetIntakeRollerRPM(intakeSys, 0.0));
 		// operatorController.b().onTrue(new SetIntakeRollerRPM(intakeSys, 1000.0));
-		// operatorController.x().onTrue(new SetIntakeRollerRPM(intakeSys, 2000.0));
+		// operatorController.x().onTrue(new SetIntakeRollerRPM(intakeSys, 1600.0));
 		// operatorController.y().onTrue(new SetIntakeRollerRPM(intakeSys, 500.0));
 
 		// intake actuator position control bindings for testing
-		// operatorController.b().onTrue(new SetIntakeActuatorInches(intakeSys, 8.0));
-		// operatorController.x().onTrue(new SetIntakeActuatorInches(intakeSys, 0.0));
-		// operatorController.y().onTrue(new SetIntakeActuatorInches(intakeSys,IntakeConstants.actuatorOutPositionInches));
+		operatorController.b().onTrue(new SetIntakeActuatorInches(intakeSys, 8.0));
+		operatorController.x().onTrue(new SetIntakeActuatorInches(intakeSys, 0.0));
+		operatorController.y().onTrue(new SetIntakeActuatorInches(intakeSys,12.0));
 
 		// climber position control bindings for testing
 		// operatorController.a().onTrue(new SetClimberPositon(climberSys, 0.0));

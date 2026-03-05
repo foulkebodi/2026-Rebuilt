@@ -29,7 +29,7 @@ public class AimToHubCmd extends Command {
 
     private Translation2d targetTranslation;
 
-    private final ProfiledPIDController aimController;
+    // private final ProfiledPIDController aimController;
 
     /**
      * Joysticks return DoubleSuppliers when the get methods are called
@@ -48,13 +48,13 @@ public class AimToHubCmd extends Command {
         this.swerveSys = swerveSys;
         this.poseEstimator = poseEstimator;
 
-         aimController = new ProfiledPIDController(
-            Constants.SwerveDriveConstants.autoAimkP, 0.0, Constants.SwerveDriveConstants.autoAimkD,
-            new Constraints(
-                Constants.SwerveDriveConstants.autoAimTurnSpeedRadPerSec,
-                Constants.SwerveDriveConstants.autoAimTurnAccelRadPerSecSq));
+        //  aimController = new ProfiledPIDController(
+        //     Constants.SwerveDriveConstants.autoAimkP, 0.0, Constants.SwerveDriveConstants.autoAimkD,
+        //     new Constraints(
+        //         Constants.SwerveDriveConstants.autoAimTurnSpeedRadPerSec,
+        //         Constants.SwerveDriveConstants.autoAimTurnAccelRadPerSecSq));
 
-        aimController.enableContinuousInput(-Math.PI, Math.PI);
+        // aimController.enableContinuousInput(-Math.PI, Math.PI);
 
         
 
@@ -66,48 +66,48 @@ public class AimToHubCmd extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        if(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            targetTranslation = Constants.FieldConstants.redAllianceHubPose;
-        }
-        else {
-            targetTranslation = Constants.FieldConstants.blueAllianceHubPose;
-        }
+        // if(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+        //     targetTranslation = Constants.FieldConstants.redAllianceHubPose;
+        // }
+        // else {
+        //     targetTranslation = Constants.FieldConstants.blueAllianceHubPose;
+        // }
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        Translation2d robotTranslation = poseEstimator.getPose().getTranslation();
-Translation2d targetOffset = targetTranslation.minus(robotTranslation);
+//         Translation2d robotTranslation = poseEstimator.getPose().getTranslation();
+// Translation2d targetOffset = targetTranslation.minus(robotTranslation);
 
-// Desired heading
-Rotation2d targetHeading = Rotation2d.fromRadians(
-    MathUtil.angleModulus(targetOffset.getAngle().getRadians())
-);
+// // Desired heading
+// Rotation2d targetHeading = Rotation2d.fromRadians(
+//     MathUtil.angleModulus(targetOffset.getAngle().getRadians())
+// );
 
-SmartDashboard.putNumber("target heading deg", targetHeading.getDegrees());
+// SmartDashboard.putNumber("target heading deg", targetHeading.getDegrees());
 
 
-// Simple PID aim
-if (Math.abs(poseEstimator.getHeading().getRadians() - targetHeading.getRadians())
-        > Constants.SwerveDriveConstants.autoAimToleranceRad) {
+// // Simple PID aim
+// if (Math.abs(poseEstimator.getHeading().getRadians() - targetHeading.getRadians())
+//         > Constants.SwerveDriveConstants.autoAimToleranceRad) {
 
-    double aimRadPerSec = aimController.calculate(
-        poseEstimator.getHeading().getRadians(),
-        targetHeading.getRadians()
-    );
+//     double aimRadPerSec = aimController.calculate(
+//         poseEstimator.getHeading().getRadians(),
+//         targetHeading.getRadians()
+//     );
 
-    swerveSys.setOmegaOverrideRadPerSec(Optional.of(aimRadPerSec));
-} else {
-    swerveSys.setOmegaOverrideRadPerSec(Optional.of(0.0));
-}
+//     swerveSys.setOmegaOverrideRadPerSec(Optional.of(aimRadPerSec));
+// } else {
+//     swerveSys.setOmegaOverrideRadPerSec(Optional.of(0.0));
+// }
         
     }
     
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-         swerveSys.setOmegaOverrideRadPerSec(Optional.empty());
+        //  swerveSys.setOmegaOverrideRadPerSec(Optional.empty());
     }
     
     // Returns true when the command should end.

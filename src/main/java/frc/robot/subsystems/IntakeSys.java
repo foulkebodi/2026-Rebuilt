@@ -96,11 +96,16 @@ public class IntakeSys extends SubsystemBase {
 
     RightActuatorMtrSparkFlexConfig.closedLoop
       .p(IntakeConstants.actuatorP)
-      .d(IntakeConstants.actuatorD);
+      .d(IntakeConstants.actuatorD).feedForward
+      .kS(IntakeConstants.RollerkS)
+      .kV(IntakeConstants.RollerkV);
 
     LeftActuatorMtrSparkFlexConfig.closedLoop
       .p(IntakeConstants.actuatorP)
-      .d(IntakeConstants.actuatorD);
+      .d(IntakeConstants.actuatorD)
+      .feedForward
+      .kS(IntakeConstants.RollerkS)
+      .kV(IntakeConstants.RollerkV);
 
     rollerMtr.configure(
       RollerMtrSparkFlexConfig,
