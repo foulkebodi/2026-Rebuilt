@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.7,
-        "y": 0.6327193181804922
+        "x": 4.25,
+        "y": 0.7
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.929965909090909,
-        "y": 0.6267761363623106
+        "x": 3.4799659090909087,
+        "y": 0.6940568181818183
       },
       "isLocked": false,
       "linkedName": "RightTrench"
     },
     {
       "anchor": {
-        "x": 1.095,
-        "y": 2.3784444444444444
+        "x": 1.14,
+        "y": 2.427166666666666
       },
       "prevControl": {
-        "x": 1.1067834031383559,
-        "y": 1.7085256069901003
+        "x": 1.1517834031383558,
+        "y": 1.757247829212322
       },
       "nextControl": {
-        "x": 1.0883444444444443,
-        "y": 2.7568310606060606
+        "x": 1.1333444444444443,
+        "y": 2.8055532828282823
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.095,
-        "y": 2.9
+        "x": 1.12,
+        "y": 3.0
       },
       "prevControl": {
-        "x": 1.0785999999999998,
-        "y": 2.6025666666666654
+        "x": 1.1036,
+        "y": 2.7025666666666655
       },
       "nextControl": null,
       "isLocked": false,
@@ -96,7 +96,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 2.8,
     "maxAngularVelocity": 240.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

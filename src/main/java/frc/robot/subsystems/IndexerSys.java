@@ -87,27 +87,24 @@ public class IndexerSys extends SubsystemBase {
 
   }
 
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a
-   * digital sensor).
-   * 
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
-  }
-
   @Override
   public void periodic() {
   }
 
   public void setTargetSpindexerRPM(double targetSpindexerRPM) {
-    spindexerPID.setSetpoint(targetSpindexerRPM, ControlType.kVelocity);
+    // if (targetSpindexerRPM != 0.0) {
+      spindexerPID.setSetpoint(targetSpindexerRPM, ControlType.kVelocity);
+    // } else {
+      // towerMtr.stopMotor();
+    // }
   }
 
   public void setTargetTowerRPM(double targetTowerRPM) {
-    towerPID.setSetpoint(targetTowerRPM, ControlType.kVelocity);
+    if (targetTowerRPM != 0.0) {
+      towerPID.setSetpoint(targetTowerRPM, ControlType.kVelocity);
+    } else {
+      towerMtr.stopMotor();
+    }
   }
 
   public double getSpindexerRPM() {

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.765677777777778,
-        "y": 3.460077777777777
+        "x": 5.746188888888888,
+        "y": 2.8754111111111103
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.992193181818181,
-        "y": 0.4894545454545458
+        "x": 6.058011111111111,
+        "y": 0.5367444444444436
       },
       "isLocked": false,
       "linkedName": "RightCloseFuel"
     },
     {
       "anchor": {
-        "x": 3.7,
-        "y": 0.6327193181804922
+        "x": 4.25,
+        "y": 0.7
       },
       "prevControl": {
-        "x": 6.363238636363636,
-        "y": 0.63375
+        "x": 6.291877777777778,
+        "y": 0.6439333333333332
       },
       "nextControl": null,
       "isLocked": false,
@@ -51,7 +51,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 2.8,
     "maxAngularVelocity": 240.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -65,7 +65,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 95.0
   },
   "useDefaultConstraints": true
 }

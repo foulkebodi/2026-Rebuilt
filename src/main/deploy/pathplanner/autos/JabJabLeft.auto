@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightTrenchToMidline"
+            "pathName": "LeftTrenchToMidline"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "MidlineToRightTrench"
+            "pathName": "MidlineToLeftTrench"
           }
         },
         {
@@ -25,25 +25,25 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.75
+            "waitTime": 4.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooting"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "RightTrenchToCloseFuel"
+            "pathName": "LeftTrenchToCloseFuel"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "CloseFuelToRightTrenchThrough"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RightTrenchToClimb"
+            "pathName": "CloseFuelToLeftTrench"
           }
         },
         {
@@ -55,19 +55,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ClimberDown"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
+            "waitTime": 5.0
           }
         },
         {

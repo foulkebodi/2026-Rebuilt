@@ -12,6 +12,7 @@ import frc.robot.subsystems.IndexerSys;
 import frc.robot.subsystems.IntakeSys;
 import frc.robot.subsystems.TurretSys;
 import frc.robot.Constants.IndexerConstants;
+import frc.robot.commands.intake.SetIntakeRollerRPM;
 import frc.robot.commands.spindexer.SetSpindexerRPM;
 import frc.robot.commands.tower.SetTowerRPM;
 
@@ -25,7 +26,8 @@ public class StopShooting extends SequentialCommandGroup {
         new SetTowerRPM(indexerSys, IndexerConstants.towerIntakingRPM),
         new SetSpindexerRPM(indexerSys, 0.0),
         new WaitCommand(1.0),
-        new SetTowerRPM(indexerSys, 0.0)
+        new SetTowerRPM(indexerSys, 0.0),
+        new SetIntakeRollerRPM(intakeSys, 0.0)
     );
   }
 }

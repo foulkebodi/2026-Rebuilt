@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.7,
-        "y": 0.6327193181804922
+        "x": 4.25,
+        "y": 0.7
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.7439659090909085,
-        "y": 0.6680034090895833
+        "x": 5.293965909090908,
+        "y": 0.7352840909090911
       },
       "isLocked": false,
       "linkedName": "RightTrench"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 5.765677777777778,
-        "y": 3.460077777777777
+        "x": 5.746188888888888,
+        "y": 2.8754111111111103
       },
       "prevControl": {
-        "x": 5.775984595959597,
-        "y": 2.4293959595959587
+        "x": 5.931333333333333,
+        "y": 1.9301999999999997
       },
       "nextControl": null,
       "isLocked": false,
@@ -54,26 +54,23 @@
       "rotationDegrees": 90.0
     }
   ],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.2469775474956828,
-      "maxWaypointRelativePos": 2.0,
-      "constraints": {
-        "maxVelocity": 1.5,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 240.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "StopShooting",
+      "waypointRelativePos": 0.056192236598888584,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "StopShooting"
+        }
+      }
+    },
+    {
       "name": "StartIntaking",
-      "waypointRelativePos": 0.10017271157167525,
+      "waypointRelativePos": 0.6802218114602542,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -85,7 +82,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 2.8,
     "maxAngularVelocity": 240.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -93,7 +90,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 95.0
   },
   "reversed": false,
   "folder": null,

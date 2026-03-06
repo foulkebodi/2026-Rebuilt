@@ -12,7 +12,6 @@ import frc.robot.commands.turret.StartFlywheel;
 import frc.robot.subsystems.IndexerSys;
 import frc.robot.subsystems.IntakeSys;
 import frc.robot.subsystems.TurretSys;
-import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.Constants;
 import frc.robot.Constants.IndexerConstants;
 import frc.robot.Constants.IntakeConstants;
@@ -22,11 +21,10 @@ import frc.robot.commands.spindexer.SetSpindexerRPM;
 import frc.robot.commands.tower.SetTowerRPM;
 
 /** An example command that uses an example subsystem. */
-public class StartShooting extends SequentialCommandGroup {
+public class StartShootingAuto extends SequentialCommandGroup {
 
-  public StartShooting(TurretSys turretSys, IndexerSys indexerSys, IntakeSys intakeSys, SwerveDrive swerveSys) {
+  public StartShootingAuto(TurretSys turretSys, IndexerSys indexerSys, IntakeSys intakeSys) {
     super(
-        // new LockCmd(swerveSys),
         new StartAiming(turretSys),
         new StartFlywheel(turretSys),
         new WaitUntilCommand(() -> turretSys.isOnTarget()),
@@ -35,7 +33,7 @@ public class StartShooting extends SequentialCommandGroup {
         new SetSpindexerRPM(indexerSys, IndexerConstants.spindexerAgitatingRPM),
         new SetIntakeRollerRPM(intakeSys, IntakeConstants.agitatingRollerRPM),
         new WaitCommand(1.0),
-        new SetIntakeActuatorInches(intakeSys, Constants.IntakeConstants.actuatorBufferPositionInches)
+        new SetIntakeActuatorInches(intakeSys, Constants.IntakeConstants.actuatorSafePositionInches)
     );
   }
 }

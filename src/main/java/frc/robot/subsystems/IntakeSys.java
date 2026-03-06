@@ -124,22 +124,26 @@ public class IntakeSys extends SubsystemBase {
   }
 
   public void periodic() {
-    if (getActuatorPositionInches() >= IntakeConstants.actuatorSafePositionInches) {
+    if (getActuatorPositionInches() >= IntakeConstants.actuatorSafePositionInches && targetRollerRPM != 0.0) {
       rollerPID.setSetpoint(targetRollerRPM, ControlType.kVelocity);
     } else {
-      rollerPID.setSetpoint(0.0, ControlType.kVelocity);
+      rollerMtr.stopMotor();
     }
   }
 
   public void setTargetActuatorInches(double targetPositionInches) {
-    LeftActuatorPID.setSetpoint(targetPositionInches, ControlType.kPosition);
-    RightActuatorPID.setSetpoint(targetPositionInches, ControlType.kPosition);
+      LeftActuatorPID.setSetpoint(targetPositionInches, ControlType.kPosition);
+      RightActuatorPID.setSetpoint(targetPositionInches, ControlType.kPosition);
   }
 
   public double getActuatorPositionInches() {
     return (leftActuatorEnc.getPosition() + rightActuatorEnc.getPosition()) / 2.0;
   }
 
+  public void resetActuatorPosition () {
+    leftActuatorEnc.setPosition(0.0);
+    rightActuatorEnc.setPosition(0.0);
+  }
   public void setTargetRollerRPM(double targetRPM) {
     this.targetRollerRPM = targetRPM;
   }

@@ -39,7 +39,7 @@ public class TurretSys extends SubsystemBase {
   private final SparkClosedLoopController azimuthPID;
   private final PoseEstimator poseEstimator;
 
-  private Double manualAzimuthAngle = 0.0;
+  private Double manualAzimuthAngle = null;
   private Double manualFlywheelRPM = 0.0;
   private boolean isAiming = false;
   private boolean isFiring = false;
@@ -180,7 +180,7 @@ public class TurretSys extends SubsystemBase {
     } else if (manualAzimuthAngle != null) {
       azimuthPID.setSetpoint(Units.degreesToRadians(manualAzimuthAngle), ControlType.kPosition);
     } else {
-      azimuthPID.setSetpoint(getCurrentAzimuthAngleRad(), ControlType.kPosition);
+      azimuthPID.setSetpoint(TurretConstants.azimuthDefaultSetpointRad, ControlType.kPosition);
     }
 
     if (isFiring) {
@@ -235,7 +235,7 @@ public class TurretSys extends SubsystemBase {
 
   public boolean isAtSpeed() {
     return Math.abs(getFlywheelRPM() - calculateTargetFlywheelRPM())
-        - 30.0 <= TurretConstants.flywheelRPMErrorTolerance;
+        - 30.0 <= TurretConstants.flywheelErrorToleranceRPM;
   }
 
   public Pose2d calculateTurretPose() {
@@ -266,19 +266,19 @@ public class TurretSys extends SubsystemBase {
 
   public double calculateTargetAzimuthAnglePassing() {
     if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
-      return TurretConstants.targetPoseRed.getTranslation()
+      return TurretConstants.passingPoseBlue.getTranslation()
           .minus(calculateTurretPose().getTranslation())
           .getAngle()
           .minus(new Rotation2d(poseEstimator.getPose().getRotation().getRadians())).getRadians()
           + Units.degreesToRadians(aziumthOffsetDeg);
     } else if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-      return TurretConstants.targetPoseRed.getTranslation()
+      return TurretConstants.passingPoseRed.getTranslation()
           .minus(calculateTurretPose().getTranslation())
           .getAngle()
           .minus(new Rotation2d(poseEstimator.getPose().getRotation().getRadians())).getRadians()
           + Units.degreesToRadians(aziumthOffsetDeg);
     } else {
-      return TurretConstants.targetPoseRed.getTranslation()
+      return TurretConstants.passingPoseBlue.getTranslation()
           .minus(calculateTurretPose().getTranslation())
           .getAngle()
           .minus(new Rotation2d(poseEstimator.getPose().getRotation().getRadians())).getRadians()
@@ -324,8 +324,13 @@ public class TurretSys extends SubsystemBase {
   }
 
   public boolean isOnTarget() {
-    return (Math.abs(getCurrentAzimuthAngleRad() - calculateTargetAzimuthAngleShooting()) <= Units
-        .degreesToRadians(TurretConstants.azimuthErrorToleranceDeg));
+    if (isPassing) {
+      return (Math.abs(getCurrentAzimuthAngleRad() - calculateTargetAzimuthAnglePassing()) <= 
+        Units.degreesToRadians(TurretConstants.azimuthErrorToleranceDeg));
+    } else {
+      return (Math.abs(getCurrentAzimuthAngleRad() - calculateTargetAzimuthAngleShooting()) <= 
+        Units.degreesToRadians(TurretConstants.azimuthErrorToleranceDeg));
+    }
   }
 
   public void setFlywheelRPM(double targetRPM) {
@@ -341,12 +346,20 @@ public class TurretSys extends SubsystemBase {
     return (flywheelOffsetRPM);
   }
 
+  public double getAzimuthOffsetDeg() {
+    return aziumthOffsetDeg;
+  }
+
   public double getCurrentAzimuthAngleRad() {
     return azimuthEnc.getPosition();
   }
 
   public double getAzimuthManualTargetDeg() {
-    return manualAzimuthAngle;
+    if (manualAzimuthAngle != null) {
+      return manualAzimuthAngle;
+    } else {
+      return 0.0;
+    }
   }
 
   public Pose2d getTurretPose() {

@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightTrenchToMidline"
+            "pathName": "LeftTrenchToMidline"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "MidlineToRightTrench"
+            "pathName": "MidlineToLeftTrench"
           }
         },
         {
@@ -25,37 +25,19 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.75
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RightTrenchToCloseFuel"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "CloseFuelToRightTrenchThrough"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RightTrenchToClimb"
+            "waitTime": 5.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "StartShooting"
+            "name": "StopShooting"
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 1.5
+            "pathName": "LeftTrenchToClimb"
           }
         },
         {
@@ -74,6 +56,12 @@
           "type": "named",
           "data": {
             "name": "StopShooting"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 10.0
           }
         }
       ]
