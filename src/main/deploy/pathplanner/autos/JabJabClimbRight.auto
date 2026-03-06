@@ -25,7 +25,13 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.75
+            "waitTime": 1.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooting"
           }
         },
         {
@@ -55,7 +61,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.5
+            "waitTime": 1.0
           }
         },
         {

@@ -13,25 +13,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MidlineToRightTrench"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RightTrenchToCloseFuel"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "CloseFuelToRightTrenchThrough"
+            "pathName": "MidlineToRightTrenchThrough"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "RightTrenchToDepot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShooting"
           }
         }
       ]

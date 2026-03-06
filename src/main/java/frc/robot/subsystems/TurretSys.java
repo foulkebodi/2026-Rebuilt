@@ -287,12 +287,22 @@ public class TurretSys extends SubsystemBase {
   }
 
   public double calculateDistanceToTarget() {
-    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
-      return calculateTurretPose().getTranslation().getDistance(TurretConstants.targetPoseBlue.getTranslation());
-    } else if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-      return calculateTurretPose().getTranslation().getDistance(TurretConstants.targetPoseRed.getTranslation());
+    if (isPassing) {
+      if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
+        return calculateTurretPose().getTranslation().getDistance(TurretConstants.passingPoseBlue.getTranslation());
+      } else if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+        return calculateTurretPose().getTranslation().getDistance(TurretConstants.passingPoseRed.getTranslation());
+      } else {
+        return calculateTurretPose().getTranslation().getDistance(TurretConstants.passingPoseBlue.getTranslation());
+      }
     } else {
-      return calculateTurretPose().getTranslation().getDistance(TurretConstants.targetPoseBlue.getTranslation());
+      if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
+        return calculateTurretPose().getTranslation().getDistance(TurretConstants.targetPoseBlue.getTranslation());
+      } else if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+        return calculateTurretPose().getTranslation().getDistance(TurretConstants.targetPoseRed.getTranslation());
+      } else {
+        return calculateTurretPose().getTranslation().getDistance(TurretConstants.targetPoseBlue.getTranslation());
+      }
     }
   }
 
